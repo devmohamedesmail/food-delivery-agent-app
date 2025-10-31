@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "email": "البريد الإلكتروني",
+    "username": "اسم المستخدم",
+    "phone": " الهاتف ",
+    "password": "كلمة المرور",
+    "loginButton": " تسجيل الدخول ",
+    "forgotPassword": " هل نسيت كلمة المرور؟ ",
+    "noAccount": " ليس لديك حساب؟ سجل ",
+    "welcomeBack": " مرحبًا بعودتك! ",
+    "loginToYourAccount": " تسجيل الدخول إلى حسابك ",
+    "enterPassword": " أدخل كلمة المرور الخاصة بك ",
+    "rememberMe": " تذكرني ",
+    "signingIn": " جاري تسجيل الدخول... ",
+    "signIn": " تسجيل الدخول ",
+    "dontHaveAccount": " ليس لديك حساب؟ ",
+    "signUp": " سجل ",
+    "joinOurPlatform": " انضم إلى منصتنا ",
+    "getStartedJourney": " ابدأ رحلتك معنا اليوم! ",
+    "name": " الاسم ",
+    "enterName": " أدخل اسمك ",
+    "identifier": " البريد الإلكتروني أو الهاتف ",
+    "enterIdentifier": " أدخل بريدك الإلكتروني أو هاتفك ",
+    "role": " الدور ",
+    "selectRole": " اختر دورك ",
+    "restaurant_owner": " مالك مطعم ",
+    "driver": " سائق ",
+    "register": " سجل ",
+    "registering": " جاري التسجيل... ",
+    "alreadyHaveAccount": " لديك حساب بالفعل؟ ",
+    "authFailed": " فشل التحقق من الهوية ",
+    "wait": " يرجى الانتظار... ",
+    "next": "التالي",
+    "createAccount":"إنشاء حساب"
+  }
+  
+}

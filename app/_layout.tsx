@@ -1,12 +1,18 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import { useFonts as useGoogleFonts, Cairo_400Regular, Cairo_600SemiBold, Cairo_700Bold } from '@expo-google-fonts/cairo';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import '../global.css'
+import '../i18n'; // Initialize i18n
 
 import { useColorScheme } from '@/components/useColorScheme';
+import AuthProvider from '@/context/auth_context';
+import ToastManager from 'toastify-react-native'
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -15,30 +21,37 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'index',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+  const [expoFontsLoaded, fontError] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 
+  const [googleFontsLoaded] = useGoogleFonts({
+    Cairo_400Regular,
+    Cairo_600SemiBold,
+    Cairo_700Bold,
+  });
+  const allFontsLoaded = expoFontsLoaded && googleFontsLoaded;
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    if (fontError) throw fontError;
+  }, [fontError]);
 
   useEffect(() => {
-    if (loaded) {
+    if (allFontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [allFontsLoaded]);
 
-  if (!loaded) {
+  if (!allFontsLoaded) {
     return null;
   }
 
@@ -49,11 +62,30 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <AuthProvider>
+
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+
+          <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+          <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+         
+          
+          <Stack.Screen name="account" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="restaurant/menu" options={{ headerShown: false }} />
+          <Stack.Screen name="restaurant/orders" options={{ headerShown: false }} />
+          <Stack.Screen name="restaurant/meal" options={{ headerShown: false }} />
+         
+
+
+          {/* <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+          <Stack.Screen name="auth/register" options={{ headerShown: false }} /> */}
+
+        </Stack>
+        <ToastManager />
+      </ThemeProvider>
+
+    </AuthProvider>
   );
 }
