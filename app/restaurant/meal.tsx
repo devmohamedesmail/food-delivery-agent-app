@@ -2,22 +2,26 @@ import CustomButton from '@/components/custom/custombutton'
 import CustomInput from '@/components/custom/custominput'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import * as ImagePicker from 'expo-image-picker'
 import { Toast } from 'toastify-react-native'
 import axios from 'axios'
-import CustomHeader from '@/components/custom/customheader'
 import CustomImagePicker from '@/components/custom/customimagepicker'
+import { config } from '@/constants/config'
+import { AuthContext } from '@/context/auth_context'
+import useFetch from '@/hooks/useFetch'
+
 
 export default function AddMeal() {
   const { t } = useTranslation()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const { auth } = useContext(AuthContext);
+
 
   // Validation schema
   const validationSchema = Yup.object().shape({
@@ -35,38 +39,10 @@ export default function AddMeal() {
       .required(t('meal.imageRequired'))
   })
 
-  const pickImage = async (setFieldValue: (field: string, value: string) => void) => {
-    try {
-      // Request permission
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-
-      if (permissionResult.granted === false) {
-        Alert.alert(t('meal.permissionRequired'), t('meal.permissionMessage'))
-        return
-      }
-
-      // Pick image
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      })
-
-      if (!result.canceled && result.assets[0]) {
-        const imageUri = result.assets[0].uri
-        setSelectedImage(imageUri)
-        setFieldValue('image', imageUri)
-      }
-    } catch (error) {
-      console.error('Error picking image:', error)
-      Alert.alert(t('meal.error'), t('meal.failedToPickImage'))
-    }
-  }
 
   const formik = useFormik({
     initialValues: {
-      restaurant_id: '2',
+      restaurant_id: '72',
       title: '',
       description: '',
       price: '',
@@ -75,13 +51,13 @@ export default function AddMeal() {
     validationSchema,
     onSubmit: async (values) => {
       setIsSubmitting(true)
-    
+
       try {
         // Create FormData for file upload - backend expects 'image' field name
         const formData = new FormData()
-        
+
         // Add form fields
-        formData.append('restaurant_id', '2')
+        formData.append('restaurant_id', auth?.user?.restaurant?.id.toString())
         formData.append('title', values.title)
         formData.append('description', values.description)
         formData.append('price', values.price)
@@ -91,20 +67,22 @@ export default function AddMeal() {
           const filename = selectedImage.split('/').pop() || 'meal.jpg'
           const match = /\.(\w+)$/.exec(filename)
           const type = match ? `image/${match[1]}` : 'image/jpeg'
-          
+
+
           const imageFile = {
             uri: selectedImage,
             name: filename,
             type: type,
           } as any
-          
-          formData.append('image', imageFile) // Changed from 'file' to 'image' to match backend
+
+          formData.append('image', imageFile)
+        } else {
+
         }
 
-        console.log('Submitting meal with FormData - using correct field name')
-        
+
         const response = await axios.post(
-          'https://uber-express-project.onrender.com/api/menu/create',
+          `${config.URL}/menu/create`,
           formData,
           {
             headers: {
@@ -112,24 +90,21 @@ export default function AddMeal() {
             },
           }
         )
-        
-        console.log('Meal added with Cloudinary URL:', response.data)
-        Toast.success(t('meal.mealAddedSuccess'))
+
+          // useFetch('/menu/restaurant/' + auth?.user?.restaurant?.id);
+        Toast.show({
+          text1: t('meal.mealAddedSuccess'),
+          type: 'success',
+        })
         router.back()
       } catch (error: any) {
-        console.error('Full error:', error)
-        console.error('Error response:', error.response?.data)
-        console.error('Error status:', error.response?.status)
-        console.error('Error config:', error.config)
-        console.error('Error request:', error.request)
-        
-        // Log the actual backend error message
-        if (error.response?.data) {
-          console.error('Backend error details:', JSON.stringify(error.response.data, null, 2))
-        }
-        
-        console.error('Error adding meal:', error)
-        Toast.error(error.response?.data?.message || t('meal.failedToAddMeal'))
+
+
+        Toast.show({
+          text1: t('meal.failedToAddMeal'),
+          type: 'error',
+        })
+
       } finally {
         setIsSubmitting(false)
       }
@@ -147,7 +122,7 @@ export default function AddMeal() {
           >
             <Ionicons name="arrow-back" size={20} color="#374151" />
           </TouchableOpacity>
-          
+
           <View className="flex-1 mx-4">
             <Text
               className="text-xl font-bold text-gray-800 text-center"
@@ -162,13 +137,13 @@ export default function AddMeal() {
               {t('meal.createMenuItemSubtitle')}
             </Text>
           </View>
-          
+
           <View className="w-10" />
         </View>
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="px-6 py-6">
+        <View className="px-2 py-6">
           {/* Form Container */}
           <View className="bg-white rounded-2xl shadow-sm p-6">
             <View className="space-y-6">
@@ -229,7 +204,11 @@ export default function AddMeal() {
                     placeholder={t('meal.tapToSelectImage')}
                     changeText={t('meal.tapToChangeImage')}
                     value={formik.values.image}
-                    onImageSelect={(uri) => formik.setFieldValue('image', uri)}
+                    onImageSelect={(uri) => {
+                      console.log('Image selected:', uri)
+                      setSelectedImage(uri)
+                      formik.setFieldValue('image', uri)
+                    }}
                     error={formik.touched.image && formik.errors.image ? formik.errors.image : undefined}
                   />
                 </View>
@@ -244,12 +223,12 @@ export default function AddMeal() {
               onPress={formik.handleSubmit}
               disabled={isSubmitting || !formik.isValid || !formik.dirty}
             />
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               onPress={() => router.back()}
               className="bg-gray-100 py-4 rounded-xl items-center"
             >
-              <Text 
+              <Text
                 className="text-gray-700 font-semibold"
                 style={{ fontFamily: 'Cairo_600SemiBold' }}
               >
@@ -262,7 +241,7 @@ export default function AddMeal() {
           <View className="mt-6 bg-blue-50 rounded-xl p-4">
             <View className="flex-row items-start">
               <Ionicons name="information-circle" size={20} color="#3B82F6" style={{ marginTop: 2, marginRight: 8 }} />
-              <Text 
+              <Text
                 className="text-blue-700 text-sm flex-1"
                 style={{ fontFamily: 'Cairo_400Regular' }}
               >

@@ -33,13 +33,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 password: password
             });
             const user = response.data;
-            console.log('Login response data:', user);
             await AsyncStorage.setItem('user', JSON.stringify(user));
             setAuth(user);
-            return { success: true, data: user };
+            return { 
+                success: true, 
+                data: user 
+            };
         } catch (error: any) {
-            console.log('Error logging in', error.response?.data || error.message);
-            return { success: false, message: error.response?.data?.message || 'Login failed' };
+            return { 
+                success: false, 
+                message: error.response?.data?.message || 'Login failed'
+             };
         }
     };
 
@@ -59,7 +63,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setAuth(user);
             return { success: true, data: user };
         } catch (error: any) {
-            console.log('Error registering', error.response?.data || error.message);
             return { success: false, message: error.response?.data?.message || 'Registration failed' };
         }
     };

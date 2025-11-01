@@ -27,7 +27,7 @@ export default function Register() {
     const { t, i18n } = useTranslation()
     const [isLoading, setIsLoading] = useState(false)
     const { handle_register } = useContext(AuthContext)
-    const [tab, setTab] = useState('2')
+    const [tab, setTab] = useState('1')
     const router = useRouter()
 
 
@@ -232,9 +232,9 @@ export default function Register() {
 
 
                                     <View className="flex-row justify-center items-center">
-                                        <Text className="text-gray-600">{t('auth.alreadyHaveAccount')} </Text>
+                                        <Text className="text-gray-600 arabic-font">{t('auth.alreadyHaveAccount')} </Text>
                                         <TouchableOpacity onPress={() => router.push('/auth/login')}>
-                                            <Text className="text-blue-600 font-bold">{t('auth.signIn')}</Text>
+                                            <Text className="text-primary arabic-font">{t('auth.signIn')}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>

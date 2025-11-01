@@ -63,7 +63,11 @@
      "addMenuItem": "Add Menu Item",
      "viewOrders": "View Orders",
      "settings": "Settings",
-     "recentOrders": "Recent Orders"
+     "recentOrders": "Recent Orders",
+     "menu": "Menu",
+     "manage_your_menu_items":"Manage your menu items",
+     "menu_items":"Menu Items",
+     "add_menu_item":"Add Menu Item"
   },
   "driver": {
     "vehicleRegistration": "Vehicle Registration",

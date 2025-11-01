@@ -1,17 +1,15 @@
 import React, { useContext, useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, SafeAreaView, StatusBar, KeyboardAvoidingView, Platform, Button } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Formik, useFormik } from 'formik'
+import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-
 import CustomInput from '@/components/custom/custominput'
 import CustomButton from '@/components/custom/custombutton'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { AuthContext } from '@/context/auth_context'
 import Logo from '@/components/logo'
-import ToastManager, { Toast } from 'toastify-react-native'
+import { Toast } from 'toastify-react-native'
 
 
 
@@ -63,8 +61,6 @@ export default function Login() {
         } else {
           router.replace('/')
         }
-
-        console.log("Login result:", result.data.user.role);
         setIsLoading(false)
       } catch (error) {
         setIsLoading(false)
@@ -103,7 +99,7 @@ export default function Login() {
             <View className="items-center mb-8 pt-20">
               <Logo />
               <Text
-                className="text-3xl font-bold text-gray-800 mb-2"
+                className="text-3xl  text-gray-800 mb-2"
                 style={{ fontFamily: 'Cairo_700Bold' }}
               >
                 {t('auth.welcomeBack')}

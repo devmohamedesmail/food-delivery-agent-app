@@ -37,7 +37,6 @@
     "login_success": "نجاح تسجيل الدخول",
     "login_failed": "فشل تسجيل الدخول",
     "restaurantRegistration": "تسجيل المطعم"
-   
   },
   "resturant": {
     "restaurantName": "اسم المطعم",
@@ -57,7 +56,7 @@
     "startTime": "وقت البدء",
     "endTime": "وقت الانتهاء",
     "restaurantRegistration": "تسجيل المطعم",
-     "restaurantDashboard": "لوحة معلومات المطعم",
+    "restaurantDashboard": "لوحة معلومات المطعم",
     "manageYourRestaurant": "إدارة مطعمك",
     "todayOrders": "طلبات اليوم",
     "todayRevenue": "إيرادات اليوم",
@@ -65,7 +64,11 @@
     "addMenuItem": "إضافة عنصر قائمة",
     "viewOrders": "عرض الطلبات",
     "settings": "الإعدادات",
-    "recentOrders": "الطلبات الأخيرة"
+    "recentOrders": "الطلبات الأخيرة",
+    "menu": "القائمة",
+    "manage_your_menu_items": "إدارة عناصر القائمة الخاصة بك",
+    "menu_items": "عناصر القائمة",
+    "add_menu_item": "إضافة عنصر قائمة"
   },
   "meal": {
     "addNewMeal": "إضافة وجبة جديدة",

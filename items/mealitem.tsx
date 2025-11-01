@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text , Image,TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 
 
 interface MenuItem {
@@ -16,27 +16,28 @@ import { Ionicons } from '@expo/vector-icons'
 import { Alert } from 'react-native'
 import axios from 'axios'
 import { Toast } from 'toastify-react-native'
-export default function MealItem({item,fetchMenuItems}:any) {
+import { config } from '@/constants/config'
+export default function MealItem({ item, fetchMenuItems }: any) {
 
 
 
 
 
-const handleDeleteItem = async (itemId: number) => {
+  const handleDeleteItem = async (itemId: number) => {
     try {
-        const response = await axios.delete(`https://uber-express-project.onrender.com/api/menu/item/${itemId}`)
-       
-        // You might want to refresh the list or update state here
-        fetchMenuItems()
-         Toast.show({
+      const response = await axios.delete(`https://uber-express-project.onrender.com/api/menu/item/${itemId}`)
+
+      // You might want to refresh the list or update state here
+      fetchMenuItems()
+      Toast.show({
         text1: 'Menu item deleted successfully',
         type: 'success',
-         })
+      })
     } catch (error) {
-        console.error('Error deleting item:', error)
-        Toast.error('Failed to delete menu item')
+      console.error('Error deleting item:', error)
+      Toast.error('Failed to delete menu item')
     }
-}
+  }
 
 
 
@@ -66,7 +67,7 @@ const handleDeleteItem = async (itemId: number) => {
           >
             {item.title}
           </Text>
-          
+
           <Text
             className="text-gray-600 text-sm mb-2"
             style={{ fontFamily: 'Cairo_400Regular' }}
@@ -74,15 +75,15 @@ const handleDeleteItem = async (itemId: number) => {
           >
             {item.description}
           </Text>
-          
+
           <View className="flex-row justify-between items-center">
             <Text
               className="text-lg font-bold text-green-600"
               style={{ fontFamily: 'Cairo_700Bold' }}
             >
-              ${parseFloat(item.price).toFixed(2)}
+              {config.CURRENCY}{parseFloat(item.price).toFixed(2)}
             </Text>
-            
+
             <View className="flex-row">
               <TouchableOpacity
                 onPress={() => {
@@ -93,7 +94,7 @@ const handleDeleteItem = async (itemId: number) => {
               >
                 <Ionicons name="pencil" size={16} color="#3B82F6" />
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 onPress={() => handleDeleteItem(item.id)}
                 className="bg-red-50 p-2 rounded-lg"

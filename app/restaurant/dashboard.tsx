@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { AuthContext } from '@/context/auth_context'
+import DashboardItemButton from '@/items/dashboard_item_button'
+
 
 export default function dashboard() {
     const { t } = useTranslation()
     const router = useRouter()
+    const { auth } = useContext(AuthContext)
 
     return (
         <View className="flex-1 bg-gray-50">
@@ -30,10 +33,19 @@ export default function dashboard() {
                     </TouchableOpacity>
                 </View>
 
-
             </View>
 
             <ScrollView className="flex-1 px-6 py-4">
+
+
+                <View className='flex items-center my-3'>
+                    <Image
+                        source={{ uri: auth?.user?.restaurant?.image }}
+                        className="w-44 h-44 rounded-lg"
+                        resizeMode="cover"
+                    />
+                    <Text className='text-4xl'>{auth?.user?.restaurant?.name}</Text>
+                </View>
 
 
                 <View>
@@ -63,15 +75,24 @@ export default function dashboard() {
 
                 <View className="mb-6">
                     <Text className="text-lg font-semibold text-gray-800 mb-3">{t('resturant.quickActions')}</Text>
-                    <View className="flex-row justify-between">
+                    <View className="flex-row justify-between flex-wrap">
 
 
-                        <TouchableOpacity
+
+                        <DashboardItemButton
                             onPress={() => router.push('/restaurant/meal')}
-                            className="bg-white rounded-xl p-4 flex-1 mr-2 shadow-sm items-center">
-                            <Ionicons name="add-circle" size={32} color="#3B82F6" />
-                            <Text className="text-gray-800 mt-2 text-center font-medium">{t('resturant.addMenuItem')}</Text>
-                        </TouchableOpacity>
+                            icon={<Ionicons name="add-circle" size={32} color="#3B82F6" />}
+                            title={t('resturant.addMenuItem')}
+
+                        />
+
+
+                        <DashboardItemButton
+                            onPress={() => router.push('/restaurant/menu')}
+                            icon={<Ionicons name="restaurant" size={32} color="#EF4444" />}
+                            title={t('resturant.menu')}
+                        />
+
 
 
 
