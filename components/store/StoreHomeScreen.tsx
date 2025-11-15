@@ -1,0 +1,195 @@
+import React, { useRef, useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Alert, Image } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Ionicons } from '@expo/vector-icons'
+import { AuthContext } from '@/context/auth_context'
+import { useContext } from 'react'
+import NoStore from './NoStore'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useRouter } from 'expo-router'
+import useFetch from '@/hooks/useFetch'
+import Loading from '../custom/Loading'
+
+interface ManagementCard {
+  title: string
+  subtitle: string
+  icon: keyof typeof Ionicons.glyphMap
+  route: string
+  color: string
+  bgColor: string
+}
+
+export default function RestaurantHomeScreen() {
+  const { t } = useTranslation()
+  const { auth } = useContext(AuthContext)
+  const router = useRouter()
+  const { data: profileData,
+    loading: profileLoading,
+    error: profileError,
+    refetch: refetchProfile
+  } = useFetch(`/users/profile/${auth?.user?.id}`)
+
+
+
+
+  const managementCards: ManagementCard[] = [
+    {
+      title: t('store.categories'),
+      subtitle: t('store.manage_product_categories'),
+      icon: 'grid-outline',
+      route: '/stores/categories',
+      color: '#3B82F6',
+      bgColor: '#EFF6FF',
+    },
+    {
+      title: t('store.products'),
+      subtitle: t('store.manage_your_products'),
+      icon: 'cube-outline',
+      route: '/stores/products',
+      color: '#10B981',
+      bgColor: '#ECFDF5',
+    },
+    {
+      title: t('store.orders'),
+      subtitle: t('store.view_manage_orders'),
+      icon: 'receipt-outline',
+      route: '/stores/orders',
+      color: '#F59E0B',
+      bgColor: '#FFFBEB',
+    },
+    {
+      title: t('account.account'),
+      subtitle: t('account.description'),
+      icon: 'person-outline',
+      route: '/account',
+      color: '#EF4444',
+      bgColor: '#FEF2F2',
+    },
+  ]
+
+  return (
+    <>
+      <View className="flex-1 bg-gray-50 pt-10">
+        <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        {profileData ? (
+          <>
+            <ScrollView className="flex-1 p-4">
+              {/* Store Info Header */}
+              <View className="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                <View className="flex-row items-center mb-4">
+                  <View className="bg-primary/10 w-16 h-16 rounded-full items-center justify-center mr-4">
+                    {/* <Ionicons name="storefront" size={32} color="#fd4a12" /> */}
+                    <Image source={{ uri: profileData?.data?.store?.logo }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Cairo_700Bold' }}>
+                      {profileData?.data?.store?.name}
+                    </Text>
+                    <Text className="text-gray-500 mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                      {t('store.store_management')}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Quick Stats */}
+                <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                  <View className="items-center flex-1">
+                    <Ionicons name="stats-chart" size={24} color="#10B981" />
+                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                      {t('store.active')}
+                    </Text>
+                  </View>
+                  <View className="items-center flex-1">
+                    <Ionicons name="star" size={24} color="#F59E0B" />
+                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                      {t('store.rating')}
+                    </Text>
+                  </View>
+                  <View className="items-center flex-1">
+                    <Ionicons name="people" size={24} color="#3B82F6" />
+                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                      {t('store.customers')}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Management Section */}
+              <View className="mb-4">
+                <Text className="text-lg font-bold text-gray-800 mb-3 px-2" style={{ fontFamily: 'Cairo_700Bold' }}>
+                  {t('store.store_management')}
+                </Text>
+
+                <View className="space-y-3">
+                  {managementCards.map((card, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => router.push(card.route as any)}
+                      className="bg-white rounded-xl p-5 shadow-sm active:opacity-70"
+                      activeOpacity={0.7}
+                    >
+                      <View className="flex-row items-center">
+                        <View
+                          className="w-14 h-14 rounded-2xl items-center justify-center mr-4"
+                          style={{ backgroundColor: card.bgColor }}
+                        >
+                          <Ionicons name={card.icon} size={28} color={card.color} />
+                        </View>
+
+                        <View className="flex-1">
+                          <Text className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Cairo_700Bold' }}>
+                            {card.title}
+                          </Text>
+                          <Text className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                            {card.subtitle}
+                          </Text>
+                        </View>
+
+                        <Ionicons name="chevron-forward" size={24} color="#9CA3AF" />
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Quick Actions */}
+              <View className="mb-6">
+                <Text className="text-lg font-bold text-gray-800 mb-3 px-2" style={{ fontFamily: 'Cairo_700Bold' }}>
+                  {t('store.quick_actions')}
+                </Text>
+
+                <View className="flex-row space-x-3">
+                  <TouchableOpacity className="flex-1 bg-primary/10 rounded-xl p-4 items-center">
+                    <Ionicons name="add-circle" size={32} color="#fd4a12" />
+                    <Text className="text-primary text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
+                      {t('store.add_product')}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity className="flex-1 bg-blue-50 rounded-xl p-4 items-center">
+                    <Ionicons name="notifications" size={32} color="#3B82F6" />
+                    <Text className="text-blue-600 text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
+                      {t('store.notifications')}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity className="flex-1 bg-green-50 rounded-xl p-4 items-center">
+                    <Ionicons name="analytics" size={32} color="#10B981" />
+                    <Text className="text-green-600 text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
+                      {t('store.analytics')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </>
+        ) : (
+          <>
+            <NoStore />
+          </>
+        )}
+        {profileLoading ? <Loading /> : null}
+      </View>
+    </>
+  )
+}

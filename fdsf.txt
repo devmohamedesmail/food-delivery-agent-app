@@ -262,7 +262,11 @@ export default function RestaurantHomeScreen() {
           </TouchableOpacity>
         </ScrollView>
       </>) : (
+        
+        <>
         <NoStore />
+      </>
+      
       )}
 
     </View>

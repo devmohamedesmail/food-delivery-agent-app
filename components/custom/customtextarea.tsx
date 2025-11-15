@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text, View, TextInput } from 'react-native'
 
 interface CustomTextAreaProps {
@@ -26,15 +27,11 @@ export default function CustomTextArea({
   height = 100,
   editable = true
 }: CustomTextAreaProps) {
+  const {t, i18n}=useTranslation()
   return (
     <View className="mb-4">
       {label && (
-        <Text
-          className="text-gray-700 text-base font-medium mb-2"
-          style={{ fontFamily: 'Cairo_600SemiBold' }}
-        >
-          {label}
-        </Text>
+        <Text className={`text-black text-base font-medium mb-2 ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}> {label} </Text>
       )}
       
       <TextInput
@@ -51,7 +48,6 @@ export default function CustomTextArea({
           touched && error ? 'border-red-500' : 'border-gray-300'
         }`}
         style={{ 
-          fontFamily: 'Cairo_400Regular',
           height: height,
           fontSize: 16
         }}

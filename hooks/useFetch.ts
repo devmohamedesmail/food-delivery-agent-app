@@ -1,29 +1,80 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useCallback } from "react";
 import axios from "axios";
 import { config } from "@/constants/config";
 
+// const useFetch = (url: string) => {
+//     const [data, setData] = useState<any>(null);
+//     const [loading, setLoading] = useState<boolean>(true);
+//     const [error, setError] = useState<any>(null);
+
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             try {
+//                 setLoading(true);
+//                 const response = await axios.get(`${config.URL}${url}`);
+//                 setData(response.data.data);
+//             } catch (err) {
+//                 setError(err);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+
+//         if (url) fetchData();
+//     }, [url]);
+
+//     return { data, loading, error };
+// };
+
+// export default useFetch;
+
+
+
 const useFetch = (url: string) => {
-    const [data, setData] = useState<any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get(`${config.URL}${url}`);
-                setData(response.data.data);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${config.URL}${url}`);
+      setData(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url]);
 
-        if (url) fetchData();
-    }, [url]);
+  useEffect(() => {
+    if (url) fetchData();
+  }, [url, fetchData]);
 
-    return { data, loading, error };
+  const refetch = useCallback(async () => {
+    await fetchData();
+  }, [fetchData]);
+
+  return { data, loading, error, refetch };
 };
 
 export default useFetch;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
