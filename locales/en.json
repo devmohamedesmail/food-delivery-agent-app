@@ -319,7 +319,18 @@
     "creating": "Creating...",
     "fillAllFields": "Please fill all required fields",
     "storeCreatedSuccess": "Store created successfully!",
-    "storeCreationFailed": "Failed to create store"
+    "storeCreationFailed": "Failed to create store",
+    "createStoreSubtitle": "Fill in the details to create your store",
+    "locationAndType": "Location & Type",
+    "storeDetails": "Store Details",
+    "storeInformation": "Store Information",
+    "storeImages": "Store Images",
+    "operatingHours": "Operating Hours",
+    "setOperatingHours": "Set your store's operating hours",
+    "selectStartTime": "Select Start Time",
+    "selectEndTime": "Select End Time",
+    "deliveryDetails": "Delivery Details"
+  
   },
   "account": {
     "profile": "Profile",
@@ -364,6 +375,12 @@
     "read_privacy_policy": "Read our privacy policy",
     "terms_of_service": "Terms of Service",
     "read_terms_service": "Read terms of service",
-    "app_version": "App Version"
+    "app_version": "App Version",
+    "language": "Language",
+    "change_language": "Change Language",
+    "change_app_language": "Change the language of the app",
+    "store_owner": " (Store Owner)",
+    "driver": " (Driver)"
+    
   }
 }

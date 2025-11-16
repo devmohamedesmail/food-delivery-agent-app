@@ -9,18 +9,17 @@ export default function CustomHeader({title}: {title?: string}) {
   const router = useRouter()
 
   return (
-    <View className="bg-white px-6 py-4 shadow-sm pt-14">
+    <View className="bg-white px-6 py-4 shadow-sm ">
         <View className="flex-row justify-between items-center">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="p-2"
+            className="p-2 bg-gray-200 rounded-full"
           >
-            <Ionicons name="arrow-back" size={24} color="#374151" />
+            <Ionicons name="arrow-back" size={20} color="black" />
           </TouchableOpacity>
 
           <Text
-            className="text-xl font-bold text-gray-800"
-            style={{ fontFamily: 'Cairo_700Bold' }}
+            className="text-xl font-bold text-black"
           >
            
             {title}

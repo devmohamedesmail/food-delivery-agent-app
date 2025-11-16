@@ -17,6 +17,7 @@
     "@expo/vector-icons": "^15.0.3",
     "@opesco12/react-native-bottom-sheet": "^1.0.4",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/datetimepicker": "^8.5.0",
     "@react-navigation/native": "^7.1.6",
     "axios": "^1.11.0",
     "expo": "^54.0.23",

@@ -27,10 +27,10 @@ export default function Login() {
       password: '',
     },
     validationSchema: Yup.object({
-       identifier: Yup.string().email(t('identifier_invalid')).required(t('identifier_required')),
+       identifier: Yup.string().email(t('auth.identifier_invalid')).required(t('auth.identifier_required')),
       password: Yup.string()
-        .required(t('password_required'))
-        .min(6, t('password_min')),
+        .required(t('auth.password_required'))
+        .min(6, t('auth.password_min')),
     }),
 
     onSubmit: async (values) => {
@@ -139,7 +139,7 @@ export default function Login() {
                   </View>
                   <Text
                     className="text-black"
-                    style={{ fontFamily: 'Cairo_400Regular' }}
+                
                   >
                     {t('auth.rememberMe')}
                   </Text>
@@ -148,7 +148,6 @@ export default function Login() {
                 <TouchableOpacity onPress={() => { }}>
                   <Text
                     className="text-primary font-medium"
-                    style={{ fontFamily: 'Cairo_600SemiBold' }}
                   >
                     {t('auth.forgotPassword')}
                   </Text>
@@ -170,14 +169,13 @@ export default function Login() {
               <View className="flex-row justify-center items-center mt-8 mb-8">
                 <Text
                   className="text-gray-600"
-                  style={{ fontFamily: 'Cairo_400Regular' }}
+                
                 >
                   {t('auth.dontHaveAccount')}
                 </Text>
                 <TouchableOpacity onPress={() => router.push('/auth/register')}>
                   <Text
                     className="text-primary font-semibold ml-1"
-                    style={{ fontFamily: 'Cairo_600SemiBold' }}
                   >
                     {t('auth.signUp')}
                   </Text>

@@ -320,7 +320,17 @@
     "creating": "جاري الإنشاء...",
     "fillAllFields": "يرجى ملء جميع الحقول المطلوبة",
     "storeCreatedSuccess": "تم إنشاء المتجر بنجاح!",
-    "storeCreationFailed": "فشل إنشاء المتجر"
+    "storeCreationFailed": "فشل إنشاء المتجر",
+    "createStoreSubtitle": "  املا التفاصيل لإنشاء متجرك ",
+    "locationAndType": " المكان والنوع ",
+    "storeDetails": "تفاصيل المتجر",
+    "storeInformation": "معلومات المتجر",
+    "storeImages": "صور المتجر",
+    "operatingHours": "ساعات العمل",
+    "setOperatingHours": "حدد ساعات عمل متجرك",
+    "selectStartTime": "اختر وقت البدء",
+    "selectEndTime": "اختر وقت الانتهاء",
+    "deliveryDetails": "تفاصيل التوصيل"
   },
   "account": {
     "profile": "الملف الشخصي",
@@ -365,6 +375,11 @@
     "read_privacy_policy": "اقرأ سياسة الخصوصية",
     "terms_of_service": "شروط الخدمة",
     "read_terms_service": "اقرأ شروط الخدمة",
-    "app_version": "إصدار التطبيق"
+    "app_version": "إصدار التطبيق",
+     "language": " اللغة ",
+    "change_language": "تغيير اللغة",
+    "change_app_language": "تغيير لغة التطبيق",
+    "store_owner": " ( مالك المتجر ) ",
+    "driver": " ( سائق )"
   }
 }

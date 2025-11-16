@@ -202,7 +202,7 @@ export default function RestaurantHomeScreen() {
             <NoStore />
           </>
         )}
-        {profileLoading ? <Loading /> : null}
+        {/* {profileLoading ? <Loading /> : null} */}
       </SafeAreaView>
     </>
   )

@@ -1,13 +1,16 @@
 import React, { useContext, useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Switch, StatusBar  , Button, Alert} from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Switch, StatusBar, Button, Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import Modal from 'react-native-modal';
-import LanguageSwitcher from '@/components/LanguageSwitcher'
+import LanguageSwitcher from '@/components/common/LanguageSwitcher'
 import { AuthContext } from '@/context/auth_context'
 import CustomHeader from '@/components/custom/customheader'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import AccountButton from '@/components/common/AccountButton'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import i18n from '@/i18n'
 
 interface SettingItem {
   id: string
@@ -23,27 +26,12 @@ export default function Account() {
   const { t } = useTranslation()
   const router = useRouter()
   const { auth, handle_logout } = useContext(AuthContext)
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  // Modal states
-  const [logoutModalVisible, setLogoutModalVisible] = useState(false)
-  const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false)
-
-  // Settings state
-  const [pushNotifications, setPushNotifications] = useState(true)
-  const [orderNotifications, setOrderNotifications] = useState(true)
-  const [emailNotifications, setEmailNotifications] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [soundEffects, setSoundEffects] = useState(true)
-  const [autoAcceptOrders, setAutoAcceptOrders] = useState(false)
 
 
 
-
-
-
- const logout = async () => {
-  
+  const logout = async () => {
     Alert.alert(t('account.logout'),
       t('account.logout_confirmation'),
       [
@@ -54,20 +42,20 @@ export default function Account() {
         {
           text: t('auth.confirm'),
           onPress: async () => {
-             await handle_logout()
-             router.replace('/auth/login')
+            await handle_logout()
+            router.replace('/auth/login')
           },
           style: 'destructive'
         }
       ]
-    );    
+    );
   }
 
 
 
   const settingsSections = [
     {
-      title: t('app_preferences'),
+      title: t('account.app_preferences'),
       items: [
         {
           id: 'language',
@@ -169,7 +157,7 @@ export default function Account() {
           subtitle: t('account.get_help_support'),
           icon: 'help-circle-outline',
           type: 'navigation' as const,
-          action: () => {}
+          action: () => { }
         },
         {
           id: 'privacy_policy',
@@ -177,7 +165,7 @@ export default function Account() {
           subtitle: t('account.read_privacy_policy'),
           icon: 'shield-outline',
           type: 'navigation' as const,
-          action: () => {}
+          action: () => { }
         },
         {
           id: 'terms_service',
@@ -185,7 +173,7 @@ export default function Account() {
           subtitle: t('account.read_terms_of_service'),
           icon: 'document-text-outline',
           type: 'navigation' as const,
-          action: () => {}
+          action: () => { }
         }
       ]
     },
@@ -206,84 +194,91 @@ export default function Account() {
           subtitle: t('account.permanently_delete_account'),
           icon: 'trash-outline',
           type: 'action' as const,
-          action: () => setDeleteAccountModalVisible(true)
+          action: () => { }
         }
       ]
     }
   ]
 
-  const renderSettingItem = (item: SettingItem) => {
-    const isDestructive = item.id === 'delete_account'
-    const isLogout = item.id === 'logout'
+  // const renderSettingItem = (item: SettingItem) => {
+  //   const isDestructive = item.id === 'delete_account'
+  //   const isLogout = item.id === 'logout'
 
-    return (
-      <TouchableOpacity
-        key={item.id}
-        onPress={item.type !== 'toggle' ? item.action : undefined}
-        className="bg-white px-4 py-4 flex-row items-center justify-between border-b border-gray-100"
-        activeOpacity={0.7}
-      >
-        <View className="flex-row items-center flex-1">
-          <View
-            className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${
-              isDestructive ? 'bg-red-50' : isLogout ? 'bg-orange-50' : 'bg-primary/10'
-            }`}
-          >
-            <Ionicons
-              name={item.icon as any}
-              size={20}
-              color={isDestructive ? '#EF4444' : isLogout ? '#F97316' : '#fd4a12'}
-            />
-          </View>
+  //   return (
+  //     <TouchableOpacity
+  //       key={item.id}
+  //       onPress={item.type !== 'toggle' ? item.action : undefined}
+  //       className="bg-white px-4 py-4 flex-row items-center justify-between border-b border-gray-100"
+  //       activeOpacity={0.7}
+  //     >
+  //       <View className="flex-row items-center flex-1">
+  //         <View
+  //           className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${
+  //             isDestructive ? 'bg-red-50' : isLogout ? 'bg-orange-50' : 'bg-primary/10'
+  //           }`}
+  //         >
+  //           <Ionicons
+  //             name={item.icon as any}
+  //             size={20}
+  //             color={isDestructive ? '#EF4444' : isLogout ? '#F97316' : '#fd4a12'}
+  //           />
+  //         </View>
 
-          <View className="flex-1">
-            <Text
-              className={`font-semibold ${isDestructive ? 'text-red-600' : isLogout ? 'text-orange-600' : 'text-gray-800'
-                }`}
-              style={{ fontFamily: 'Cairo_600SemiBold' }}
-            >
-              {item.title}
-            </Text>
-            {item.subtitle && (
-              <Text
-                className="text-gray-500 text-sm mt-1"
-                style={{ fontFamily: 'Cairo_400Regular' }}
-              >
-                {item.subtitle}
-              </Text>
-            )}
-          </View>
-        </View>
+  //         <View className="flex-1">
+  //           <Text
+  //             className={`font-semibold ${isDestructive ? 'text-red-600' : isLogout ? 'text-orange-600' : 'text-gray-800'
+  //               }`}
+  //             style={{ fontFamily: 'Cairo_600SemiBold' }}
+  //           >
+  //             {item.title}
+  //           </Text>
+  //           {item.subtitle && (
+  //             <Text
+  //               className="text-gray-500 text-sm mt-1"
+  //               style={{ fontFamily: 'Cairo_400Regular' }}
+  //             >
+  //               {item.subtitle}
+  //             </Text>
+  //           )}
+  //         </View>
+  //       </View>
 
-        <View className="ml-3">
-          {item.type === 'toggle' && (
-            <Switch
-              value={item.value}
-              onValueChange={item.action}
-              trackColor={{ false: '#E5E7EB', true: '#fd4a12' }}
-              thumbColor={item.value ? '#FFFFFF' : '#FFFFFF'}
-            />
-          )}
+  //       <View className="ml-3">
+  //         {item.type === 'toggle' && (
+  //           <Switch
+  //             value={item.value}
+  //             onValueChange={item.action}
+  //             trackColor={{ false: '#E5E7EB', true: '#fd4a12' }}
+  //             thumbColor={item.value ? '#FFFFFF' : '#FFFFFF'}
+  //           />
+  //         )}
 
-          {item.type === 'language' && (
-            <LanguageSwitcher />
-          )}
+  //         {item.type === 'language' && (
+  //           <LanguageSwitcher />
+  //         )}
 
-          {(item.type === 'navigation' || item.type === 'action') && (
-            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-          )}
-        </View>
-      </TouchableOpacity>
-    )
-  }
+  //         {(item.type === 'navigation' || item.type === 'action') && (
+  //           <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+  //         )}
+  //       </View>
+  //     </TouchableOpacity>
+  //   )
+  // }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
 
       {/* Header */}
-    
-      <CustomHeader title={t('account.account')} />
+
+      {/* <CustomHeader title={t('account.account')} /> */}
+      <View className='flex flex-row items-center justify-between px-4 py-2'>
+        <TouchableOpacity onPress={() => router.back()}>
+          <AntDesign name="arrow-left" size={20} color="black" />
+        </TouchableOpacity>
+        <Text className="ml-4 text-xl font-bold">{t('account.account')}</Text>
+        <Text></Text>
+      </View>
 
 
       {/* Settings Content */}
@@ -313,14 +308,16 @@ export default function Account() {
                 className="text-primary text-sm font-medium"
                 style={{ fontFamily: 'Cairo_600SemiBold' }}
               >
-                {auth?.user?.role?.role || t('user')}
+                {/* {auth?.user?.role?.role || t('user')} */}
+                {auth?.user?.role?.role === "store_owner" ? t('account.store_owner') : ''}
+                {auth?.user?.role?.role === "driver" ? t('account.driver') : ''}
               </Text>
             </View>
           </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="p-4 flex-row items-center justify-between"
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <View className="flex-row items-center">
               <Ionicons name="create-outline" size={20} color="#fd4a12" />
@@ -332,15 +329,17 @@ export default function Account() {
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
+
+
 
         {/* Settings Sections */}
         {settingsSections.map((section, sectionIndex) => (
           <View key={sectionIndex} className="mx-4 mt-6">
             <Text
-              className="text-sm font-semibold text-gray-500 mb-2 px-2 uppercase tracking-wide"
-              style={{ fontFamily: 'Cairo_600SemiBold' }}
+              className={`text-sm font-semibold text-black mb-2 px-2 uppercase tracking-wide ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
+
             >
               {section.title}
             </Text>
@@ -348,7 +347,8 @@ export default function Account() {
             <View className="bg-white rounded-xl shadow-sm overflow-hidden">
               {section.items.map((item, itemIndex) => (
                 <View key={item.id}>
-                  {renderSettingItem(item)}
+                  {/* {renderSettingItem(item)} */}
+                  <AccountButton item={item} />
                 </View>
               ))}
             </View>
@@ -366,7 +366,7 @@ export default function Account() {
         </View>
       </ScrollView>
 
-     
+
     </SafeAreaView>
   )
 }

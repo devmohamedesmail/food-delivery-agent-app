@@ -22,12 +22,12 @@ export default function NoStore() {
       </View>
 
       {/* Title */}
-      <Text className="text-2xl font-bold text-text text-center mb-4" style={{ fontFamily: 'Cairo_700Bold' }}>
+      <Text className="text-2xl font-bold text-text text-center mb-4">
         {t('store.noStoreTitle')}
       </Text>
 
       {/* Message */}
-      <Text className="text-base text-gray-600 text-center mb-8 px-4 leading-6" style={{ fontFamily: 'Cairo_400Regular' }}>
+      <Text className="text-base text-gray-600 text-center mb-8 px-4 leading-6">
         {t('store.noStoreMessage')}
       </Text>
 
@@ -38,7 +38,7 @@ export default function NoStore() {
         activeOpacity={0.8}
       >
         <Ionicons name="add-circle-outline" size={24} color="white" />
-        <Text className="text-white text-lg font-semibold ml-2" style={{ fontFamily: 'Cairo_600SemiBold' }}>
+        <Text className="text-white text-lg font-semibold ml-2" >
           {t('store.createStoreButton')}
         </Text>
       </TouchableOpacity>
@@ -47,19 +47,19 @@ export default function NoStore() {
       <View className="mt-8 bg-white rounded-xl p-4 shadow-sm w-full">
         <View className="flex-row items-start mb-3">
           <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm" style={{ fontFamily: 'Cairo_400Regular' }}>
+          <Text className="text-gray-700 ml-2 flex-1 text-sm" >
             {t('store.manageMenuOrders')}
           </Text>
         </View>
         <View className="flex-row items-start mb-3">
           <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm" style={{ fontFamily: 'Cairo_400Regular' }}>
+          <Text className="text-gray-700 ml-2 flex-1 text-sm" >
             {t('store.trackPerformance')}
           </Text>
         </View>
         <View className="flex-row items-start">
           <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm" style={{ fontFamily: 'Cairo_400Regular' }}>
+          <Text className="text-gray-700 ml-2 flex-1 text-sm">
             {t('store.reachCustomers')}
           </Text>
         </View>

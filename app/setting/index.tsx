@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import CustomHeader from '../../components/custom/customheader'
-import LanguageSwitcher from '../../components/LanguageSwitcher'
+import LanguageSwitcher from '../../components/common/LanguageSwitcher'
 import { AuthContext } from '@/context/auth_context'
 
 interface SettingItem {
