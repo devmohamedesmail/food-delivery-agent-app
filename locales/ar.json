@@ -1,4 +1,11 @@
 {
+  "common":{
+    "selectImage": "اختر صورة",
+    "chooseImageSource": "اختر كيف تريد اختيار صورة",
+    "camera": "الكاميرا",
+    "gallery": "المعرض",
+    "cancel": "إلغاء"
+  },
   "auth": {
     "email": "البريد الإلكتروني",
     "username": "اسم المستخدم",

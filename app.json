@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "uber-agent",
-    "slug": "uber-agent",
+    "name": "Tawsila Agent",
+    "slug": "tawsila-agent",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "uberagent",
+    "scheme": "tawsilaagent",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {

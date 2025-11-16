@@ -10,7 +10,7 @@ import CustomHeader from '@/components/custom/customheader'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AccountButton from '@/components/common/AccountButton'
 import AntDesign from '@expo/vector-icons/AntDesign';
-import i18n from '@/i18n'
+import i18n from '@/lib/i18n'
 
 interface SettingItem {
   id: string

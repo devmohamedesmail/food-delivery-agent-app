@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useContext, useEffect } from 'react';
 // import 'react-native-reanimated';
 import '../global.css'
-import '../i18n'; // Initialize i18n
+import '../lib/i18n'; // Initialize i18n
 
 import { useColorScheme } from '@/components/useColorScheme';
 import AuthProvider, { AuthContext } from '@/context/auth_context';

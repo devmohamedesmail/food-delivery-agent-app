@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, Alert, TouchableOpacity, Image } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import { useTranslation } from 'react-i18next'
 
 interface CustomImagePickerProps {
   label?: string
@@ -29,6 +30,8 @@ export default function CustomImagePicker({
   allowsEditing = false
 }: CustomImagePickerProps) {
   const [selectedImage, setSelectedImage] = useState<string | undefined>(value)
+  const { t , i18n } = useTranslation()
+  const isArabic = i18n.language === 'ar'
 
   const pickImage = async () => {
     try {
@@ -89,12 +92,13 @@ export default function CustomImagePicker({
 
   const showImageOptions = () => {
     Alert.alert(
-      'Select Image',
-      'Choose how you want to select an image',
+    
+      t('common.selectImage'),
+      t('common.chooseImageSource'),
       [
-        { text: 'Camera', onPress: pickImageFromCamera },
-        { text: 'Gallery', onPress: pickImage },
-        { text: 'Cancel', style: 'cancel' }
+        { text: t('common.camera'), onPress: pickImageFromCamera },
+        { text: t('common.gallery'), onPress: pickImage },
+        { text: t('common.cancel'), style: 'cancel' }
       ]
     )
   }
@@ -105,8 +109,7 @@ export default function CustomImagePicker({
   return (
     <View className="mb-4">
       <Text
-        className="text-gray-700 text-base font-medium mb-2"
-        style={{ fontFamily: 'Cairo_600SemiBold' }}
+        className={`text-gray-700 text-base font-medium mb-2 ${isArabic ? 'text-right' : 'text-left'}`}
       >
         {label}
       </Text>
@@ -124,17 +127,17 @@ export default function CustomImagePicker({
             />
             <Text
               className="text-blue-600 text-sm"
-              style={{ fontFamily: 'Cairo_400Regular' }}
+              
             >
-              {changeText}
+              {changeText} 
             </Text>
           </View>
         ) : (
           <View className="items-center">
             <Ionicons name="camera" size={32} color="#9CA3AF" />
             <Text
-              className="text-gray-500 mt-2 text-center"
-              style={{ fontFamily: 'Cairo_400Regular' }}
+              className={`text-gray-500 mt-2 ${isArabic ? 'text-right' : 'text-center'}`}
+
             >
               {placeholder}
             </Text>

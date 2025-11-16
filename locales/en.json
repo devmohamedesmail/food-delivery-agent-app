@@ -1,4 +1,11 @@
 {
+  "common":{
+    "selectImage": "Select Image",
+    "chooseImageSource": "Choose how you want to select an image",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "cancel": "Cancel"
+  },
   "auth": {
     "email": "Email",
     "username": "Username",
