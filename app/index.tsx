@@ -1,9 +1,7 @@
 import { AuthContext } from '@/context/auth_context'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Text } from 'react-native'
-import { Link, Redirect } from 'expo-router'
-import StoreHomeScreen from '@/components/store/StoreHomeScreen'
-import DriverHomeScreen from '@/components/DriverHomeScreen'
+import { Link, Redirect, router } from 'expo-router'
 import Loading from '@/components/custom/Loading'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useFetch from '@/hooks/useFetch'
@@ -30,13 +28,14 @@ export default function Home() {
     return <Redirect href="/auth/login" />
   }
 
-  console.log("User Role:", auth);
 
   // Show appropriate home screen based on user role
   if (auth?.user?.role.role === "driver") {
-    return <DriverHomeScreen />
+    // return <DriverHomeScreen />
+    router.push('/driver')
   } else if (auth?.user?.role.role === "store_owner") {
-    return <StoreHomeScreen />
+    // return <StoreHomeScreen />
+    router.push('/stores')
   } else {
     // Fallback for unknown role
     return (

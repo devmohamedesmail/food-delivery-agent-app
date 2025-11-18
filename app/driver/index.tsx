@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react'
-import { useContext, useState } from 'react'
-import { View, Text, TouchableOpacity, StatusBar, Image, RefreshControl, ScrollView } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { AuthContext } from '@/context/auth_context'
+import React from 'react'
+import { ScrollView, View , Text , TouchableOpacity, StatusBar , Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import useFetch from '@/hooks/useFetch'
-import { useRouter } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { useContext, useState, useCallback } from 'react'
+import { AuthContext } from '@/context/auth_context'
 import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { RefreshControl } from 'react-native'
+import useFetch from '@/hooks/useFetch'
 
-export default function DriverHomeScreen() {
+export default function Home() {
   const { t, i18n } = useTranslation()
   const { auth } = useContext(AuthContext)
   const router = useRouter();
@@ -29,14 +30,8 @@ export default function DriverHomeScreen() {
 
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50"
-
-    >
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
-
-
-
-
 
 
       <View className="flex-row items-center justify-between px-4 py-4 bg-white shadow-sm">
@@ -50,7 +45,6 @@ export default function DriverHomeScreen() {
           <Ionicons name="person-circle-outline" size={28} color="#fd4a12" />
         </TouchableOpacity>
       </View>
-
 
 
       <ScrollView
@@ -91,7 +85,7 @@ export default function DriverHomeScreen() {
         ) : (
           <View>
             <Image
-              source={require('../assets/gallery/license.png')}
+              source={require('../../assets/gallery/license.png')}
               style={{ width: 200, height: 200, alignSelf: 'center', marginTop: 50 }}
 
             />
@@ -106,9 +100,6 @@ export default function DriverHomeScreen() {
           </View>
         )}
       </ScrollView>
-
-
-
 
     </SafeAreaView>
   )

@@ -1,26 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Switch, StatusBar, Button, Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Ionicons } from '@expo/vector-icons'
+
 import { useRouter } from 'expo-router'
-import Modal from 'react-native-modal';
-import LanguageSwitcher from '@/components/common/LanguageSwitcher'
 import { AuthContext } from '@/context/auth_context'
-import CustomHeader from '@/components/custom/customheader'
+
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AccountButton from '@/components/common/AccountButton'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import i18n from '@/lib/i18n'
+import AccountActionsButtons from '@/components/account/AccountActionsButtons'
 
-interface SettingItem {
-  id: string
-  title: string
-  subtitle?: string
-  icon: string
-  type: 'toggle' | 'navigation' | 'action' | 'language'
-  value?: boolean
-  action?: () => void
-}
+
 
 export default function Account() {
   const { t } = useTranslation()
@@ -28,6 +19,8 @@ export default function Account() {
   const { auth, handle_logout } = useContext(AuthContext)
   const [darkMode, setDarkMode] = useState(false)
   const [soundEffects, setSoundEffects] = useState(true)
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false)
+
 
 
 
@@ -84,70 +77,6 @@ export default function Account() {
         }
       ]
     },
-    // {
-    //   title: t('account.notifications'),
-    //   items: [
-    //     {
-    //       id: 'push_notifications',
-    //       title: t('account.push_notifications'),
-    //       subtitle: t('account.push_notifications_description'),
-    //       icon: 'notifications-outline',
-    //       type: 'toggle' as const,
-    //       value: pushNotifications,
-    //       action: () => setPushNotifications(!pushNotifications)
-    //     },
-    //     {
-    //       id: 'order_notifications',
-    //       title: t('account.order_notifications'),
-    //       subtitle: t('account.order_notifications_description'),
-    //       icon: 'receipt-outline',
-    //       type: 'toggle' as const,
-    //       value: orderNotifications,
-    //       action: () => setOrderNotifications(!orderNotifications)
-    //     },
-    //     {
-    //       id: 'email_notifications',
-    //       title: t('account.email_notifications'),
-    //       subtitle: t('account.email_notifications_description'),
-    //       icon: 'mail-outline',
-    //       type: 'toggle' as const,
-    //       value: emailNotifications,
-    //       action: () => setEmailNotifications(!emailNotifications)
-    //     }
-    //   ]
-    // },
-
-
-    // {
-    //   title: t('account.restaurant_settings'),
-    //   items: [
-    //     {
-    //       id: 'auto_accept_orders',
-    //       title: t('account.auto_accept_orders'),
-    //       subtitle: t('account.auto_accept_orders_description'),
-    //       icon: 'checkmark-circle-outline',
-    //       type: 'toggle' as const,
-    //       value: autoAcceptOrders,
-    //       action: () => setAutoAcceptOrders(!autoAcceptOrders)
-    //     },
-    //     {
-    //       id: 'restaurant_info',
-    //       title: t('account.restaurant_information'),
-    //       subtitle: t('account.manage_restaurant_details'),
-    //       icon: 'restaurant-outline',
-    //       type: 'navigation' as const,
-    //       action: () => {}
-    //     },
-    //     {
-    //       id: 'business_hours',
-    //       title: t('account.business_hours'),
-    //       subtitle: t('account.set_operating_hours'),
-    //       icon: 'time-outline',
-    //       type: 'navigation' as const,
-    //       action: () => {}
-    //     }
-    //   ]
-    // },
     {
       title: t('account.support_help'),
       items: [
@@ -177,98 +106,26 @@ export default function Account() {
         }
       ]
     },
-    {
-      title: t('account.account'),
-      items: [
-        {
-          id: 'logout',
-          title: t('account.logout'),
-          subtitle: t('account.sign_out_account'),
-          icon: 'log-out-outline',
-          type: 'action' as const,
-          action: () => logout()
-        },
-        {
-          id: 'account.delete_account',
-          title: t('account.delete_account'),
-          subtitle: t('account.permanently_delete_account'),
-          icon: 'trash-outline',
-          type: 'action' as const,
-          action: () => { }
-        }
-      ]
-    }
+    
   ]
 
-  // const renderSettingItem = (item: SettingItem) => {
-  //   const isDestructive = item.id === 'delete_account'
-  //   const isLogout = item.id === 'logout'
-
-  //   return (
-  //     <TouchableOpacity
-  //       key={item.id}
-  //       onPress={item.type !== 'toggle' ? item.action : undefined}
-  //       className="bg-white px-4 py-4 flex-row items-center justify-between border-b border-gray-100"
-  //       activeOpacity={0.7}
-  //     >
-  //       <View className="flex-row items-center flex-1">
-  //         <View
-  //           className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${
-  //             isDestructive ? 'bg-red-50' : isLogout ? 'bg-orange-50' : 'bg-primary/10'
-  //           }`}
-  //         >
-  //           <Ionicons
-  //             name={item.icon as any}
-  //             size={20}
-  //             color={isDestructive ? '#EF4444' : isLogout ? '#F97316' : '#fd4a12'}
-  //           />
-  //         </View>
-
-  //         <View className="flex-1">
-  //           <Text
-  //             className={`font-semibold ${isDestructive ? 'text-red-600' : isLogout ? 'text-orange-600' : 'text-gray-800'
-  //               }`}
-  //             style={{ fontFamily: 'Cairo_600SemiBold' }}
-  //           >
-  //             {item.title}
-  //           </Text>
-  //           {item.subtitle && (
-  //             <Text
-  //               className="text-gray-500 text-sm mt-1"
-  //               style={{ fontFamily: 'Cairo_400Regular' }}
-  //             >
-  //               {item.subtitle}
-  //             </Text>
-  //           )}
-  //         </View>
-  //       </View>
-
-  //       <View className="ml-3">
-  //         {item.type === 'toggle' && (
-  //           <Switch
-  //             value={item.value}
-  //             onValueChange={item.action}
-  //             trackColor={{ false: '#E5E7EB', true: '#fd4a12' }}
-  //             thumbColor={item.value ? '#FFFFFF' : '#FFFFFF'}
-  //           />
-  //         )}
-
-  //         {item.type === 'language' && (
-  //           <LanguageSwitcher />
-  //         )}
-
-  //         {(item.type === 'navigation' || item.type === 'action') && (
-  //           <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-  //         )}
-  //       </View>
-  //     </TouchableOpacity>
-  //   )
-  // }
+ 
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
-      <CustomHeader title={t('account.account')} />
+  
+      <View className='bg-black/90 pt-24 pb-5 px-4 py-4 flex-row items-center justify-between'>
+       
+        <TouchableOpacity
+        className='bg-black/60 rounded-full p-2'
+        onPress={() => router.back()}>
+          <AntDesign name="arrow-left" size={24} color="white" />
+        </TouchableOpacity>
+
+        <Text className="text-white text-lg font-bold" >{t('account.account')}</Text>
+
+      </View>
 
 
       {/* Settings Content */}
@@ -305,21 +162,7 @@ export default function Account() {
             </View>
           </View>
 
-          {/* <TouchableOpacity
-            className="p-4 flex-row items-center justify-between"
-            onPress={() => { }}
-          >
-            <View className="flex-row items-center">
-              <Ionicons name="create-outline" size={20} color="#fd4a12" />
-              <Text
-                className="text-primary font-medium ml-3"
-                style={{ fontFamily: 'Cairo_600SemiBold' }}
-              >
-                {t('edit_profile')}
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-          </TouchableOpacity> */}
+        
         </View>
 
 
@@ -344,6 +187,8 @@ export default function Account() {
             </View>
           </View>
         ))}
+
+        <AccountActionsButtons />
 
         {/* App Version */}
         <View className="items-center py-8">

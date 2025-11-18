@@ -69,18 +69,18 @@ export default function RestaurantHomeScreen() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-gray-50 ">
+      <SafeAreaView className="flex-1 bg-gray-50 " edges={["bottom"]}>
         <StatusBar barStyle="light-content" backgroundColor="black" />
 
-        <View className="flex-row items-center justify-between px-4 py-4 bg-white shadow-sm">
+        <View className="flex-row items-center justify-between pt-20 px-4 py-4 bg-black/90 shadow-sm">
           <View style={{ width: 32 }} />
-          <Text className="text-2xl font-bold text-black-800">{t('store.homeTitle', { defaultValue: 'Driver Home' })}</Text>
+          <Text className="text-2xl font-bold text-white">{t('store.homeTitle', { defaultValue: 'Driver Home' })}</Text>
           <TouchableOpacity
             onPress={() => router.push('/account')}
-            className="p-2 rounded-full bg-primary/10"
+            className="p-2 rounded-full bg-primary"
             accessibilityLabel={t('account.profile')}
           >
-            <Ionicons name="person-circle-outline" size={28} color="#fd4a12" />
+            <Ionicons name="person-circle-outline" size={28} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -166,35 +166,7 @@ export default function RestaurantHomeScreen() {
                 </View>
               </View>
 
-              {/* Quick Actions */}
-              <View className="mb-6">
-                <Text className="text-lg font-bold text-gray-800 mb-3 px-2" style={{ fontFamily: 'Cairo_700Bold' }}>
-                  {t('store.quick_actions')}
-                </Text>
-
-                <View className="flex-row space-x-3">
-                  <TouchableOpacity className="flex-1 bg-primary/10 rounded-xl p-4 items-center">
-                    <Ionicons name="add-circle" size={32} color="#fd4a12" />
-                    <Text className="text-primary text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
-                      {t('store.add_product')}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity className="flex-1 bg-blue-50 rounded-xl p-4 items-center">
-                    <Ionicons name="notifications" size={32} color="#3B82F6" />
-                    <Text className="text-blue-600 text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
-                      {t('store.notifications')}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity className="flex-1 bg-green-50 rounded-xl p-4 items-center">
-                    <Ionicons name="analytics" size={32} color="#10B981" />
-                    <Text className="text-green-600 text-sm mt-2 font-medium" style={{ fontFamily: 'Cairo_600SemiBold' }}>
-                      {t('store.analytics')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+            
             </ScrollView>
           </>
         ) : (

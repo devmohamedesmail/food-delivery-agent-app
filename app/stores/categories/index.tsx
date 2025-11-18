@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons'
 import Input from '@/components/custom/Input'
 import CustomTextArea from '@/components/custom/customtextarea'
 import CustomButton from '@/components/custom/Button'
-import Loading from '@/components/custom/Loading'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -15,6 +14,7 @@ import useFetch from '@/hooks/useFetch'
 import { Toast } from 'toastify-react-native'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Loading from '@/components/common/Loading'
 
 interface Category {
   id: number
@@ -33,7 +33,7 @@ export default function Categories() {
   const [refreshing, setRefreshing] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const { data: categoriesData, loading: categoriesLoading, error: categoriesError , refetch: refetchCategories } = useFetch(`/categories/store/${auth.user.store.id}`)
+  const { data: categoriesData, loading: categoriesLoading, error: categoriesError, refetch: refetchCategories } = useFetch(`/categories/store/${auth.user.store.id}`)
 
   const onRefresh = () => {
     setRefreshing(true)
@@ -128,22 +128,24 @@ export default function Categories() {
   }
 
   const openAddModal = () => {
-    console.log('Opening add modal...')
     setEditingCategory(null)
     formik.resetForm()
     setModalVisible(true)
-    console.log('Modal visibility set to:', true)
   }
 
   if (categoriesLoading) {
-    return <Loading color="#fd4a12" />
+    return (
+      <View>
+        <Loading type="processing" />
+      </View>
+    )
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       {/* Professional Header */}
-      <View className="bg-white px-4 py-4 shadow-sm">
+      <View className="bg-black/90 px-4 py-4 shadow-sm pt-24">
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
             onPress={() => router.back()}
@@ -151,18 +153,18 @@ export default function Categories() {
           >
             <Ionicons name="arrow-back" size={24} color="#374151" />
           </TouchableOpacity>
-          
+
           <View className="flex-1 mx-4">
-            <Text className="text-xl font-bold text-gray-800">
+            <Text className="text-xl font-bold text-white">
               {t('categories.categories')}
             </Text>
-            <Text className="text-sm text-gray-500 mt-1">
+            <Text className="text-sm text-white mt-1">
               {t('categories.manage_categories')}
             </Text>
           </View>
 
-          <View className="bg-primary/10 w-10 h-10 rounded-full items-center justify-center">
-            <Text className="text-primary font-bold">
+          <View className="bg-primary w-10 h-10 rounded-full items-center justify-center">
+            <Text className="text-white font-bold">
               {categoriesData?.data?.length}
             </Text>
           </View>
@@ -181,7 +183,7 @@ export default function Categories() {
                 {t('categories.total_categories')}
               </Text>
               <Text className="text-2xl font-bold text-primary mt-1">
-                 {categoriesData?.data?.length}
+                {categoriesData?.data?.length}
               </Text>
             </View>
             <View className="bg-primary/10 w-14 h-14 rounded-full items-center justify-center">
@@ -203,7 +205,7 @@ export default function Categories() {
           </View>
         ) : (
           <View className="space-y-3">
-            {categoriesData && categoriesData.data.map((category:any) => (
+            {categoriesData && categoriesData.data.map((category: any) => (
               <View key={category.id} className="bg-white rounded-xl p-4 shadow-sm">
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-1">

@@ -4,7 +4,10 @@
     "chooseImageSource": "Choose how you want to select an image",
     "camera": "Camera",
     "gallery": "Gallery",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "ok": "OK",
+    "confirming": "Confirming..."
   },
   "auth": {
     "email": "Email",
@@ -46,43 +49,38 @@
     "identifier_invalid": "Please enter a valid email address",
     "identifier_required": "Email or phone is required",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "address": "Address"
   },
-  "resturant": {
-    "restaurantName": "Restaurant Name",
-    "enterRestaurantName": "Enter Restaurant Name",
-    "restaurantAddress": "Restaurant Address",
-    "enterRestaurantAddress": "Enter Restaurant Address",
-    "restaurantImage": "Restaurant Image",
-    "tapToSelectRestaurantImage": "Tap to select restaurant image",
-    "tapToChangeRestaurantImage": "Tap to change restaurant image",
-    "registeringRestaurant": "Registering Restaurant...",
-    "registerRestaurant": "Register Restaurant",
-    "phone": "Phone",
-    "enterPhone": "Enter Phone Number",
-    "tapToChangeImage": "Tap to change image",
-    "tapToSelectImage": "Tap to select image",
-    "registering": "Registering...",
-    "startTime": "Start Time",
-    "endTime": "End Time",
-    "restaurantRegistration": "Restaurant Registration",
-    "restaurantDashboard": "Restaurant Dashboard",
-    "manageYourRestaurant": "Manage your restaurant",
-    "todayOrders": "Today's Orders",
-    "todayRevenue": "Today's Revenue",
-    "quickActions": "Quick Actions",
-    "addMenuItem": "Add Menu Item",
-    "viewOrders": "View Orders",
-    "settings": "Settings",
-    "recentOrders": "Recent Orders",
-    "menu": "Menu",
-    "manage_your_menu_items": "Manage your menu items",
-    "menu_items": "Menu Items",
-    "add_menu_item": "Add Menu Item"
-  },
+
   "orders": {
     "orders": "Orders",
-    "manage_incoming_orders": "Manage incoming orders"
+    "manage_incoming_orders": "Manage incoming orders",
+    "all": "All",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "preparing": "Preparing",
+    "onTheWay": "On The Way",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "myOrders": "My Orders",
+    "title": "Orders",
+    "noOrders": "No orders yet",
+    "noOrdersDescription": "When you receive orders, they will appear here",
+    "loading": "Loading...",
+    "orderId": "Order ID",
+    "items": "Items",
+    "totalAmount": "Total Amount",
+    "cancelOrder": "Cancel Order",
+    "cancelOrderConfirmation": "Are you sure you want to cancel this order?",
+    "orderCancelledSuccessfully": "Order cancelled successfully",
+    "failedToCancelOrder": "Failed to cancel order",
+    "acceptOrder": "Accept Order",
+    "acceptOrderConfirmation": "Are you sure you want to accept this order?",
+    "orderAcceptedSuccessfully": "Order accepted successfully",
+    "failedToAcceptOrder": "Failed to accept order",
+    "areYouSureCancel": "Are you sure you want to cancel this order?",
+    "acceptingOrder": "Accepting..."
   },
   "driver": {
     "homeTitle": "Driver Home",
@@ -389,7 +387,10 @@
     "change_language": "Change Language",
     "change_app_language": "Change the language of the app",
     "store_owner": " (Store Owner)",
-    "driver": " (Driver)"
+    "driver": " (Driver)",
+    "logouting": "Logging Out...",
+    "logout_successful": "Logout Successful",
+    "logout_failed": "Logout Failed"
     
   }
 }
