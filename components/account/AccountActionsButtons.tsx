@@ -49,7 +49,7 @@ export default function AccountActionsButtons() {
     return (
         <View className='px-5'>
             <TouchableOpacity
-                className='bg-white py-4  border-b border-b-gray-200 rounded-xl px-4 mb-4 flex-row justify-center items-center'
+                className='bg-white py-7  border-b border-b-gray-200 rounded-xl px-4 mb-4 flex-row justify-center items-center'
                 onPress={() => setLogoutModalVisible(true)}>
                 <View>
                     <Entypo name="chevron-left" size={24} color="gray" />
@@ -83,7 +83,7 @@ export default function AccountActionsButtons() {
                         onPress={() => setLogoutModalVisible(false)}
                         className='bg-gray-200 rounded-xl px-4 py-3 mt-2'
                         textClassName='text-gray-800'
-                        style={{ flex: 1 }}
+                        style={{ flex: 1  }}
                     />
                 </View>
             </CustomModal>

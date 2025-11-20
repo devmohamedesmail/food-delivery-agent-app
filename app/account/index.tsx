@@ -10,6 +10,7 @@ import AccountButton from '@/components/common/AccountButton'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import i18n from '@/lib/i18n'
 import AccountActionsButtons from '@/components/account/AccountActionsButtons'
+import Header from '@/components/custom/Header'
 
 
 
@@ -106,26 +107,20 @@ export default function Account() {
         }
       ]
     },
-    
+
   ]
 
- 
+
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
-  
-      <View className='bg-black/90 pt-24 pb-5 px-4 py-4 flex-row items-center justify-between'>
-       
-        <TouchableOpacity
-        className='bg-black/60 rounded-full p-2'
-        onPress={() => router.back()}>
-          <AntDesign name="arrow-left" size={24} color="white" />
-        </TouchableOpacity>
 
-        <Text className="text-white text-lg font-bold" >{t('account.account')}</Text>
 
-      </View>
+      <Header title={t('account.account')} />
+
+
+
 
 
       {/* Settings Content */}
@@ -162,7 +157,7 @@ export default function Account() {
             </View>
           </View>
 
-        
+
         </View>
 
 

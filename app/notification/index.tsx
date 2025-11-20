@@ -27,17 +27,15 @@ export default function Notification() {
   const { t } = useTranslation()
   const router = useRouter()
   const { auth } = useAuth()
-  const {
-    data: profileData,
-    loading: profileLoading,
-    error: profileError,
-    refetch: refetchProfile
-  } = useFetch(`/users/profile/${auth?.user?.id}`)
+  const { data: profileData} = useFetch(`/users/profile/${auth?.user?.id}`)
+  const { loading: profileLoading}= useFetch(`/users/profile/${auth?.user?.id}`)
+  const { refetch: refetchProfile}= useFetch(`/users/profile/${auth?.user?.id}`)
+  const { error: profileError}= useFetch(`/users/profile/${auth?.user?.id}`)
 
-  const { data: notification, loading: notificationLoading, error: notificationError , refetch:notificationRefetch } = useFetch(`/notifications/?notifiable_id=${auth?.user?.id}&notifiable_type=driver`)
+  const { data: notification, loading: notificationLoading, error: notificationError, refetch: notificationRefetch } = useFetch(`/notifications/?notifiable_id=${auth?.user?.id}&notifiable_type=driver`)
 
 
-const handle_mark_as_red = async (notification_id: string) => {
+  const handle_mark_as_red = async (notification_id: string) => {
     try {
       console.log('Notification ID:', notification_id);
       await axios.put(`${config.URL}/notifications/read/${notification_id}`)
@@ -48,8 +46,8 @@ const handle_mark_as_red = async (notification_id: string) => {
         text1: t('common.error_happened')
       })
     }
-     
-}
+
+  }
 
 
   return (
@@ -66,19 +64,18 @@ const handle_mark_as_red = async (notification_id: string) => {
         >
 
           {notificationLoading ? (
-            <View><Loading /></View>
+            <View className='flex-1'><Loading /></View>
           ) : (<>
 
             {notification?.data.length === 0 ? (
-              // Empty State
               <EmptyNotification />
             ) : (
               // Notifications List
               <View className="px-2 py-4">
                 {notification && notification?.data.map((notification: any) => (
-                  <TouchableOpacity 
-                  onPress={()=> handle_mark_as_red(notification.id)}
-                  key={notification.id} className='border rounded-md border-gray-100 p-4 bg-white mb-2 py-5'>
+                  <TouchableOpacity
+                    onPress={() => handle_mark_as_red(notification.id)}
+                    key={notification.id} className='border rounded-md border-gray-100 p-4 bg-white mb-2 py-5'>
 
 
                     <View className='flex flex-row justify-end items-center'>

@@ -51,7 +51,8 @@
     "identifier_required": "Email or phone is required",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "address": "Address"
+    "address": "Address",
+    "checkCredentials": "Please check your credentials and try again."
   },
 
   "orders": {
@@ -109,7 +110,15 @@
     "vehicle_type_required": "Vehicle type is required",
     "vehicle_color_required": "Vehicle color is required",
     "vehicle_image_required": "Vehicle image is required",
-    "viewOrders": "View Orders"
+    "viewOrders": "View Orders",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "toggleAvailability": "Toggle Availability",
+    "goOnline": "Go Online",
+    "goOffline": "Go Offline",
+    "youAreOnline": "You are now online and can receive orders",
+    "youAreOffline": "You are now offline and will not receive orders",
+    "failedToUpdateStatus": "Failed to update availability status"
   },
   "driverOrders":{
     "title": "Driver Orders",

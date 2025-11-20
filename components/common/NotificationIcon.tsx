@@ -8,8 +8,8 @@ export default function NotificationIcon() {
     return (
         <TouchableOpacity 
         onPress={()=>router.push('/notification')}
-        className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center">
-            <Ionicons name="notifications" size={20} color="red" />
+        className="w-10 h-10 bg-white rounded-full items-center justify-center">
+            <Ionicons name="notifications" size={20} color="#fd4a12" />
         </TouchableOpacity>
     )
 }

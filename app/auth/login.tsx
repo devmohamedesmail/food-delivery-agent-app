@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router'
 import CustomInput from '@/components/custom/Input'
 import CustomButton from '@/components/custom/Button'
 import { AuthContext } from '@/context/auth_context'
-import Logo from '@/components/logo'
+import Logo from '@/components/common/logo'
 import { Toast } from 'toastify-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomToast from '@/components/custom/Toast'
@@ -42,24 +42,25 @@ export default function Login() {
         const result = await handle_login(values.identifier, values.password)
         Toast.show({
           text1: t('auth.login_success'),
+          text2: t('auth.welcomeBack'),
           type: 'success',
         })
 
-        const role = result.data.user.role;
-        if (role === 'restaurant_owner') {
-          router.replace('/restaurant/dashboard')
-        } else if (role === 'restaurant') {
-          router.replace('/')
+        const role = result.data.user.role.role;
+          
+        if (role === 'store_owner') {
+          router.replace('/stores')
         } else if (role === 'driver') {
-          router.replace('/')
+          router.replace('/driver')
         } else {
           router.replace('/')
         }
         setIsLoading(false)
-      } catch (error) {
+      } catch (error:any) {
         setIsLoading(false)
         Toast.show({
           text1: t('auth.login_failed'),
+          text2: t('auth.checkCredentials'),
           type: 'error',
         })
       } finally {

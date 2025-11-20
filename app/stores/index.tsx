@@ -8,6 +8,7 @@ import { useContext } from 'react'
 import useFetch from '@/hooks/useFetch'
 import { useRouter } from 'expo-router'
 import NoStore from '@/components/store/NoStore'
+import NotificationIcon from '@/components/common/NotificationIcon'
 
 interface ManagementCard {
     title: string
@@ -70,7 +71,7 @@ export default function Home() {
             <StatusBar barStyle="light-content" backgroundColor="black" />
 
             <View className="flex-row items-center justify-between pt-20 px-4 py-4 bg-black/90 shadow-sm">
-                <View style={{ width: 32 }} />
+                <NotificationIcon />
                 <Text className="text-2xl font-bold text-white">{t('store.homeTitle', { defaultValue: 'Driver Home' })}</Text>
                 <TouchableOpacity
                     onPress={() => router.push('/account')}

@@ -29,7 +29,6 @@ export default function Categories() {
   const { t } = useTranslation()
   const { auth } = useContext(AuthContext)
   const router = useRouter()
-  const [categories, setCategories] = useState<Category[]>([])
   const [refreshing, setRefreshing] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
@@ -37,7 +36,7 @@ export default function Categories() {
 
   const onRefresh = () => {
     setRefreshing(true)
-    // fetchCategories()
+    refetchCategories()
   }
 
 
@@ -135,7 +134,7 @@ export default function Categories() {
 
   if (categoriesLoading) {
     return (
-      <View>
+      <View className='flex-1'>
         <Loading type="processing" />
       </View>
     )

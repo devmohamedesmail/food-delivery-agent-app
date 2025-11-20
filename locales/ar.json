@@ -52,7 +52,8 @@
     "identifier_required": "البريد الإلكتروني أو الهاتف مطلوب",
     "cancel": "إلغاء",
     "confirm": "تأكيد",
-    "address": "العنوان"
+    "address": "العنوان",
+    "checkCredentials": "يرجى التحقق من بياناتك الخاصة وحاول مرة أخرى."
   },
   "orders": {
     "orders": "الطلبات",
@@ -108,7 +109,15 @@
     "vehicle_type_required": "نوع المركبة مطلوب",
     "vehicle_color_required": "لون المركبة مطلوب",
     "vehicle_image_required": "صورة المركبة مطلوبة",
-    "viewOrders": "عرض الطلبات"
+    "viewOrders": "عرض الطلبات",
+     "available": " متاح ",
+    "unavailable": " غير متاح ",
+    "toggleAvailability": "تبديل التوفر",
+    "goOnline": "الاتصال بالإنترنت",
+    "goOffline": "قطع الاتصال بالإنترنت",
+    "youAreOnline": "أنت الآن متصل بالإنترنت ويمكنك استقبال الطلبات",
+    "youAreOffline": "أنت الآن غير متصل بالإنترنت ولن تستقبل الطلبات",
+    "failedToUpdateStatus": "فشل في تحديث حالة التوفر"
   },
    "driverOrders":{
     "title": " طلبات السائق ",

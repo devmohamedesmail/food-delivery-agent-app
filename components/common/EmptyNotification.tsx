@@ -20,7 +20,6 @@ export default function EmptyNotification() {
 
             <Text
                 className="text-gray-500 text-center text-base leading-6"
-                style={{ fontFamily: 'Cairo_400Regular' }}
             >
                 {t('notifications.noNotificationsDesc')}
             </Text>

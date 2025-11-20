@@ -9,7 +9,7 @@ import { AuthContext } from '@/context/auth_context'
 import CustomButton from '@/components/custom/Button'
 import { Toast } from 'toastify-react-native'
 import { useRouter } from 'expo-router'
-import Logo from '@/components/logo'
+import Logo from '@/components/common/logo'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type UserRole = 3 | 5 // 3 for store_owner, 5 for driver
