@@ -7,7 +7,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "ok": "OK",
-    "confirming": "Confirming..."
+    "confirming": "Confirming...",
+    "error_happened": "An error occurred. Please try again."
   },
   "auth": {
     "email": "Email",
@@ -107,7 +108,16 @@
     "license_plate_required": "License plate is required",
     "vehicle_type_required": "Vehicle type is required",
     "vehicle_color_required": "Vehicle color is required",
-    "vehicle_image_required": "Vehicle image is required"
+    "vehicle_image_required": "Vehicle image is required",
+    "viewOrders": "View Orders"
+  },
+  "driverOrders":{
+    "title": "Driver Orders",
+    "from": "From",
+    "to": "To",
+    "fare": "Fare",
+    "payment": "Payment",
+    "rider": "Rider"
   },
   "colors": {
     "black": "Black",

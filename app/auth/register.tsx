@@ -10,6 +10,7 @@ import CustomButton from '@/components/custom/Button'
 import { Toast } from 'toastify-react-native'
 import { useRouter } from 'expo-router'
 import Logo from '@/components/logo'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type UserRole = 3 | 5 // 3 for store_owner, 5 for driver
 
@@ -96,7 +97,7 @@ export default function Register() {
         {
             value: 3,
             label: t('auth.restaurant_owner'),
-            icon: 'restaurant-outline'
+            icon: 'storefront-outline'
         },
         {
             value: 5,
@@ -109,7 +110,7 @@ export default function Register() {
 
 
     return (
-        <View className="flex-1 bg-gradient-to-br from-blue-900 via-purple-900 to-black">
+        <SafeAreaView className="flex-1 " edges={["bottom"]}>
             <StatusBar barStyle="light-content" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -122,16 +123,29 @@ export default function Register() {
                 >
 
 
-                    <View className="flex-1 bg-white rounded-t-[32px] px-6 pt-20">
-                        <View className='flex items-center justify-center'>
-                            <Logo />
 
-                        </View>
-                        <View className="mb-6">
-                            <Text className="text-2xl text-center arabic-font text-gray-800 mb-2">
+                    <View className="pt-10 pb-8 px-6 bg-black">
+
+
+
+
+                        {/* Logo/Brand Section */}
+                        <View className="items-center mb-8 pt-20">
+
+                            <View className="bg-white p-4 rounded-full overflow-hidden">
+                                <Logo />
+                            </View>
+                            <Text className="text-3xl  text-white font-extrabold mt-4 mb-2" >
                                 {t('auth.createAccount')}
                             </Text>
+                    
                         </View>
+                    </View>
+
+
+                    <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
+
+
 
                         {/* Name Input */}
                         <CustomInput
@@ -174,7 +188,7 @@ export default function Register() {
                                     <TouchableOpacity
                                         key={option.value}
                                         onPress={() => formik.setFieldValue('role_id', option.value)}
-                                        className={`border rounded-xl p-4 mb-3 flex-row items-center ${formik.values.role_id === option.value
+                                        className={`border rounded-xl p-4 mb-3 flex-row-reverse items-center  ${formik.values.role_id === option.value
                                             ? 'border-primary bg-black-50'
                                             : 'border-gray-200 bg-gray-50'
                                             }`}
@@ -189,7 +203,7 @@ export default function Register() {
                                                 color={formik.values.role_id === option.value ? 'red' : '#6B7280'}
                                             />
                                         </View>
-                                        <Text className={`flex-1 ${formik.values.role_id === option.value
+                                        <Text className={`flex-1 text-right ${formik.values.role_id === option.value
                                             ? 'text-priamry'
                                             : 'text-gray-700'
                                             }`}>
@@ -236,6 +250,6 @@ export default function Register() {
 
                 </ScrollView>
             </KeyboardAvoidingView>
-        </View>
+        </SafeAreaView>
     )
 }

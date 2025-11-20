@@ -9,12 +9,13 @@ import Button from '../../components/custom/Button'
 import Select from '../../components/custom/Select'
 import { Toast } from 'toastify-react-native'
 import CustomImagePicker from '../../components/custom/customimagepicker'
-import CustomHeader from '../../components/custom/customheader'
+import CustomHeader from '../../components/custom/Header'
 import CustomLoading from '../../components/custom/Loading'
 import axios from 'axios'
 import { config } from '@/constants/config'
 import useFetch from '@/hooks/useFetch'
 import { useAuth } from '@/context/auth_context'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 interface DriverFormValues {
     vehicle_type: string
@@ -32,7 +33,7 @@ interface VehicleType {
 }
 
 export default function Create() {
-    const { t } = useTranslation()
+    const { t , i18n} = useTranslation()
     const router = useRouter()
     const { auth } = useAuth()
     const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -141,7 +142,8 @@ export default function Create() {
     }
 
     return (
-        <KeyboardAvoidingView
+       <SafeAreaView className='flex-1' edges={["bottom"]}>
+         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             className="flex-1 bg-gray-50"
         >
@@ -159,12 +161,12 @@ export default function Create() {
                         {/* Section Header */}
                         <View className="mb-6">
                             <Text
-                                className="text-xl font-semibold text-gray-800 mb-2"
+                                className={`text-xl font-semibold text-black mb-2 ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
                                 style={{ fontFamily: 'Cairo_600SemiBold' }}
                             >
                                 {t('driver.vehicleInfo')}
                             </Text>
-                            <View className="h-1 w-16 bg-primary rounded" />
+                        
                         </View>
 
                         {/* Form Fields */}
@@ -237,5 +239,6 @@ export default function Create() {
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
+       </SafeAreaView>
     )
 }

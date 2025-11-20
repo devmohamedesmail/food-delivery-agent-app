@@ -7,7 +7,8 @@
     "cancel": "إلغاء",
      "confirm": "تأكيد",
     "ok": "حسناً",
-    "confirming": "جارٍ التأكيد..."
+    "confirming": "جارٍ التأكيد...",
+    "error_happened": "حدث خطأ. يرجى المحاولة مرة أخرى."
   },
   "auth": {
     "email": "البريد الإلكتروني",
@@ -106,7 +107,16 @@
     "license_plate_required": "رقم اللوحة مطلوب",
     "vehicle_type_required": "نوع المركبة مطلوب",
     "vehicle_color_required": "لون المركبة مطلوب",
-    "vehicle_image_required": "صورة المركبة مطلوبة"
+    "vehicle_image_required": "صورة المركبة مطلوبة",
+    "viewOrders": "عرض الطلبات"
+  },
+   "driverOrders":{
+    "title": " طلبات السائق ",
+    "from": "من",
+    "to": "إلى",
+    "fare": "الأجرة",
+    "payment": "الدفع",
+    "rider": " الراكب "
   },
   "colors": {
     "black": "أسود",

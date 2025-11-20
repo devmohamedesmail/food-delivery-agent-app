@@ -10,7 +10,8 @@ import CustomButton from '@/components/custom/Button'
 import { AuthContext } from '@/context/auth_context'
 import Logo from '@/components/logo'
 import { Toast } from 'toastify-react-native'
-
+import { SafeAreaView } from 'react-native-safe-area-context'
+import CustomToast from '@/components/custom/Toast'
 
 
 export default function Login() {
@@ -27,7 +28,9 @@ export default function Login() {
       password: '',
     },
     validationSchema: Yup.object({
-       identifier: Yup.string().email(t('auth.identifier_invalid')).required(t('auth.identifier_required')),
+      identifier: Yup.string()
+        .email(t('auth.identifier_invalid'))
+        .required(t('auth.identifier_required')),
       password: Yup.string()
         .required(t('auth.password_required'))
         .min(6, t('auth.password_min')),
@@ -68,7 +71,7 @@ export default function Login() {
 
 
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 
 
       <KeyboardAvoidingView
@@ -81,23 +84,25 @@ export default function Login() {
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
-          <View className="pt-10 pb-8 px-6">
-            
+          <View className="pt-10 pb-8 px-6 bg-black">
+
 
 
 
             {/* Logo/Brand Section */}
             <View className="items-center mb-8 pt-20">
-              <Logo />
+
+              <View className="bg-white p-4 rounded-full overflow-hidden">
+                <Logo />
+              </View>
               <Text
-                className="text-3xl  text-gray-800 mb-2"
-                style={{ fontFamily: 'Cairo_700Bold' }}
+                className="text-3xl  text-white font-extrabold mt-4 mb-2"
               >
                 {t('auth.welcomeBack')}
               </Text>
               <Text
-                className={`text-gray-600 text-center ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
-                style={{ fontFamily: 'Cairo_400Regular' }}
+                className={`text-white text-center ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
+
               >
                 {t('auth.loginToYourAccount')}
               </Text>
@@ -105,7 +110,7 @@ export default function Login() {
           </View>
 
           {/* Login Form */}
-          <View className="flex-1 px-6">
+          <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
             <View className="space-y-4">
               {/* Email/Phone Input */}
               <CustomInput
@@ -139,7 +144,7 @@ export default function Login() {
                   </View>
                   <Text
                     className="text-black"
-                
+
                   >
                     {t('auth.rememberMe')}
                   </Text>
@@ -169,7 +174,7 @@ export default function Login() {
               <View className="flex-row justify-center items-center mt-8 mb-8">
                 <Text
                   className="text-gray-600"
-                
+
                 >
                   {t('auth.dontHaveAccount')}
                 </Text>
@@ -185,6 +190,6 @@ export default function Login() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   )
 }

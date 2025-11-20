@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View , Text , TouchableOpacity, StatusBar , Image } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StatusBar, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { useContext, useState, useCallback } from 'react'
@@ -8,18 +8,20 @@ import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { RefreshControl } from 'react-native'
 import useFetch from '@/hooks/useFetch'
+import Loading from '@/components/common/Loading'
+import NotificationIcon from '@/components/common/NotificationIcon'
 
 export default function Home() {
   const { t, i18n } = useTranslation()
   const { auth } = useContext(AuthContext)
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false)
-  const { data: profileData,
+  const {
+    data: profileData,
     loading: profileLoading,
     error: profileError,
     refetch: refetchProfile
   } = useFetch(`/users/profile/${auth?.user?.id}`)
-
 
 
   const onRefresh = useCallback(async () => {
@@ -31,12 +33,14 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+      <StatusBar barStyle="light-content" translucent={true} />
 
 
-      <View className="flex-row items-center justify-between px-4 py-4 bg-white shadow-sm">
-        <View style={{ width: 32 }} />
-        <Text className="text-lg font-bold text-gray-800">{t('driver.homeTitle', { defaultValue: 'Driver Home' })}</Text>
+      <View className="flex-row items-center justify-between px-4 py-4 pt-12 bg-white shadow-sm">
+       <NotificationIcon />
+        <Text className="text-lg font-bold text-gray-800">{t('driver.homeTitle')}</Text>
+
+       
         <TouchableOpacity
           onPress={() => router.push('/account')}
           className="p-2 rounded-full bg-primary/10"
@@ -58,47 +62,84 @@ export default function Home() {
         }
 
       >
-        {profileData?.data?.driver ? (
-          <View className="mx-4 mt-8 p-6 bg-white rounded-2xl ">
-            <View className="flex-row items-center mb-4">
-              <Ionicons name="person-circle" size={40} color="#fd4a12" />
-              <View className="ml-3">
-                <Text className="text-lg font-bold text-gray-800">{profileData?.data?.name}</Text>
-                <Text className="text-gray-500">{profileData?.data?.identifier}</Text>
+        {profileLoading ? (<Loading />) : (
+          <>
+            {profileData?.data?.driver ? (
+             <>
+              <View className="mx-4 mt-8 p-6 bg-white rounded-2xl ">
+                <View className="flex-row items-center mb-4">
+                  <Ionicons name="person-circle" size={40} color="#fd4a12" />
+                  <View className="ml-3">
+                    <Text className="text-lg font-bold text-gray-800">{profileData?.data?.name}</Text>
+                    <Text className="text-gray-500">{profileData?.data?.identifier}</Text>
+                  </View>
+                </View>
+
+                <View className="flex-row items-center mb-3">
+                  <Ionicons name="car-sport-outline" size={22} color="#fd4a12" />
+                  <Text className="ml-2 text-gray-700 font-medium">{t('driver.vehicle_type', { defaultValue: 'Vehicle Type' })}:</Text>
+                  <Text className="ml-2 text-gray-900">{profileData?.data?.driver.vehicle_type}</Text>
+                </View>
+
+                <View className="flex-row items-center mb-3">
+                  <Ionicons name="pricetag-outline" size={22} color="#fd4a12" />
+                  <Text className="ml-2 text-gray-700 font-medium">{t('driver.license_plate', { defaultValue: 'License Plate' })}:</Text>
+                  <Text className="ml-2 text-gray-900">{profileData?.data?.driver.vehicle_license_plate}</Text>
+                </View>
+
+
+
+
+                <View className="flex-row items-center mb-3">
+                  <Ionicons name="color-palette-outline" size={22} color="#fd4a12" />
+                  <Text className="ml-2 text-gray-700 font-medium">{t('driver.vehicle_color')}:</Text>
+                  <Text className="ml-2 text-gray-900">{profileData?.data?.driver.vehicle_color}</Text>
+                </View>
+
+                <View className="flex-row items-center mb-3">
+                  <Image source={{ uri: `${profileData?.data?.driver.image}` }} style={{ width: 100, height: 100 }} />
+                </View>
+
+
               </View>
-            </View>
 
-            <View className="flex-row items-center mb-3">
-              <Ionicons name="car-sport-outline" size={22} color="#fd4a12" />
-              <Text className="ml-2 text-gray-700 font-medium">{t('driver.vehicle_type', { defaultValue: 'Vehicle Type' })}:</Text>
-              <Text className="ml-2 text-gray-900">{profileData?.data?.driver.vehicle_type}</Text>
-            </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => router.push('/driver/orders')}
+                  className='bg-primary m-4 p-4 rounded-md mt-6'
+                >
+                  <Text className='text-center text-white font-bold'>{t('driver.viewOrders')}</Text>
+                </TouchableOpacity>
+              </View>
+             
+             </>
+            ) : (
+              <View>
+                <Image
+                  source={require('../../assets/gallery/license.png')}
+                  style={{ width: 200, height: 200, alignSelf: 'center', marginTop: 50 }}
 
-            <View className="flex-row items-center mb-3">
-              <Ionicons name="pricetag-outline" size={22} color="#fd4a12" />
-              <Text className="ml-2 text-gray-700 font-medium">{t('driver.license_plate', { defaultValue: 'License Plate' })}:</Text>
-              <Text className="ml-2 text-gray-900">{profileData?.data?.driver.vehicle_license_plate}</Text>
-            </View>
+                />
+                <View className='px-10 mt-10'>
+                  <TouchableOpacity
+                    onPress={() => router.push('/driver/create')}
+                    className='bg-primary p-3 py-5 rounded-md'>
+                    <Text className='text-center text-white'>{t('driver.createProfile')}</Text>
+                  </TouchableOpacity>
+                </View>
+
+              </View>
+            )}
 
 
-          </View>
-        ) : (
-          <View>
-            <Image
-              source={require('../../assets/gallery/license.png')}
-              style={{ width: 200, height: 200, alignSelf: 'center', marginTop: 50 }}
 
-            />
-            <View className='px-10 mt-10'>
-              <TouchableOpacity
-                onPress={() => router.push('/driver/create')}
-                className='bg-primary p-3 py-5 rounded-md'>
-                <Text className='text-center text-white'>{t('driver.createProfile')}</Text>
-              </TouchableOpacity>
-            </View>
+          </>)}
 
-          </View>
-        )}
+
+
+      
+
+
       </ScrollView>
 
     </SafeAreaView>
