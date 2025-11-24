@@ -5,13 +5,13 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import CustomInput from '@/components/custom/Input'
-import CustomButton from '@/components/custom/Button'
+import CustomInput from '@/components/ui/Input'
+import CustomButton from '@/components/ui/Button'
 import { AuthContext } from '@/context/auth_context'
 import Logo from '@/components/common/logo'
 import { Toast } from 'toastify-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Skeleton from '@/components/common/Skeleton'
+
 
 
 
@@ -20,7 +20,7 @@ export default function Login() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const { auth, handle_login } = useContext(AuthContext)
+  const { handle_login } = useContext(AuthContext)
 
 
   const formik = useFormik({
@@ -143,12 +143,11 @@ export default function Login() {
                   onPress={() => setRememberMe(!rememberMe)}
                   className="flex-row items-center"
                 >
-                  <View className={`w-5 h-5 border-2 border-gray-300 rounded mr-2 items-center justify-center ${rememberMe ? 'bg-primary border-primary' : ''}`}>
+                  <View className={`w-5 h-5 border-2 border-gray-300 rounded mr-2 items-center justify-center ${rememberMe ? ' border-primary' : ''}`}>
                     {rememberMe && <Ionicons name="checkmark" size={12} color="white" />}
                   </View>
                   <Text
                     className="text-black"
-
                   >
                     {t('auth.rememberMe')}
                   </Text>

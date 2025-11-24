@@ -4,15 +4,15 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import CustomInput from '@/components/custom/Input'
+import Input from '@/components/ui/Input'
 import { AuthContext } from '@/context/auth_context'
-import CustomButton from '@/components/custom/Button'
+import Button from '@/components/ui/Button'
 import { Toast } from 'toastify-react-native'
 import { useRouter } from 'expo-router'
 import Logo from '@/components/common/logo'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-type UserRole = 3 | 5 // 3 for store_owner, 5 for driver
+type UserRole = 3 | 5 
 
 interface RegisterFormValues {
     name: string
@@ -96,7 +96,7 @@ export default function Register() {
     const roleOptions: { value: UserRole; label: string; icon: string }[] = [
         {
             value: 3,
-            label: t('auth.restaurant_owner'),
+            label: t('auth.store_owner'),
             icon: 'storefront-outline'
         },
         {
@@ -148,7 +148,7 @@ export default function Register() {
 
 
                         {/* Name Input */}
-                        <CustomInput
+                        <Input
                             label={t('auth.name')}
                             placeholder={t('auth.enterName')}
                             type="text"
@@ -159,7 +159,7 @@ export default function Register() {
                         />
 
                         {/* Phone Number Input */}
-                        <CustomInput
+                        <Input
                             label={t('auth.identifier')}
                             placeholder={t('auth.enterIdentifier')}
                             type="phone"
@@ -170,7 +170,7 @@ export default function Register() {
                         />
 
                         {/* Password Input */}
-                        <CustomInput
+                        <Input
                             label={t('auth.password')}
                             placeholder={t('auth.enterPassword')}
                             type="password"
@@ -181,8 +181,7 @@ export default function Register() {
                         />
 
                         {/* Role Selection */}
-                        <View className="mb-6">
-                            <Text className={`text-gray-700  mb-3 ${i18n.language === "ar" ? 'text-right' : 'text-left'}`}>{t('auth.role')}</Text>
+                        <View className="my-6">
                             <View className="space-y-3">
                                 {roleOptions.map((option) => (
                                     <TouchableOpacity
@@ -222,11 +221,11 @@ export default function Register() {
                             )}
                         </View>
 
-                        <CustomButton
+                        <Button
                             title={isLoading ? t('auth.wait') : t('auth.next')}
                             onPress={() => formik.handleSubmit()}
                             disabled={isLoading || !formik.isValid || !formik.dirty || !formik.values.identifier || !formik.values.password}
-                        // icon={<Ionicons name="arrow-forward" size={20} color="white" />}
+                        
                         />
 
 

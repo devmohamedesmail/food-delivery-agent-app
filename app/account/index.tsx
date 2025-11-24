@@ -10,7 +10,7 @@ import AccountButton from '@/components/common/AccountButton'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import i18n from '@/lib/i18n'
 import AccountActionsButtons from '@/components/account/AccountActionsButtons'
-import Header from '@/components/custom/Header'
+import Header from '@/components/ui/Header'
 
 
 

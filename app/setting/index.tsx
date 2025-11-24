@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, SafeAreaView, Alert, Switch }
 import { useTranslation } from 'react-i18next'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import CustomHeader from '../../components/custom/Header'
+import CustomHeader from '../../components/ui/Header'
 import LanguageSwitcher from '../../components/common/LanguageSwitcher'
 import { AuthContext } from '@/context/auth_context'
 

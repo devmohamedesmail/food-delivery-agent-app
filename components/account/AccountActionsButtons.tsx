@@ -4,8 +4,8 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { useTranslation } from 'react-i18next'
 import { AuthContext } from '@/context/auth_context';
 import { useRouter } from 'expo-router';
-import CustomModal from '../custom/CustomModal';
-import Button from '../custom/Button';
+import CustomModal from '../ui/CustomModal';
+import Button from '../ui/Button';
 import { Toast } from 'toastify-react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import Colors from '@/constants/Colors';

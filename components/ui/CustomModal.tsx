@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Modal, Alert, Pressable } from 'react-native'
+import { View, Modal } from 'react-native'
 
 export default function CustomModal(
     {

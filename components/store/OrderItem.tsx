@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { config } from '@/constants/config';
-import Button from '../custom/Button';
+import Button from '../ui/Button';
 import axios from 'axios';
 import { Toast } from 'toastify-react-native';
-import CustomModal from '../custom/CustomModal';
+import CustomModal from '../ui/CustomModal';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';

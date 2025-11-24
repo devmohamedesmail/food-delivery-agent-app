@@ -9,7 +9,10 @@ import useFetch from '@/hooks/useFetch'
 import { useRouter } from 'expo-router'
 import NoStore from '@/components/store/NoStore'
 import NotificationIcon from '@/components/common/NotificationIcon'
-import Skeleton from '@/components/common/Skeleton'
+import Loading from '@/components/ui/Loading'
+import Skeleton from '@/components/ui/Skeleton'
+
+
 
 interface ManagementCard {
     title: string
@@ -82,99 +85,102 @@ export default function Home() {
                     <Ionicons name="person-circle-outline" size={28} color="white" />
                 </TouchableOpacity>
             </View>
+            {profileLoading ? (<Loading />) : (<>
 
-
-
-
-            {profileData?.data?.store ? (
-                <>
-                    <ScrollView className="flex-1 p-4">
-                        {/* Store Info Header */}
-                        <View className="bg-white rounded-xl p-6 mb-6 shadow-sm">
-                            <View className="flex-row items-center mb-4">
-                                <View className="bg-primary/10 w-16 h-16 rounded-full items-center justify-center mr-4">
-                                    {/* <Ionicons name="storefront" size={32} color="#fd4a12" /> */}
-                                    <Image source={{ uri: profileData?.data?.store?.logo }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                {profileData?.data?.store ? (
+                    <>
+                        <ScrollView className="flex-1 p-4">
+                            {/* Store Info Header */}
+                            <View className="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                                <View className="flex-row items-center mb-4">
+                                    <View className="bg-primary/10 w-16 h-16 rounded-full items-center justify-center mr-4">
+                                        {/* <Ionicons name="storefront" size={32} color="#fd4a12" /> */}
+                                        <Image source={{ uri: profileData?.data?.store?.logo }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                                    </View>
+                                    <View className="flex-1">
+                                        <Text className="text-2xl font-bold text-black-800" >
+                                            {profileData?.data?.store?.name}
+                                        </Text>
+                                        <Text className="text-black mt-1" >
+                                            {t('store.store_management')}
+                                        </Text>
+                                    </View>
                                 </View>
-                                <View className="flex-1">
-                                    <Text className="text-2xl font-bold text-black-800" >
-                                        {profileData?.data?.store?.name}
-                                    </Text>
-                                    <Text className="text-black mt-1" >
-                                        {t('store.store_management')}
-                                    </Text>
+
+                                {/* Quick Stats */}
+                                <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                                    <View className="items-center flex-1">
+                                        <Ionicons name="stats-chart" size={24} color="#10B981" />
+                                        <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                                            {t('store.active')}
+                                        </Text>
+                                    </View>
+                                    <View className="items-center flex-1">
+                                        <Ionicons name="star" size={24} color="#F59E0B" />
+                                        <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                                            {t('store.rating')}
+                                        </Text>
+                                    </View>
+                                    <View className="items-center flex-1">
+                                        <Ionicons name="people" size={24} color="#3B82F6" />
+                                        <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
+                                            {t('store.customers')}
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
 
-                            {/* Quick Stats */}
-                            <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                                <View className="items-center flex-1">
-                                    <Ionicons name="stats-chart" size={24} color="#10B981" />
-                                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
-                                        {t('store.active')}
-                                    </Text>
-                                </View>
-                                <View className="items-center flex-1">
-                                    <Ionicons name="star" size={24} color="#F59E0B" />
-                                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
-                                        {t('store.rating')}
-                                    </Text>
-                                </View>
-                                <View className="items-center flex-1">
-                                    <Ionicons name="people" size={24} color="#3B82F6" />
-                                    <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
-                                        {t('store.customers')}
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
+                            {/* Management Section */}
+                            <View className="mb-4">
+                                <Text className="text-lg font-bold text-black text-right mb-3 px-2" >
+                                    {t('store.store_management')}
+                                </Text>
 
-                        {/* Management Section */}
-                        <View className="mb-4">
-                            <Text className="text-lg font-bold text-black-800 mb-3 px-2" >
-                                {t('store.store_management')}
-                            </Text>
+                                <View className="space-y-3">
+                                    {managementCards.map((card, index) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            onPress={() => router.push(card.route as any)}
+                                            className="bg-white rounded-xl p-5 shadow-sm active:opacity-70"
+                                            activeOpacity={0.7}
+                                        >
+                                            <View className="flex-row-reverse items-center">
+                                                <View
+                                                    className="w-14 h-14 rounded-2xl items-center justify-center mr-4"
+                                                    style={{ backgroundColor: card.bgColor }}
+                                                >
+                                                    <Ionicons name={card.icon} size={28} color={card.color} />
+                                                </View>
 
-                            <View className="space-y-3">
-                                {managementCards.map((card, index) => (
-                                    <TouchableOpacity
-                                        key={index}
-                                        onPress={() => router.push(card.route as any)}
-                                        className="bg-white rounded-xl p-5 shadow-sm active:opacity-70"
-                                        activeOpacity={0.7}
-                                    >
-                                        <View className="flex-row items-center">
-                                            <View
-                                                className="w-14 h-14 rounded-2xl items-center justify-center mr-4"
-                                                style={{ backgroundColor: card.bgColor }}
-                                            >
-                                                <Ionicons name={card.icon} size={28} color={card.color} />
+                                                <View className="flex-1 justify-center items-end mx-2">
+                                                    <Text className="text-lg font-bold text-gray-800" >
+                                                        {card.title}
+                                                    </Text>
+                                                    <Text className="text-gray-500 text-sm mt-1" >
+                                                        {card.subtitle}
+                                                    </Text>
+                                                </View>
+
+                                                <Ionicons name="chevron-back" size={24} color="#9CA3AF" />
                                             </View>
-
-                                            <View className="flex-1">
-                                                <Text className="text-lg font-bold text-gray-800" >
-                                                    {card.title}
-                                                </Text>
-                                                <Text className="text-gray-500 text-sm mt-1" >
-                                                    {card.subtitle}
-                                                </Text>
-                                            </View>
-
-                                            <Ionicons name="chevron-forward" size={24} color="#9CA3AF" />
-                                        </View>
-                                    </TouchableOpacity>
-                                ))}
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
                             </View>
-                        </View>
 
 
-                    </ScrollView>
-                </>
-            ) : (
-                <>
-                    <NoStore />
-                </>
-            )}
+                        </ScrollView>
+                    </>
+                ) : (
+                    <>
+                        <NoStore />
+                    </>
+                )}
+
+            </>)}
+
+
+
             {/* {profileLoading ? <Loading /> : null} */}
         </SafeAreaView>
     )

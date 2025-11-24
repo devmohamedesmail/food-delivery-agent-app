@@ -2,7 +2,7 @@ import { AuthContext } from '@/context/auth_context'
 import React, { useContext, useEffect } from 'react'
 import { Text } from 'react-native'
 import { Link, Redirect, router } from 'expo-router'
-import Loading from '@/components/custom/Loading'
+import Loading from '@/components/ui/Loading'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {

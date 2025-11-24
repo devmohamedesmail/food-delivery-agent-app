@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Modal, KeyboardAvoidingView, Platform, Alert, StatusBar } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import Input from '@/components/custom/Input'
-import CustomTextArea from '@/components/custom/customtextarea'
-import CustomButton from '@/components/custom/Button'
+import Input from '@/components/ui/Input'
+import CustomTextArea from '@/components/ui/customtextarea'
+import CustomButton from '@/components/ui/Button'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
@@ -14,7 +14,7 @@ import useFetch from '@/hooks/useFetch'
 import { Toast } from 'toastify-react-native'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Loading from '@/components/common/Loading'
+import Loading from '@/components/ui/Loading'
 
 interface Category {
   id: number

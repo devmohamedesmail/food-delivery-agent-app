@@ -13,7 +13,6 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@danielsledz/react-native-skeleton-placeholder": "^1.0.2",
     "@expo-google-fonts/cairo": "^0.4.1",
     "@expo/vector-icons": "^15.0.3",
     "@opesco12/react-native-bottom-sheet": "^1.0.4",

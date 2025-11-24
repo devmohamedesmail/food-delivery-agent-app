@@ -16,7 +16,7 @@ export default function CustomButton({ title, onPress, icon, disabled = false, .
                 onPress={disabled ? undefined : onPress} 
                 disabled={disabled}
                 {...props}
-                className={`p-4 px-10 rounded-lg mt-4 ${
+                className={`p-4 px-10 rounded-full mt-4 ${
                     disabled 
                         ? 'bg-gray-300' 
                         : 'bg-primary'
@@ -24,9 +24,9 @@ export default function CustomButton({ title, onPress, icon, disabled = false, .
             >
                 <View className='flex-row justify-center items-center space-x-2'>
                     <Text 
-                        className={` mx-2 ${
+                        className={` mx-2 font-bold ${
                             disabled 
-                                ? 'text-gray-500' 
+                                ? 'text-gray-700' 
                                 : 'text-white'
                         }`}
                     >

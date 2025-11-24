@@ -4,8 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/context/auth_context'
 import useFetch from '@/hooks/useFetch'
-import Header from '@/components/custom/Header'
-import Loading from '@/components/common/Loading'
+import Header from '@/components/ui/Header'
+import Loading from '@/components/ui/Loading'
 import { config } from '@/constants/config'
 
 export default function Orders() {

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Toast } from 'toastify-react-native'
 import { useTranslation } from 'react-i18next'
 import { config } from '@/constants/config'
-import Loading from '../common/Loading'
+import Loading from '../ui/Loading'
 
 export default function ToggleAvailbility({ profileData, refetchProfile }: { profileData: any, refetchProfile: any }) {
 
