@@ -70,20 +70,20 @@ export default function AccountActionsButtons() {
 
             <CustomModal visible={logoutModalVisible} onClose={() => setLogoutModalVisible(false)} >
                 <Text className='text-center'>{t('account.logout_confirmation')}</Text>
-                <View className='flex flex-row justify-center gap-4 mt-10'>
+                <View className='flex  justify-center gap-4 mt-10'>
                     <Button
                         title={loadding ? t('account.logging_out') : t('account.logout')}
                         onPress={logout}
-                        className='bg-red-500 rounded-xl px-4 py-3 mt-4'
+                        className='bg-red-500  px-4 py-3 '
                         textClassName='text-white'
                         style={{ backgroundColor:'red' }}
                     />
                     <Button
                         title={t('auth.cancel')}
                         onPress={() => setLogoutModalVisible(false)}
-                        className='bg-gray-200 rounded-xl px-4 py-3 mt-2'
+                        className='bg-gray-200  px-4 py-3 '
                         textClassName='text-gray-800'
-                        style={{ flex: 1  }}
+                       
                     />
                 </View>
             </CustomModal>

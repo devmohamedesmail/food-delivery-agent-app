@@ -9,7 +9,25 @@
     "ok": "OK",
     "confirming": "Confirming...",
     "error_happened": "An error occurred. Please try again.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "save": "Save",
+    "saving": "Saving...",
+    "success": "Success",
+    "error": "Error",
+    "yes": "Yes",
+    "no": "No",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "update": "Update",
+    "updating": "Updating...",
+    "edit": "Edit",
+    "search": "Search",
+    "search_placeholder": "Search...",
+    "no_data": "No data available",
+    "try_again": "Please try again.",
+    "loading_failed": "Failed to load data",
+    "retry": "Retry",
+    "home": "Home"
   },
   "auth": {
     "email": "Email",
@@ -119,7 +137,9 @@
     "goOffline": "Go Offline",
     "youAreOnline": "You are now online and can receive orders",
     "youAreOffline": "You are now offline and will not receive orders",
-    "failedToUpdateStatus": "Failed to update availability status"
+    "failedToUpdateStatus": "Failed to update availability status",
+    "noTrips": "No trips yet",
+    "noTripsDescription": "When you complete trips, they will appear here"
   },
   "driverOrders":{
     "title": "Driver Orders",

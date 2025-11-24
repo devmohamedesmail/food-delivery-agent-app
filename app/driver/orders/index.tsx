@@ -7,6 +7,7 @@ import useFetch from '@/hooks/useFetch'
 import Header from '@/components/ui/Header'
 import Loading from '@/components/ui/Loading'
 import { config } from '@/constants/config'
+import NoTrips from '@/components/driver/NoTrips'
 
 export default function Orders() {
   const { t } = useTranslation()
@@ -15,13 +16,13 @@ export default function Orders() {
   const { data: driverTrips } = useFetch(`/trips/driver/${profileData?.data?.driver?.id}`)
   const { loading: tripsLoading } = useFetch(`/trips/driver/${profileData?.data?.driver?.id}`)
 
-  if (tripsLoading) {
-    return (
-      <View className='flex-1'>
-        <Loading />
-      </View>
-    )
-  }
+  // if (tripsLoading) {
+  //   return (
+  //     <View className='flex-1'>
+  //       <Loading />
+  //     </View>
+  //   )
+  // }
 
 
 
@@ -71,17 +72,26 @@ export default function Orders() {
       <Header title={t('driverOrders.title')} />
 
 
-      <FlatList
-        data={driverTrips?.trips || []}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderTrip}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        ListEmptyComponent={
-          <View className="flex-1 justify-center items-center mt-20">
-            <Text className="text-gray-400">{t('orders.noTrips')}</Text>
-          </View>
-        }
-      />
+      {tripsLoading ? (<Loading />) : (<>
+
+        {driverTrips?.trips ? (<>
+
+          <FlatList
+            data={driverTrips?.trips || []}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderTrip}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            ListEmptyComponent={<NoTrips />}
+          />
+
+
+        </>) : (<></>)}
+
+      </>)}
+
+
+
+
 
 
 

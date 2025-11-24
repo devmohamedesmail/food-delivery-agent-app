@@ -25,8 +25,9 @@ export default function CustomModal(
                     padding: 20,
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
-                    minHeight: 200
+                    minHeight: 300
                 }}>
+                    <View className="w-12 h-1.5 bg-gray-300 rounded-full self-center mb-4" />
 
                     {children}
 

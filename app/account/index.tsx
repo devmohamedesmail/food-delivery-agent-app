@@ -1,13 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Switch, StatusBar, Button, Alert } from 'react-native'
+import { View, Text, ScrollView, StatusBar, Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
-
 import { useRouter } from 'expo-router'
 import { AuthContext } from '@/context/auth_context'
-
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AccountButton from '@/components/common/AccountButton'
-import AntDesign from '@expo/vector-icons/AntDesign';
 import i18n from '@/lib/i18n'
 import AccountActionsButtons from '@/components/account/AccountActionsButtons'
 import Header from '@/components/ui/Header'
@@ -16,99 +13,7 @@ import Header from '@/components/ui/Header'
 
 export default function Account() {
   const { t } = useTranslation()
-  const router = useRouter()
-  const { auth, handle_logout } = useContext(AuthContext)
-  const [darkMode, setDarkMode] = useState(false)
-  const [soundEffects, setSoundEffects] = useState(true)
-  const [logoutModalVisible, setLogoutModalVisible] = useState(false)
-
-
-
-
-  const logout = async () => {
-    Alert.alert(t('account.logout'),
-      t('account.logout_confirmation'),
-      [
-        {
-          text: t('auth.cancel'),
-          style: 'cancel'
-        },
-        {
-          text: t('auth.confirm'),
-          onPress: async () => {
-            await handle_logout()
-            router.replace('/auth/login')
-          },
-          style: 'destructive'
-        }
-      ]
-    );
-  }
-
-
-
-  const settingsSections = [
-    {
-      title: t('account.app_preferences'),
-      items: [
-        {
-          id: 'language',
-          title: t('account.language'),
-          subtitle: t('account.change_app_language'),
-          icon: 'language-outline',
-          type: 'language' as const
-        },
-        {
-          id: 'dark_mode',
-          title: t('account.dark_mode'),
-          subtitle: t('account.dark_mode_description'),
-          icon: 'moon-outline',
-          type: 'toggle' as const,
-          value: darkMode,
-          action: () => setDarkMode(!darkMode)
-        },
-        {
-          id: 'sound_effects',
-          title: t('account.sound_effects'),
-          subtitle: t('account.sound_effects_description'),
-          icon: 'volume-high-outline',
-          type: 'toggle' as const,
-          value: soundEffects,
-          action: () => setSoundEffects(!soundEffects)
-        }
-      ]
-    },
-    {
-      title: t('account.support_help'),
-      items: [
-        {
-          id: 'help_center',
-          title: t('account.help_center'),
-          subtitle: t('account.get_help_support'),
-          icon: 'help-circle-outline',
-          type: 'navigation' as const,
-          action: () => { }
-        },
-        {
-          id: 'privacy_policy',
-          title: t('account.privacy_policy'),
-          subtitle: t('account.read_privacy_policy'),
-          icon: 'shield-outline',
-          type: 'navigation' as const,
-          action: () => { }
-        },
-        {
-          id: 'terms_service',
-          title: t('account.terms_of_service'),
-          subtitle: t('account.read_terms_of_service'),
-          icon: 'document-text-outline',
-          type: 'navigation' as const,
-          action: () => { }
-        }
-      ]
-    },
-
-  ]
+  const { auth } = useContext(AuthContext)
 
 
 
@@ -118,10 +23,6 @@ export default function Account() {
 
 
       <Header title={t('account.account')} />
-
-
-
-
 
       {/* Settings Content */}
       <ScrollView className="flex-1">
@@ -163,7 +64,7 @@ export default function Account() {
 
 
         {/* Settings Sections */}
-        {settingsSections.map((section, sectionIndex) => (
+        {/* {settingsSections.map((section, sectionIndex) => (
           <View key={sectionIndex} className="mx-4 mt-6">
             <Text
               className={`text-sm font-semibold text-black mb-2 px-2 uppercase tracking-wide ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
@@ -175,13 +76,12 @@ export default function Account() {
             <View className="bg-white rounded-xl shadow-sm overflow-hidden">
               {section.items.map((item, itemIndex) => (
                 <View key={item.id}>
-                  {/* {renderSettingItem(item)} */}
                   <AccountButton item={item} />
                 </View>
               ))}
             </View>
           </View>
-        ))}
+        ))} */}
 
         <AccountActionsButtons />
 

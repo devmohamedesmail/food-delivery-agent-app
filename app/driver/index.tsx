@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { useContext, useState, useCallback } from 'react'
 import { AuthContext } from '@/context/auth_context'
-import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { RefreshControl } from 'react-native'
 import useFetch from '@/hooks/useFetch'
@@ -13,9 +12,10 @@ import NotificationIcon from '@/components/common/NotificationIcon'
 import VehicleInfo from '@/components/driver/VehicleInfo'
 import ToggleAvailbility from '@/components/driver/ToggleAvailbility'
 import { useDriverLocation } from '@/context/DriverLocationContext'
+import Button from '@/components/ui/Button'
 
 export default function Home() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { auth } = useContext(AuthContext)
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false)
@@ -43,16 +43,10 @@ export default function Home() {
 
       <View className="flex-row items-center justify-between px-4 py-6 pt-20 bg-black/90 shadow-sm">
         <NotificationIcon />
-        <Text className="text-lg font-bold text-white">{t('driver.homeTitle')}</Text>
+        <Text className="text-lg font-bold text-white">{t('common.home')}</Text>
 
 
-        <TouchableOpacity
-          onPress={() => router.push('/account')}
-          className="p-2 rounded-full bg-white"
-          accessibilityLabel={t('account.profile')}
-        >
-          <Ionicons name="person-circle-outline" size={28} color="#fd4a12" />
-        </TouchableOpacity>
+
       </View>
 
 
@@ -69,7 +63,7 @@ export default function Home() {
       >
 
 
-        {profileLoading ? (<View ><Loading message={t('common.loading')} /></View>) : (
+        {profileLoading ? (<Loading />) : (
           <>
             {profileData?.data?.driver ? (
               <>
@@ -81,13 +75,14 @@ export default function Home() {
 
                 <ToggleAvailbility profileData={profileData} refetchProfile={refetchProfile} />
 
-                <View>
-                  <TouchableOpacity
-                    onPress={() => router.push('/driver/orders')}
-                    className='bg-primary m-4 p-4 rounded-md mt-6'
-                  >
-                    <Text className='text-center text-white font-bold'>{t('driver.viewOrders')}</Text>
-                  </TouchableOpacity>
+                <View className='px-10'>
+                  
+
+                  <Button  title={t('driver.viewOrders')}  onPress={() => router.push('/driver/orders')} />
+                  <Button  title={t('account.account')}  bgColor="bg-black"  onPress={() => router.push('/account')} />
+
+        
+
                 </View>
 
               </>
@@ -112,12 +107,6 @@ export default function Home() {
 
 
           </>)}
-
-
-
-
-
-
       </ScrollView>
 
     </SafeAreaView>

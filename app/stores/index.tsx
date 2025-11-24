@@ -76,14 +76,7 @@ export default function Home() {
 
             <View className="flex-row items-center justify-between pt-20 px-4 py-4 bg-black/90 shadow-sm">
                 <NotificationIcon />
-                <Text className="text-2xl font-bold text-white">{t('store.homeTitle', { defaultValue: 'Driver Home' })}</Text>
-                <TouchableOpacity
-                    onPress={() => router.push('/account')}
-                    className="p-2 rounded-full bg-primary"
-                    accessibilityLabel={t('account.profile')}
-                >
-                    <Ionicons name="person-circle-outline" size={28} color="white" />
-                </TouchableOpacity>
+                <Text className="text-2xl font-bold text-white">{t('common.home')}</Text>
             </View>
             {profileLoading ? (<Loading />) : (<>
 
@@ -92,12 +85,11 @@ export default function Home() {
                         <ScrollView className="flex-1 p-4">
                             {/* Store Info Header */}
                             <View className="bg-white rounded-xl p-6 mb-6 shadow-sm">
-                                <View className="flex-row items-center mb-4">
+                                <View className="flex-row-reverse items-center mb-4">
                                     <View className="bg-primary/10 w-16 h-16 rounded-full items-center justify-center mr-4">
-                                        {/* <Ionicons name="storefront" size={32} color="#fd4a12" /> */}
                                         <Image source={{ uri: profileData?.data?.store?.logo }} style={{ width: 32, height: 32, borderRadius: 16 }} />
                                     </View>
-                                    <View className="flex-1">
+                                    <View className="flex-1 items-end justify-end mx-2">
                                         <Text className="text-2xl font-bold text-black-800" >
                                             {profileData?.data?.store?.name}
                                         </Text>
@@ -107,8 +99,8 @@ export default function Home() {
                                     </View>
                                 </View>
 
-                                {/* Quick Stats */}
-                                <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                               
+                                {/* <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-gray-100">
                                     <View className="items-center flex-1">
                                         <Ionicons name="stats-chart" size={24} color="#10B981" />
                                         <Text className="text-gray-500 text-xs mt-1" style={{ fontFamily: 'Cairo_400Regular' }}>
@@ -127,7 +119,7 @@ export default function Home() {
                                             {t('store.customers')}
                                         </Text>
                                     </View>
-                                </View>
+                                </View> */}
                             </View>
 
                             {/* Management Section */}
