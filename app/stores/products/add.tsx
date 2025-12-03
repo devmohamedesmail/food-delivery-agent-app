@@ -10,11 +10,9 @@ import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Loading from "@/components/ui/Loading";
-import Skeleton from "@/components/ui/Skeleton";
 import Header from "@/components/ui/Header";
 import Input from "@/components/ui/Input";
-import CustomTextArea from "@/components/ui/customtextarea";
+import CustomTextArea from "@/components/ui/textarea";
 import CustomButton from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
@@ -44,10 +42,10 @@ interface Category {
 export default function Add() {
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  const router = useRouter();
+  const {data:attributesData} =useFetch('/attributes');
+  const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>([]);
+  const [selectedAttributeId, setSelectedAttributeId] = useState<string>("");
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const {
     data: profileData,
     loading: profileLoading,
@@ -75,6 +73,8 @@ export default function Add() {
       sale_price: "",
       category_id: "",
       image: "",
+      attribute_value: "",
+      attribute_price: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required(t("products.name_required")),
@@ -108,6 +108,19 @@ export default function Add() {
         }
         formData.append("category_id", values.category_id);
 
+        // Add attributes and values
+        if (selectedAttributeId && attributeValues.length > 0) {
+          // Send as array notation for FormData
+          formData.append("attributes[]", selectedAttributeId);
+          
+          // Send each value as separate entries
+          attributeValues.forEach((av, index) => {
+            formData.append(`values[${index}][attribute_id]`, av.attribute_id);
+            formData.append(`values[${index}][value]`, av.value);
+            formData.append(`values[${index}][price]`, av.price);
+          });
+        }
+
         // Add image file if exists
         if (values.image) {
           const uriParts = values.image.split(".");
@@ -137,7 +150,9 @@ export default function Add() {
           resetForm();
         }
       } catch (error) {
+        console.error("Error adding product:", error);
         Toast.show({
+        
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
@@ -262,6 +277,117 @@ export default function Add() {
               placeholder={t("products.tap_to_select_image")}
             />
           </View>
+
+          {/* Attribute Selection */}
+          <View className="mb-4">
+            <Select
+              label={t("products.attribute")}
+              placeholder={t("products.select_attribute")}
+              options={(attributesData?.attributes || []).map((attr: any) => ({
+                label: attr.name,
+                value: attr.id.toString()
+              }))}
+              value={selectedAttributeId}
+              onSelect={(value: string) => {
+                setSelectedAttributeId(value);
+                setAttributeValues([]);
+              }}
+            />
+          </View>
+
+          {/* Attribute Values Section */}
+          {selectedAttributeId && (
+            <View className="mb-4">
+              <Text className="text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "Cairo_400Regular" }}>
+                {t("products.attribute_values")}
+              </Text>
+              
+              {/* Dynamic Attribute Value Inputs */}
+              {attributeValues.map((attrValue, index) => (
+                <View key={index} className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <View className="flex-row justify-between items-center mb-2">
+                    <Text className="text-xs text-gray-600" style={{ fontFamily: "Cairo_400Regular" }}>
+                      {t("products.value_item")} {index + 1}
+                    </Text>
+                    <CustomButton
+                      title={t("products.remove")}
+                      onPress={() => {
+                        const newValues = attributeValues.filter((_, i) => i !== index);
+                        setAttributeValues(newValues);
+                      }}
+                      className="bg-red-500 py-1 px-3"
+                    />
+                  </View>
+                  <View className="mb-2">
+                    <Input
+                      label={t("products.value")}
+                      placeholder={t("products.enter_value")}
+                      value={attrValue.value}
+                      onChangeText={(text) => {
+                        const newValues = [...attributeValues];
+                        newValues[index].value = text;
+                        setAttributeValues(newValues);
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Input
+                      label={t("products.extra_price")}
+                      placeholder={t("products.enter_extra_price")}
+                      value={attrValue.price}
+                      onChangeText={(text) => {
+                        const newValues = [...attributeValues];
+                        newValues[index].price = text;
+                        setAttributeValues(newValues);
+                      }}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                </View>
+              ))}
+
+              {/* Add New Value Inputs */}
+              <View className="mb-3 p-3 bg-gray-50 rounded-lg">
+                <View className="mb-2">
+                  <Input
+                    label={t("products.value")}
+                    placeholder={t("products.enter_value")}
+                    value={formik.values.attribute_value}
+                    onChangeText={formik.handleChange("attribute_value")}
+                  />
+                </View>
+                <View className="mb-3">
+                  <Input
+                    label={t("products.extra_price")}
+                    placeholder={t("products.enter_extra_price")}
+                    value={formik.values.attribute_price}
+                    onChangeText={formik.handleChange("attribute_price")}
+                    keyboardType="numeric"
+                  />
+                </View>
+                <CustomButton
+                  title={t("products.add_value")}
+                  onPress={() => {
+                    if (formik.values.attribute_value && formik.values.attribute_price) {
+                      setAttributeValues([
+                        ...attributeValues,
+                        {
+                          attribute_id: selectedAttributeId,
+                          value: formik.values.attribute_value,
+                          price: formik.values.attribute_price
+                        }
+                      ]);
+                      formik.setFieldValue("attribute_value", "");
+                      formik.setFieldValue("attribute_price", "");
+                    } else {
+                      Toast.error(t("products.fill_all_fields"));
+                    }
+                  }}
+                  className="bg-blue-500"
+                />
+              </View>
+            </View>
+          )}
 
           {/* Submit Button */}
           <CustomButton

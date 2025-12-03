@@ -10,7 +10,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "@/context/auth_context";
 import { Toast } from "toastify-react-native";
 import Input from "@/components/ui/Input";
-import TextArea from "@/components/ui/customtextarea";
+import TextArea from "@/components/ui/textarea";
 import Button from "@/components/ui/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/ui/Header";

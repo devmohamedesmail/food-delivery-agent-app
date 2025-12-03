@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,49 +6,41 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
-  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
 import { config } from "@/constants/config";
-import { AuthContext } from "@/context/auth_context";
 import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "@/components/ui/Loading";
-import Header from "@/components/ui/Header";
 import NoCategories from "@/components/categories/NoCategories";
-
-
+import Layout from "@/components/features/store/categories/Layout";
+import { useStore } from "@/hooks/useStore";
 
 export default function Categories() {
   const { t } = useTranslation();
-  const { auth } = useContext(AuthContext);
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
+  const { store } = useStore();
   const {
     data: categoriesData,
     loading: categoriesLoading,
-    error: categoriesError,
     refetch: refetchCategories,
-  } = useFetch(`/categories/store/${auth.user.store.id}`);
+  } = useFetch(`/categories/store/${store?.id}`);
 
- const onRefresh = async () => {
-  try {
-    setRefreshing(true);
-    await refetchCategories();
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setRefreshing(false);
-  }
-};
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await refetchCategories();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
- 
   const handleDelete = (id: number) => {
     Alert.alert(
       t("categories.delete_category"),
@@ -72,7 +58,7 @@ export default function Categories() {
                 type: "success",
                 text1: t("categories.category_deleted_successfully"),
               });
-              refetchCategories()
+              refetchCategories();
             } catch (error: any) {
               console.log("Error deleting category:", error);
               Toast.show({
@@ -86,23 +72,8 @@ export default function Categories() {
     );
   };
 
- 
-
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
-      <Header title={t("categories.categories")} />
-
-      <View className="flex flex-row justify-end items-center my-2 px-4">
-        <TouchableOpacity
-          onPress={() => router.push("/stores/categories/add")}
-          className="bg-primary px-5 w-fit py-2 rounded-full"
-        >
-          <Text className="text-white">{t("categories.add_category")}</Text>
-        </TouchableOpacity>
-      </View>
-
+    <Layout>
       <ScrollView
         className="flex-1 p-4"
         refreshControl={
@@ -136,7 +107,7 @@ export default function Categories() {
 
             {/* Categories List */}
             {categoriesData.data.length === 0 ? (
-            <NoCategories />
+              <NoCategories />
             ) : (
               <View className="space-y-3">
                 {categoriesData &&
@@ -178,10 +149,7 @@ export default function Categories() {
                             size={18}
                             color="white"
                           />
-                          <Text
-                            className="text-white ml-2 font-medium"
-                           
-                          >
+                          <Text className="text-white ml-2 font-medium">
                             {t("categories.edit")}
                           </Text>
                         </TouchableOpacity>
@@ -195,10 +163,7 @@ export default function Categories() {
                             size={18}
                             color="white"
                           />
-                          <Text
-                            className="text-white ml-2 font-medium"
-                         
-                          >
+                          <Text className="text-white ml-2 font-medium">
                             {t("categories.delete")}
                           </Text>
                         </TouchableOpacity>
@@ -210,150 +175,6 @@ export default function Categories() {
           </>
         )}
       </ScrollView>
-
-      {/* Floating Add Button */}
-      {/* <TouchableOpacity
-        onPress={openAddModal}
-        className="absolute bottom-24 right-6 bg-primary w-16 h-16 rounded-full items-center justify-center shadow-lg"
-        style={{ elevation: 5 }}
-      >
-        <Ionicons name="add" size={32} color="white" />
-      </TouchableOpacity> */}
-
-      {/* <GestureHandlerRootView>
-        <BottomSheet
-          ref={bottomSheetRef}
-          onChange={handleSheetChanges}
-          snapPoints={snapPoints}
-        >
-          <BottomSheetView>
-            <View className="px-5">
-              <Input
-                label={t("categories.name")}
-                placeholder={t("categories.enter_category_name")}
-                value={formik.values.name}
-                onChangeText={formik.handleChange("name")}
-                error={
-                  formik.touched.name && formik.errors.name
-                    ? formik.errors.name
-                    : ""
-                }
-              />
-              <CustomTextArea
-                label={t("categories.description")}
-                placeholder={t("categories.enter_category_description")}
-                value={formik.values.description}
-                onChangeText={formik.handleChange("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? formik.errors.description
-                    : ""
-                }
-                touched={formik.touched.description}
-              />
-              <CustomButton
-                title={
-                  formik.isSubmitting
-                    ? t("categories.saving")
-                    : editingCategory
-                      ? t("categories.update_category")
-                      : t("categories.add_category")
-                }
-                onPress={formik.handleSubmit as any}
-                disabled={formik.isSubmitting}
-              />
-            </View>
-          </BottomSheetView>
-        </BottomSheet>
-      </GestureHandlerRootView> */}
-
-      {/* Add/Edit Modal */}
-      {/* <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          setModalVisible(false);
-          setEditingCategory(null);
-          formik.resetForm();
-        }}
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          className="flex-1 justify-end bg-black/50"
-        >
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => {
-              setModalVisible(false);
-              setEditingCategory(null);
-              formik.resetForm();
-            }}
-            className="flex-1"
-          />
-          <View
-            className="bg-white rounded-t-3xl p-6"
-            style={{ maxHeight: "80%" }}
-          >
-            <View className="flex-row items-center justify-between mb-6">
-              <Text
-                className="text-2xl font-bold text-gray-800"
-                style={{ fontFamily: "Cairo_700Bold" }}
-              >
-                {editingCategory
-                  ? t("categories.edit_category")
-                  : t("categories.add_category")}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(false);
-                  setEditingCategory(null);
-                  formik.resetForm();
-                }}
-              >
-                <Ionicons name="close-circle" size={32} color="#9CA3AF" />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <Input
-                label={t("categories.name")}
-                placeholder={t("categories.enter_category_name")}
-                value={formik.values.name}
-                onChangeText={formik.handleChange("name")}
-                error={
-                  formik.touched.name && formik.errors.name
-                    ? formik.errors.name
-                    : ""
-                }
-              />
-              <CustomTextArea
-                label={t("categories.description")}
-                placeholder={t("categories.enter_category_description")}
-                value={formik.values.description}
-                onChangeText={formik.handleChange("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? formik.errors.description
-                    : ""
-                }
-                touched={formik.touched.description}
-              />
-              <CustomButton
-                title={
-                  formik.isSubmitting
-                    ? t("categories.saving")
-                    : editingCategory
-                      ? t("categories.update_category")
-                      : t("categories.add_category")
-                }
-                onPress={formik.handleSubmit as any}
-                disabled={formik.isSubmitting}
-              />
-            </ScrollView>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal> */}
-    </SafeAreaView>
+    </Layout>
   );
 }

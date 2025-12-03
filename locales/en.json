@@ -229,7 +229,19 @@
     "price_positive": "Price must be greater than 0",
     "category_required": "Please select a category",
     "sale_price": "Sale Price",
-    "enter_sale_price": "Enter sale price"
+    "enter_sale_price": "Enter sale price",
+    "attribute": "Attribute",
+    "select_attribute": "Select attribute",
+    "attribute_values": "Attribute Values",
+    "value": "Value",
+    "enter_value": "Enter value (e.g., XL, Red)",
+    "extra_price": "Extra Price",
+    "enter_extra_price": "Enter extra price",
+    "add_value": "+ Add Value",
+    "remove": "Remove",
+    "value_item": "Value",
+    "fill_all_fields": "Please fill all fields",
+    "update_product": "Update Product"
   },
   "notifications": {
     "title": "Notifications",

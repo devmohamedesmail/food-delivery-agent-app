@@ -1,14 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import {
   View,
-  Text,
-  ScrollView,
   TouchableOpacity,
   RefreshControl,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
   StatusBar,
   FlatList,
 } from "react-native";
@@ -26,6 +20,8 @@ import Skeleton from "@/components/ui/Skeleton";
 import NoProductsFound from "@/components/store/NoProductsFound";
 import Header from "@/components/ui/Header";
 import ProductItem from "@/components/products/ProductItem";
+import { useStore } from "@/hooks/useStore";
+import FloadtButton from "@/components/ui/FloadtButton";
 
 interface Product {
   id: number;
@@ -43,36 +39,22 @@ interface Product {
   updatedAt: string;
 }
 
-interface Category {
-  id: number;
-  name: string;
-  description: string;
-}
-
 export default function Products() {
   const { t } = useTranslation();
-  const { auth } = useContext(AuthContext);
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const {
-    data: profileData,
-    loading: profileLoading,
-    refetch: refetchProfile,
-  } = useFetch(auth?.user?.id ? `/users/profile/${auth.user.id}` : "");
-
-  // Check if store exists
-  const storeId = profileData?.data?.store?.id || "";
+  const { store, loading } = useStore();
 
   const {
     data: productsData,
     loading: productsLoading,
     refetch: refetchProducts,
-  } = useFetch(storeId ? `/products/store/${storeId}` : "");
+  } = useFetch(store?.id ? `/products/store/${store?.id}` : "");
+
   // Fetch categories for dropdown
   const { data: categoriesData } = useFetch(
-    storeId ? `/categories/store/${storeId}` : ""
+    store?.id ? `/categories/store/${store?.id}` : ""
   );
 
   useEffect(() => {
@@ -88,11 +70,17 @@ export default function Products() {
         `${config.URL}/products/${productId}`
       );
       if (response.data.success) {
-        Toast.success(t("products.product_deleted_successfully"));
+        Toast.show({
+          type: "success",
+          text1: t("products.product_deleted_successfully"),
+        });
         refetchProducts();
       }
     } catch (error) {
-      Toast.error(t("products.failed_to_delete_product"));
+      Toast.show({
+        type: "error",
+        text1: t("products.failed_to_delete_product"),
+      });
     }
   };
 
@@ -111,14 +99,14 @@ export default function Products() {
 
       <Header title={t("products.products")} />
 
-      {profileLoading ? (
+      {loading ? (
         <Loading />
       ) : (
         <>
           {productsLoading ? (
             <View className="mt-10 flex gap-4 px-3">
               {[...Array(5)].map((_, index) => (
-                <Skeleton key={index} height={200} />
+                <Skeleton key={index} height={100} />
               ))}
             </View>
           ) : (
@@ -149,14 +137,7 @@ export default function Products() {
               )}
             </>
           )}
-
-          <TouchableOpacity
-            className="absolute bottom-24 right-6 bg-primary rounded-full w-16 h-16 items-center justify-center shadow-lg"
-            onPress={() => router.push("/stores/products/add")}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="add" size={32} color="#fff" />
-          </TouchableOpacity>
+          <FloadtButton onPress={() => router.push("/stores/products/add")} />
         </>
       )}
     </SafeAreaView>

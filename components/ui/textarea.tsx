@@ -44,7 +44,8 @@ export default function CustomTextArea({
         maxLength={maxLength}
         editable={editable}
         textAlignVertical="top"
-        className={`border border-gray-300 rounded-lg px-4 py-3 text-gray-800 ${
+        cursorColor={"#fd4a12"}
+        className={`border border-black text-right rounded-lg px-4 py-3 text-gray-800 ${
           touched && error ? 'border-red-500' : 'border-gray-300'
         }`}
         style={{ 

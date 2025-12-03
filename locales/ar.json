@@ -228,7 +228,19 @@
     "price_positive": "السعر يجب أن يكون أكبر من 0",
     "category_required": "يرجى اختيار فئة",
     "sale_price": "سعر التخفيض",
-    "enter_sale_price": "أدخل سعر التخفيض"
+    "enter_sale_price": "أدخل سعر التخفيض",
+    "attribute": "الخاصية",
+    "select_attribute": "اختر الخاصية",
+    "attribute_values": "قيم الخاصية",
+    "value": "القيمة",
+    "enter_value": "أدخل القيمة (مثال: XL، أحمر)",
+    "extra_price": "السعر الإضافي",
+    "enter_extra_price": "أدخل السعر الإضافي",
+    "add_value": "+ إضافة قيمة",
+    "remove": "إزالة",
+    "value_item": "القيمة",
+    "fill_all_fields": "يرجى ملء جميع الحقول",
+    "update_product": "تحديث المنتج"
   },
   "notifications": {
     "title": "الإشعارات",
