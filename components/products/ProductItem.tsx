@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
 import { config } from "@/constants/config";
+import Button from "../ui/Button";
+import Modal from 'react-native-modal';
 
 interface Category {
   id: number;
@@ -18,63 +20,99 @@ export default function ProductItem({
 }: any) {
   const { t } = useTranslation();
   const router = useRouter();
+  const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
-    <View key={product.id} className="bg-white rounded-xl p-4 mb-3 shadow-sm">
-      <View className="flex-row">
-        {/* Product Image */}
+    <View
+      key={product.id}
+      className="bg-white rounded-xl  mb-3 shadow-sm w-[45%] mx-2"
+    >
+      {/* product Image */}
+      <View className="relative">
         {product.image ? (
           <Image
             source={{ uri: product.image }}
-            className="w-20 h-20 rounded-lg mr-3"
+            className="w-full h-44 rounded-lg mr-3"
             resizeMode="cover"
           />
         ) : (
-          <View className="w-20 h-20 rounded-lg bg-gray-100 items-center justify-center mr-3">
+          <View className="w-full h-44 rounded-lg bg-gray-100 items-center justify-center mr-3">
             <Ionicons name="image-outline" size={32} color="#9CA3AF" />
           </View>
         )}
 
-        {/* Product Details */}
-        <View className="flex-1">
-          <Text
-            className="font-bold text-lg text-black"    
-          >
-            {product.name}
-          </Text>
+        <TouchableOpacity 
+        // onPress={() => handleDelete(product.id)}
+        onPress={() => toggleModal()}
+        className="absolute bg-red-600 w-10 h-10 top-3 right-3 flex flex-row items-center justify-center rounded-full">
+          <Ionicons name="trash-outline" size={18} color="white" />
+        </TouchableOpacity>
+      </View>
 
+      {/*  product info  */}
+      <View className="py-3 px-2">
+        <Text className="font-bold text-lg text-center text-black">
+          {product.name}
+        </Text>
 
-          <View>
+         <Text className="font-bold text-lg text-center text-black">
+          {product?.category?.title}
+        </Text>
 
-            {product.attributes.length === 0 ? (<Text>{product.price} {config.CURRENCY} </Text>): null}
+        <View>
+          {product.attributes.length === 0 ? (
+            <Text>
+              {product.price} {config.CURRENCY}{" "}
+            </Text>
+          ) : null}
 
-            {product.attributes && product.attributes.length > 0 && (
-              <View className="mt-2">
-                {product.attributes.map((attr: any) => (
-                  <View key={attr.id} className="mb-1">
-                    <Text className="text-black font-bold mb-2">{attr.name}</Text>
+          {product.attributes && product.attributes.length > 0 && (
+            <View className="mt-2">
+              {product.attributes.map((attr: any) => (
+                <View key={attr.id} className="mb-1">
+                  <Text className="text-black font-bold mb-2">{attr.name}</Text>
 
-                    {attr.values && attr.values.length > 0 ? (
-                      <View className="flex flex-row">
-                        {attr.values.map((val: any, index: number) => (
-                          <Text
-                            key={index}
-                            className=" ml-2 bg-primary text-xs px-2 py-1 rounded-full text-white"
-                          >
-                            {val.value} - {val.price}
-                          </Text>
-                        ))}
-                      </View>
-                    ) : (null)}
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
+                  {attr.values && attr.values.length > 0 ? (
+                    <View className="flex flex-row">
+                      {attr.values.map((val: any, index: number) => (
+                        <Text
+                          key={index}
+                          className=" ml-2 bg-primary text-xs px-2 py-1 rounded-full text-white"
+                        >
+                          {val.value} - {val.price}
+                        </Text>
+                      ))}
+                    </View>
+                  ) : null}
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </View>
 
+      {/* Product Actions */}
+
+      <View>
+        <Button
+          className="bg-green-600 py-2"
+          title={t("common.edit")}
+          onPress={() =>
+            router.push({
+              pathname: "/stores/products/update",
+              params: { data: JSON.stringify(product) },
+            })
+          }
+        />
+
+      </View>
+
       {/* Action Buttons */}
-      <View className="flex-row mt-3 pt-3 border-t border-gray-100">
+      {/* <View className="flex-row mt-3 pt-3 border-t border-gray-100">
         <TouchableOpacity
           onPress={() =>
             router.push({
@@ -99,7 +137,15 @@ export default function ProductItem({
             {t("categories.delete")}
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
+
+
+
+      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+        <View style={{flex: 1}}>
+          <Text>I am the modal content!</Text>
+        </View>
+      </Modal>
     </View>
   );
 }

@@ -36,17 +36,6 @@ export default function OrderItem({ item, refetchOrders }: { item: any, refetchO
     const [isCancelling, setIsCancelling] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
-
 
     const handle_cancelOrder = async () => {
         try {
@@ -97,13 +86,7 @@ export default function OrderItem({ item, refetchOrders }: { item: any, refetchO
 
     return (
         <View>
-            <View className="bg-white mx-4 mb-4 rounded-2xl border border-gray-100" style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 8,
-                elevation: 1
-            }}>
+            <View className="bg-white mx-4 mb-4 rounded-2xl border border-gray-100" >
                 {/* Header */}
                 <View className="p-4 border-b border-gray-100">
 
@@ -119,12 +102,6 @@ export default function OrderItem({ item, refetchOrders }: { item: any, refetchO
                         </View>
                     </View>
 
-
-
-                    <View className="flex-row items-center">
-                        <Ionicons name="calendar-outline" size={14} color="#9ca3af" />
-                        <Text className="text-gray-500 text-xs ml-2">{formatDate(item.placed_at)}</Text>
-                    </View>
 
                 </View>
 

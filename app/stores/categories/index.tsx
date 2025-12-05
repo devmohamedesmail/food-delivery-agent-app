@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  RefreshControl,
+import {RefreshControl,
   Alert,
   FlatList,
 } from "react-native";
@@ -13,7 +10,7 @@ import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
 import Loading from "@/components/ui/Loading";
 import NoCategories from "@/components/categories/NoCategories";
-import Layout from "@/components/features/store/categories/Layout";
+import Layout from "@/components/categories/Layout";
 import { useStore } from "@/hooks/useStore";
 import CategoryItem from "@/components/categories/CategoryItem";
 

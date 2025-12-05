@@ -17,11 +17,12 @@ import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "@/components/ui/Loading";
 import Skeleton from "@/components/ui/Skeleton";
-import NoProductsFound from "@/components/store/NoProductsFound";
+import NoProductsFound from "@/components/products/NoProductsFound";
 import Header from "@/components/ui/Header";
 import ProductItem from "@/components/products/ProductItem";
 import { useStore } from "@/hooks/useStore";
 import FloadtButton from "@/components/ui/FloadtButton";
+import Layout from "@/components/ui/Layout";
 
 interface Product {
   id: number;
@@ -94,12 +95,42 @@ export default function Products() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
-
+    <Layout>
       <Header title={t("products.products")} />
 
-      {loading ? (
+      {loading ? <Loading /> : null}
+
+      {productsLoading ? (
+        <View className="mt-10 flex gap-4 px-3">
+          {[...Array(5)].map((_, index) => (
+            <Skeleton key={index} height={100} />
+          ))}
+        </View>
+      ) : null}
+
+      {!productsLoading && products.length === 0 ? <NoProductsFound /> : null}
+
+      <View>
+        <FlatList
+          key={"2-columns"}
+          data={products}
+          numColumns={2}
+          keyExtractor={(item) => item.id.toString()}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          contentContainerStyle={{ padding: 16 }}
+          renderItem={({ item: product }) => (
+            <ProductItem
+              product={product}
+              categoriesData={categoriesData}
+              handleDelete={handleDelete}
+            />
+          )}
+        />
+      </View>
+
+      {/* {loading ? (
         <Loading />
       ) : (
         <>
@@ -139,7 +170,7 @@ export default function Products() {
           )}
           <FloadtButton onPress={() => router.push("/stores/products/add")} />
         </>
-      )}
-    </SafeAreaView>
+      )} */}
+    </Layout>
   );
 }
