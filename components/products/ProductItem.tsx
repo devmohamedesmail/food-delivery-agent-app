@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
 import { config } from "@/constants/config";
 import Button from "../ui/Button";
-import Modal from 'react-native-modal';
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface Category {
   id: number;
@@ -45,12 +45,30 @@ export default function ProductItem({
           </View>
         )}
 
-        <TouchableOpacity 
-        // onPress={() => handleDelete(product.id)}
-        onPress={() => toggleModal()}
-        className="absolute bg-red-600 w-10 h-10 top-3 right-3 flex flex-row items-center justify-center rounded-full">
-          <Ionicons name="trash-outline" size={18} color="white" />
-        </TouchableOpacity>
+
+
+        <View className="absolute top-2 right-2">
+          <TouchableOpacity
+            onPress={() => handleDelete(product.id)}
+
+            className=" bg-red-600 w-10 h-10 top-3 right-3 flex flex-row items-center justify-center rounded-full">
+            <Ionicons name="trash-outline" size={18} color="white" />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/stores/products/update",
+                params: { data: JSON.stringify(product) },
+              })
+            }
+
+            className=" bg-green-600 mt-3 w-10 h-10 top-3 right-3 flex flex-row items-center justify-center rounded-full">
+            <Entypo name="edit" size={18} color="white" />
+          </TouchableOpacity>
+
+        </View>
       </View>
 
       {/*  product info  */}
@@ -59,7 +77,7 @@ export default function ProductItem({
           {product?.name}
         </Text>
 
-         <Text className="font-bold text-lg text-center text-black">
+        <Text className="font-bold text-lg text-center text-black">
           {product?.category?.title}
         </Text>
 
@@ -74,14 +92,14 @@ export default function ProductItem({
             <View className="mt-2">
               {product.attributes.map((attr: any) => (
                 <View key={attr.id} className="mb-1">
-                  <Text className="text-black font-bold mb-2">{attr.name}</Text>
+                  {/* <Text className="text-black font-bold mb-2">{attr.name}</Text> */}
 
                   {attr.values && attr.values.length > 0 ? (
-                    <View className="flex flex-row">
+                    <View className="flex flex-row flex-wrap">
                       {attr.values.map((val: any, index: number) => (
                         <Text
                           key={index}
-                          className=" ml-2 bg-primary text-xs px-2 py-1 rounded-full text-white"
+                          className="  mb-1 bg-primary text-xs px-2 mx-1 py-1 rounded-full text-white"
                         >
                           {val.value} - {val.price}
                         </Text>
@@ -95,57 +113,7 @@ export default function ProductItem({
         </View>
       </View>
 
-      {/* Product Actions */}
-
-      <View>
-        <Button
-          className="bg-green-600 py-2"
-          title={t("common.edit")}
-          onPress={() =>
-            router.push({
-              pathname: "/stores/products/update",
-              params: { data: JSON.stringify(product) },
-            })
-          }
-        />
-
-      </View>
-
-      {/* Action Buttons */}
-      {/* <View className="flex-row mt-3 pt-3 border-t border-gray-100">
-        <TouchableOpacity
-          onPress={() =>
-            router.push({
-              pathname: "/stores/products/update",
-              params: { data: JSON.stringify(product) },
-            })
-          }
-          className="flex-1 flex-row items-center justify-center bg-green-500 rounded-lg py-2 mr-2"
-        >
-          <Ionicons name="create-outline" size={18} color="white" />
-          <Text className="text-white ml-1 font-medium">
-            {t("categories.edit")}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => handleDelete(product.id)}
-          className="flex-1 flex-row items-center justify-center bg-red-500 rounded-lg py-2"
-        >
-          <Ionicons name="trash-outline" size={18} color="white" />
-          <Text className="text-white ml-1 font-medium">
-            {t("categories.delete")}
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-
-
-
-      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-        <View style={{flex: 1}}>
-          <Text>I am the modal content!</Text>
-        </View>
-      </Modal>
+    
     </View>
   );
 }

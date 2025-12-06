@@ -234,14 +234,17 @@
     "select_attribute": "اختر الخاصية",
     "attribute_values": "قيم الخاصية",
     "value": "القيمة",
-    "enter_value": "أدخل القيمة (مثال: XL، أحمر)",
+    "enter_value": "أدخل القيمة (مثال: وسط كبير )",
     "extra_price": "السعر الإضافي",
     "enter_extra_price": "أدخل السعر الإضافي",
     "add_value": "+ إضافة قيمة",
     "remove": "إزالة",
     "value_item": "القيمة",
     "fill_all_fields": "يرجى ملء جميع الحقول",
-    "update_product": "تحديث المنتج"
+    "update_product": "تحديث المنتج",
+    "delete_product_confirmation": "هل أنت متأكد من حذف هذا المنتج؟",
+    "delete": "حذف",
+      "products_count":" عدد المنتجات"
   },
   "notifications": {
     "title": "الإشعارات",

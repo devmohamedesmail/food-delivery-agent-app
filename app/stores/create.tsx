@@ -18,6 +18,7 @@ import { Toast } from 'toastify-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Ionicons } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Layout from '@/components/ui/Layout'
 
 interface StoreType {
   id: number
@@ -47,8 +48,7 @@ interface StoreFormValues {
   phone: string
   start_time: string
   end_time: string
-  delivery_time: string
-  delivery_fee: string
+  
 }
 
 export default function Create() {
@@ -73,8 +73,7 @@ export default function Create() {
     address: Yup.string().required(t('store.addressRequired') || 'Address is required'),
     phone: Yup.string().required(t('store.phoneRequired') || 'Phone is required'),
     start_time: Yup.string().required(t('store.startTimeRequired') || 'Start time is required'),
-    end_time: Yup.string().required(t('store.endTimeRequired') || 'End time is required'),
-    delivery_time: Yup.string().required(t('store.deliveryTimeRequired') || 'Delivery time is required'),
+   
   })
 
   // Formik setup
@@ -89,8 +88,7 @@ export default function Create() {
       phone: '',
       start_time: '',
       end_time: '',
-      delivery_time: '',
-      delivery_fee: '',
+  
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -107,8 +105,7 @@ export default function Create() {
         formData.append('phone', values.phone)
         formData.append('start_time', values.start_time)
         formData.append('end_time', values.end_time)
-        formData.append('delivery_time', values.delivery_time)
-        formData.append('delivery_fee', values.delivery_fee || '0')
+       
 
         // Add images if selected
         if (values.logo) {
@@ -129,24 +126,38 @@ export default function Create() {
           formData.append('banner', bannerFile)
         }
 
-        const response = await axios.post(`${config.URL}/stores/create`, formData, {
+        const {data} = await axios.post(`${config.URL}/stores/create`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${auth.token}`
           }
         })
 
-        if (response.data.success) {
-          Toast.success(t('store.storeCreatedSuccess') || 'Store created successfully!')
+        if (data?.success) {
+          Toast.show({
+            type: 'success',
+            text1: t('store.storeCreatedSuccess'),
+            position: 'bottom',
+            visibilityTime: 1000,
+          })
           formik.resetForm()
           router.push('/')
         } else {
-          Toast.error(response.data.message || t('store.storeCreationFailed'))
+          Toast.show({
+            type: 'error',
+            text1: t('store.storeCreationFailed'),
+            position: 'bottom',
+            visibilityTime: 2000,
+          })
         }
 
       } catch (error: any) {
-        console.error('Store creation error:', error)
-        Toast.error(error.response?.data?.message || t('store.storeCreationFailed') || 'Failed to create store')
+        Toast.show({
+          type: 'error',
+          text1:t('store.storeCreationFailed'),
+          position: 'bottom',
+          visibilityTime: 2000,
+        })
       } finally {
         setIsSubmitting(false)
       }
@@ -207,7 +218,7 @@ export default function Create() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className="flex-1 bg-gray-50"
     >
-      <SafeAreaView className="flex-1 bg-gray-50">
+      <Layout>
         <CustomHeader title={t('store.createStore') || 'Create Store'} />
         
         <ScrollView className="flex-1 px-6 pt-4" showsVerticalScrollIndicator={false}>
@@ -406,35 +417,7 @@ export default function Create() {
                   )}
                 </View>
 
-                {/* Section 5: Delivery Details */}
-                <View className="mb-6">
-                  <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
-                    <Ionicons name="bicycle-outline" size={24} color="#fd4a12" />
-                    <Text className="text-lg font-semibold text-gray-800 ml-2">
-                      {t('store.deliveryDetails')}
-                    </Text>
-                  </View>
-                  <View className="h-1 w-20 bg-primary rounded mb-4" />
-
-                  {/* Delivery Time */}
-                  <Input
-                    label={t('store.deliveryTime') || 'Delivery Time * (minutes)'}
-                    placeholder={t('store.enterDeliveryTime')}
-                    value={formik.values.delivery_time}
-                    onChangeText={formik.handleChange('delivery_time')}
-                    keyboardType="numeric"
-                    error={formik.touched.delivery_time && formik.errors.delivery_time ? formik.errors.delivery_time : undefined}
-                  />
-
-                  {/* Delivery Fee */}
-                  <Input
-                    label={t('store.deliveryFee') || 'Delivery Fee (optional)'}
-                    placeholder={t('store.enterDeliveryFee') || 'Enter delivery fee'}
-                    value={formik.values.delivery_fee}
-                    onChangeText={formik.handleChange('delivery_fee')}
-                    keyboardType="numeric"
-                  />
-                </View>
+                
 
                 {/* Submit Button */}
                 <View className="mt-4">
@@ -451,7 +434,7 @@ export default function Create() {
             )}
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </Layout>
     </KeyboardAvoidingView>
   )
 }

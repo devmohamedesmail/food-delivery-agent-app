@@ -16,6 +16,7 @@ import CustomButton from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
 import { useLocalSearchParams } from "expo-router";
+import Layout from "@/components/ui/Layout";
 
 interface Category {
   id: number;
@@ -152,8 +153,8 @@ export default function Update() {
     },
   });
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-      <Header title={t("products.update_product")} />
+   <Layout>
+     <Header title={t("products.update_product")} />
       <ScrollView>
         <View className="px-4 py-6">
           {/* Product Name */}
@@ -172,14 +173,14 @@ export default function Update() {
           </View>
 
           {/* Product Description */}
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <CustomTextArea
               label={t("products.product_description")}
               placeholder={t("products.enter_product_description")}
               value={formik.values.description}
               onChangeText={formik.handleChange("description")}
             />
-          </View>
+          </View> */}
 
           {/* Price */}
           <View className="mb-4">
@@ -198,7 +199,7 @@ export default function Update() {
           </View>
 
           {/* Sale Price */}
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <Input
               label={t("products.sale_price")}
               placeholder={t("products.enter_sale_price", {
@@ -214,7 +215,7 @@ export default function Update() {
                   : ""
               }
             />
-          </View>
+          </View> */}
 
           {/* Category Dropdown */}
           <View className="mb-4">
@@ -371,6 +372,6 @@ export default function Update() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+   </Layout>
   );
 }

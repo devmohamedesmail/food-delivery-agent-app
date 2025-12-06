@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,6 +16,8 @@ import CustomTextArea from "@/components/ui/textarea";
 import CustomButton from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
+import Layout from "@/components/ui/Layout";
+import { useStore } from "@/hooks/useStore";
 
 interface Product {
   id: number;
@@ -42,21 +44,12 @@ interface Category {
 export default function Add() {
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  const {data:attributesData} =useFetch('/attributes');
+  const { data: attributesData } = useFetch('/attributes');
   const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>([]);
   const [selectedAttributeId, setSelectedAttributeId] = useState<string>("");
-
-  const {
-    data: profileData,
-    loading: profileLoading,
-    refetch: refetchProfile,
-  } = useFetch(auth?.user?.id ? `/users/profile/${auth.user.id}` : "");
-
-  // Check if store exists
-  const storeId = profileData?.data?.store?.id || "";
-
+  const { store } = useStore();
   const { data: categoriesData } = useFetch(
-    storeId ? `/categories/store/${storeId}` : ""
+    store?.id ? `/categories/store/${store?.id}` : ""
   );
 
   const categoryOptions =
@@ -75,22 +68,22 @@ export default function Add() {
       image: "",
       attribute_value: "",
       attribute_price: "",
+      has_attributes: false,
     },
     validationSchema: Yup.object({
       name: Yup.string().required(t("products.name_required")),
-      price: Yup.number()
-        .required(t("products.price_required"))
-        .positive(t("products.price_positive")),
-      sale_price: Yup.number()
-        .nullable()
-        .positive(
-          t("products.price_positive")
-        ),
+      price: Yup.number().when("has_attributes", (hasAttributes, schema) => {
+        return hasAttributes
+          ? schema.nullable()
+          : schema
+            .required(t("products.price_required"))
+            .positive(t("products.price_positive"));
+      }),
       category_id: Yup.string().required(t("products.category_required")),
     }),
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        if (!storeId) {
+        if (!store?.id) {
           Toast.error(
             t("products.no_store_found", { defaultValue: "No store found" })
           );
@@ -99,7 +92,7 @@ export default function Add() {
 
         // Create FormData for image upload
         const formData = new FormData();
-        formData.append("store_id", storeId.toString());
+        formData.append("store_id", store.id.toString());
         formData.append("name", values.name);
         formData.append("description", values.description);
         formData.append("price", values.price);
@@ -112,7 +105,7 @@ export default function Add() {
         if (selectedAttributeId && attributeValues.length > 0) {
           // Send as array notation for FormData
           formData.append("attributes[]", selectedAttributeId);
-          
+
           // Send each value as separate entries
           attributeValues.forEach((av, index) => {
             formData.append(`values[${index}][attribute_id]`, av.attribute_id);
@@ -146,13 +139,13 @@ export default function Add() {
           Toast.show({
             type: "success",
             text1: t("products.product_added_successfully"),
-          })   
+          })
           resetForm();
         }
       } catch (error) {
         console.error("Error adding product:", error);
         Toast.show({
-        
+
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
@@ -161,11 +154,21 @@ export default function Add() {
       }
     },
   });
+
+
+  useEffect(() => {
+    if (attributeValues.length > 0) {
+      formik.setFieldValue("has_attributes", true);
+    } else {
+      formik.setFieldValue("has_attributes", false);
+    }
+  }, [attributeValues])
+
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
+    <Layout>
       <Header title={t("products.add_product")} />
 
-      <ScrollView className="px-4 py-3">
+      <ScrollView className="px-4 py-10 bg-white">
         {/* Product Name */}
         <View className="pb-20">
           <View className="mb-4">
@@ -183,7 +186,7 @@ export default function Add() {
           </View>
 
           {/* Product Description */}
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <CustomTextArea
               label={t("products.product_description")}
               placeholder={t("products.enter_product_description")}
@@ -203,7 +206,7 @@ export default function Add() {
                 {formik.errors.description}
               </Text>
             )}
-          </View>
+          </View> */}
 
           {/* Price */}
           <View className="mb-4">
@@ -222,7 +225,7 @@ export default function Add() {
           </View>
 
           {/* Sale Price */}
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <Input
               label={t("products.sale_price")}
               placeholder={t("products.enter_sale_price", {
@@ -237,16 +240,10 @@ export default function Add() {
                   : ""
               }
             />
-          </View>
+          </View> */}
 
           {/* Category Dropdown */}
           <View className="mb-4">
-            {/* <Text
-              className="text-sm font-medium text-gray-700 mb-2"
-              style={{ fontFamily: "Cairo_600SemiBold" }}
-            >
-              {t("products.category")}
-            </Text> */}
             <Select
               label={t("products.category")}
               placeholder={t("products.select_category")}
@@ -291,6 +288,7 @@ export default function Add() {
               onSelect={(value: string) => {
                 setSelectedAttributeId(value);
                 setAttributeValues([]);
+                formik.setFieldValue("has_attributes", true);
               }}
             />
           </View>
@@ -301,7 +299,7 @@ export default function Add() {
               <Text className="text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "Cairo_400Regular" }}>
                 {t("products.attribute_values")}
               </Text>
-              
+
               {/* Dynamic Attribute Value Inputs */}
               {attributeValues.map((attrValue, index) => (
                 <View key={index} className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
@@ -358,8 +356,8 @@ export default function Add() {
                 </View>
                 <View className="mb-3">
                   <Input
-                    label={t("products.extra_price")}
-                    placeholder={t("products.enter_extra_price")}
+                    label={t("products.price")}
+                    placeholder={t("products.price")}
                     value={formik.values.attribute_price}
                     onChangeText={formik.handleChange("attribute_price")}
                     keyboardType="numeric"
@@ -399,6 +397,6 @@ export default function Add() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </Layout>
   );
 }

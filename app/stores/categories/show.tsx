@@ -27,65 +27,10 @@ export default function show() {
   const { t } = useTranslation();
   const { category_id } = useLocalSearchParams();
   const { data, loading } = useFetch(`/products/categories/${category_id}`);
-  
   const products: Product[] = data?.data || [];
   const categoryName = products[0]?.category?.name || "";
 
-  const renderProduct = ({ item }: { item: Product }) => (
-    <View className="w-1/2 p-2">
-      <View className="bg-white rounded-lg shadow-sm border border-gray-100">
-        <View className="aspect-square bg-gray-100 rounded-t-lg items-center justify-center">
-          {item.image ? (
-            <Image 
-              source={{ uri: item.image }} 
-              className="w-full h-full rounded-t-lg"
-              resizeMode="cover"
-            />
-          ) : (
-            <Text className="text-gray-400 text-4xl">🍽️</Text>
-          )}
-        </View>
-        
-        <View className="p-3">
-          <Text 
-            className="text-sm font-semibold text-gray-800 mb-1" 
-            style={{ fontFamily: "Cairo_600SemiBold" }}
-            numberOfLines={2}
-          >
-            {item.name}
-          </Text>
-          
-          <View className="flex-row items-center justify-between mt-2">
-            <View>
-              {item.sale_price ? (
-                <View>
-                  <Text 
-                    className="text-xs text-gray-400 line-through" 
-                    style={{ fontFamily: "Cairo_400Regular" }}
-                  >
-                    {item.price} {t("common.currency", { defaultValue: "LE" })}
-                  </Text>
-                  <Text 
-                    className="text-sm font-bold text-green-600" 
-                    style={{ fontFamily: "Cairo_700Bold" }}
-                  >
-                    {item.sale_price} {t("common.currency", { defaultValue: "LE" })}
-                  </Text>
-                </View>
-              ) : (
-                <Text 
-                  className="text-sm font-bold text-gray-800" 
-                  style={{ fontFamily: "Cairo_700Bold" }}
-                >
-                  {item.price} {t("common.currency", { defaultValue: "LE" })}
-                </Text>
-              )}
-            </View>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
+ 
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>

@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import Button from '../ui/Button';
 
 export default function CategoryItem({ category, handleDelete }) {
     const { t } = useTranslation();
@@ -22,8 +23,7 @@ export default function CategoryItem({ category, handleDelete }) {
                     </Text>
                 </View>
                 <Text
-                    className="text-lg font-bold text-gray-800"
-
+                    className="text-sm font-bold text-gray-800"
                 >
                     {category.name}
                 </Text>
@@ -35,7 +35,9 @@ export default function CategoryItem({ category, handleDelete }) {
                 </Text>
             </View>
 
-            <View className="flex  items-center justify-end space-x-2 mt-3 pt-3 border-t border-gray-100">
+            <View className="flex flex-row  items-center justify-between space-x-2 mt-3 pt-3 border-t border-gray-100">
+            
+
                 <TouchableOpacity
                     onPress={() =>
                         router.push({
@@ -43,13 +45,10 @@ export default function CategoryItem({ category, handleDelete }) {
                             params: { category_id: category.id.toString() },
                         })
                     }
-                    className="bg-primary px-4 py-2 rounded-lg flex-row items-center justify-center min-w-full mb-2"
-                >
-                    <AntDesign name="eye" size={20} color="white" />
-                    <Text className="text-white ml-2 font-medium">
-                        {t("categories.show_products")}
-                    </Text>
+                    className='bg-primary w-12 h-12 rounded-full flex flex-row justify-center items-center'>
+                    <AntDesign name="eye" size={18} color="white" />
                 </TouchableOpacity>
+
 
                 <TouchableOpacity
                     onPress={() =>
@@ -58,23 +57,19 @@ export default function CategoryItem({ category, handleDelete }) {
                             params: { data: JSON.stringify(category) },
                         })
                     }
-                    className="bg-green-500 px-4 py-2 rounded-lg flex-row items-center justify-center mr-2 min-w-full mb-2"
-                >
+                    className='bg-green-600 w-12 h-12 rounded-full flex flex-row justify-center items-center'>
                     <Ionicons name="create-outline" size={18} color="white" />
-                    <Text className="text-white ml-2 font-medium">
-                        {t("categories.edit")}
-                    </Text>
                 </TouchableOpacity>
+
+            
 
                 <TouchableOpacity
                     onPress={() => handleDelete(category.id)}
-                    className="bg-red-500 px-4 py-2 rounded-lg flex-row items-center justify-center min-w-full mb-2"
-                >
+                    className='bg-red-600 w-12 h-12 rounded-full flex flex-row justify-center items-center'>
                     <Ionicons name="trash-outline" size={18} color="white" />
-                    <Text className="text-white ml-2 font-medium">
-                        {t("categories.delete")}
-                    </Text>
                 </TouchableOpacity>
+
+                
             </View>
         </View>
     )
