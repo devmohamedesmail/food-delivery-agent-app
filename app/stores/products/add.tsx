@@ -2,38 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { config } from "@/constants/config";
 import { AuthContext } from "@/context/auth_context";
 import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/ui/Header";
 import Input from "@/components/ui/Input";
-import CustomTextArea from "@/components/ui/textarea";
 import CustomButton from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
 import Layout from "@/components/ui/Layout";
 import { useStore } from "@/hooks/useStore";
+import ProductController from "@/controllers/products/controller";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 
-interface Product {
-  id: number;
-  store_id: number;
-  category_id: number;
-  name: string;
-  description: string;
-  price: number;
-  sale_price: number | null;
-  image: string | null;
-  on_sale: boolean;
-  is_featured: boolean;
-  stock: number;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 interface Category {
   id: number;
@@ -44,6 +28,7 @@ interface Category {
 export default function Add() {
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
+  const router = useRouter();
   const { data: attributesData } = useFetch('/attributes');
   const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>([]);
   const [selectedAttributeId, setSelectedAttributeId] = useState<string>("");
@@ -57,6 +42,32 @@ export default function Add() {
       label: cat.name,
       value: cat.id.toString(),
     })) || [];
+
+
+
+  const queryClient = useQueryClient(); // ✅ هنا
+
+   // 🔹 Create mutation
+  const createMutation = useMutation({
+    mutationFn: (formData: FormData) =>
+      ProductController.createProduct({
+        formData,
+        token: auth.token,
+      }),
+
+    onSuccess: () => {
+      Toast.success(t("products.product_added_successfully"));
+      queryClient.invalidateQueries({
+        queryKey: ["products", store.id],
+      });
+      router.back();
+    },
+
+    onError: () => {
+      Toast.error(t("products.failed_to_save_product"));
+    },
+  });
+
 
   const formik = useFormik({
     initialValues: {
@@ -83,13 +94,7 @@ export default function Add() {
     }),
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        if (!store?.id) {
-          Toast.error(
-            t("products.no_store_found", { defaultValue: "No store found" })
-          );
-          return;
-        }
-
+        if (!store?.id) return;
         // Create FormData for image upload
         const formData = new FormData();
         formData.append("store_id", store.id.toString());
@@ -126,32 +131,15 @@ export default function Add() {
           } as any);
         }
 
-        const response = await axios.post(
-          `${config.URL}/products/create`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (response.data.success) {
-          Toast.show({
-            type: "success",
-            text1: t("products.product_added_successfully"),
-          })
-          resetForm();
-        }
+        createMutation.mutate(formData);
+
       } catch (error) {
-        console.error("Error adding product:", error);
         Toast.show({
 
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
-      } finally {
-        setSubmitting(false);
-      }
+      } 
     },
   });
 
@@ -185,28 +173,7 @@ export default function Add() {
             />
           </View>
 
-          {/* Product Description */}
-          {/* <View className="mb-4">
-            <CustomTextArea
-              label={t("products.product_description")}
-              placeholder={t("products.enter_product_description")}
-              value={formik.values.description}
-              onChangeText={formik.handleChange("description")}
-              error={
-                formik.touched.description && formik.errors.description
-                  ? formik.errors.description
-                  : ""
-              }
-            />
-            {formik.touched.description && formik.errors.description && (
-              <Text
-                className="text-red-500 text-xs mt-1"
-                style={{ fontFamily: "Cairo_400Regular" }}
-              >
-                {formik.errors.description}
-              </Text>
-            )}
-          </View> */}
+        
 
           {/* Price */}
           <View className="mb-4">
@@ -224,24 +191,7 @@ export default function Add() {
             />
           </View>
 
-          {/* Sale Price */}
-          {/* <View className="mb-4">
-            <Input
-              label={t("products.sale_price")}
-              placeholder={t("products.enter_sale_price", {
-                defaultValue: "Enter sale price",
-              })}
-              value={formik.values.sale_price}
-              onChangeText={formik.handleChange("sale_price")}
-              keyboardType="numeric"
-              error={
-                formik.touched.sale_price && formik.errors.sale_price
-                  ? formik.errors.sale_price
-                  : ""
-              }
-            />
-          </View> */}
-
+        
           {/* Category Dropdown */}
           <View className="mb-4">
             <Select

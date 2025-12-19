@@ -3,24 +3,48 @@ import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { config } from "../../../constants/config";
 import { useTranslation } from "react-i18next";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@/context/auth_context";
 import { Toast } from "toastify-react-native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Input from "@/components/ui/Input";
 import TextArea from "@/components/ui/textarea";
 import Button from "@/components/ui/Button";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/ui/Header";
+import { useStore } from "@/hooks/useStore";
+import CategoryController from "@/controllers/categories/contoller";
+import Layout from "@/components/ui/Layout";
 
 export default function update() {
   const { data } = useLocalSearchParams();
   const category = JSON.parse(data as string);
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const { store } = useStore();
+  const queryClient = useQueryClient();
+
+  const updateMutation = useMutation({
+    mutationFn: (values: { name: string; description: string }) =>
+      CategoryController.updateCategory({
+        categoryId: category.id,
+        storeId: store?.id!,
+        name: values.name,
+        description: values.description,
+        token: auth.token,
+      }),
+    onSuccess: () => {
+      Toast.success(t("categories.category_updated_successfully"));
+      queryClient.invalidateQueries({ queryKey: ["categories", store.id] });
+      formik.resetForm();
+    },
+    onError: (error: any) => {
+      Toast.error(
+        error?.response?.data?.message ||
+          t("categories.failed_to_save_category")
+      );
+    },
+  });
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -30,52 +54,15 @@ export default function update() {
     },
     validationSchema: Yup.object({
       name: Yup.string().required(t("categories.name_required")),
-      // description: Yup.string().required(t('categories.description_required')),
     }),
-    onSubmit: async (values, { resetForm, setSubmitting }) => {
-      try {
-        setLoading(true);
-        const payload = {
-          store_id: auth.user.store.id,
-          name: values.name,
-          description: values.description,
-        };
-
-        const response = await axios.put(
-          `${config.URL}/categories/update/${category.id}`,
-          payload
-        );
-        if (response.status === 200) {
-          Toast.show({
-            type: "success",
-            text1: t("categories.category_updated_successfully"),
-          });
-
-          resetForm();
-        } else {
-          Toast.show({
-            type: "error",
-            text1: t("categories.failed_to_save_category"),
-          });
-        }
-        setLoading(false);
-      } catch (error: any) {
-        Toast.show({
-          type: "error",
-          text1:
-            error?.response?.data?.message ||
-            t("categories.failed_to_save_category"),
-        });
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
+    onSubmit: async (values) => {
+      updateMutation.mutate(values);
     },
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
-      <Header title={t("categories.update_category")} />
+    <Layout>
+       <Header title={t("categories.update_category")} />
       <View className="p-4">
         <Input
           label={t("categories.name")}
@@ -98,11 +85,11 @@ export default function update() {
           
         />
         <Button
-          title={loading ? t("common.saving") : t("common.save")}
+          title={updateMutation.isPending ? t("common.saving") : t("common.save")}
           onPress={formik.handleSubmit as any}
-          disabled={formik.isSubmitting}
+          disabled={updateMutation.isPending}
         />
       </View>
-    </SafeAreaView>
+    </Layout>
   );
 }

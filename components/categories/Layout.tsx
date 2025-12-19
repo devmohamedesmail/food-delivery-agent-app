@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: categoriesData } = useFetch(`/categories/store/${store?.id}`);
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="light-content" backgroundColor="#000"  />
       <Header title={t("categories.categories")} />
 
       <View className="flex flex-row justify-between items-center my-2 px-4">

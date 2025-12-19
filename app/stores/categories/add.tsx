@@ -2,23 +2,44 @@ import React, { useContext, useState } from "react";
 import { View } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { config } from "../../../constants/config";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "@/context/auth_context";
 import { Toast } from "toastify-react-native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Input from "@/components/ui/Input";
 import TextArea from "@/components/ui/textarea";
 import Button from "@/components/ui/Button";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/ui/Header";
-import useFetch from "@/hooks/useFetch";
+import Layout from "@/components/ui/Layout";
+import { useStore } from "@/hooks/useStore";
+import CategoryController from "@/controllers/categories/contoller";
 
 export default function Add() {
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-   const {refetch: refetchCategories} = useFetch(`/categories/store/${auth.user.store.id}`);
+  const { store } = useStore();
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: (values: { name: string; description: string }) =>
+      CategoryController.createCategory({
+        store_id: store?.id!,
+        name: values.name,
+        description: values.description,
+        token: auth.token,
+      }),
+    onSuccess: () => {
+      Toast.success(t("categories.category_added_successfully"));
+      queryClient.invalidateQueries({ queryKey: ["categories", store.id] });
+      formik.resetForm();
+    },
+    onError: (error: any) => {
+      Toast.error(
+        error?.response?.data?.message ||
+          t("categories.failed_to_save_category")
+      );
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -28,50 +49,13 @@ export default function Add() {
     validationSchema: Yup.object({
       name: Yup.string().required(t("categories.name_required")),
     }),
-    onSubmit: async (values, { resetForm, setSubmitting }) => {
-      try {
-        setLoading(true);
-        const payload = {
-          store_id: auth.user.store.id,
-          name: values.name,
-          description: values.description,
-        };
-
-        const response = await axios.post(
-          `${config.URL}/categories/create`,
-          payload
-        );
-        console.log(response.status);
-        if (response.status === 201) {
-          Toast.show({
-            type: "success",
-            text1: t("categories.category_added_successfully"),
-          });
-          refetchCategories();
-          resetForm();
-        } else {
-          Toast.show({
-            type: "error",
-            text1: t("categories.failed_to_save_category"),
-          });
-        }
-        setLoading(false);
-      } catch (error: any) {
-        Toast.show({
-          type: "error",
-          text1:
-            error?.response?.data?.message ||
-            t("categories.failed_to_save_category"),
-        });
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
+    onSubmit: async (values) => {
+      createMutation.mutate(values);
     },
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
+    <Layout>
       <Header title={t("categories.add_category")} />
       <View className="px-5 py-10">
         <Input
@@ -96,12 +80,11 @@ export default function Add() {
           touched={formik.touched.description}
         />
         <Button
-          
-          title={loading ? t("common.saving") : t("common.save")}
+          title={createMutation.isPending ? t("common.saving") : t("common.save")}
           onPress={formik.handleSubmit as any}
-          disabled={formik.isSubmitting}
+          disabled={createMutation.isPending}
         />
       </View>
-    </SafeAreaView>
+    </Layout>
   );
 }

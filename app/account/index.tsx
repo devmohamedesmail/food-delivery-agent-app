@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { View, Text, ScrollView, StatusBar, Alert } from 'react-native'
+import { View, Text, ScrollView, StatusBar, Alert, Linking } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 import { AuthContext } from '@/context/auth_context'
@@ -8,6 +8,9 @@ import AccountButton from '@/components/common/AccountButton'
 import i18n from '@/lib/i18n'
 import AccountActionsButtons from '@/components/account/AccountActionsButtons'
 import Header from '@/components/ui/Header'
+import AccountSettingButton from '@/components/account/AccountSettingButton'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Colors from '@/constants/Colors'
 
 
 
@@ -63,25 +66,18 @@ export default function Account() {
 
 
 
-        {/* Settings Sections */}
-        {/* {settingsSections.map((section, sectionIndex) => (
-          <View key={sectionIndex} className="mx-4 mt-6">
-            <Text
-              className={`text-sm font-semibold text-black mb-2 px-2 uppercase tracking-wide ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
-
-            >
-              {section.title}
-            </Text>
-
-            <View className="bg-white rounded-xl shadow-sm overflow-hidden">
-              {section.items.map((item, itemIndex) => (
-                <View key={item.id}>
-                  <AccountButton item={item} />
-                </View>
-              ))}
-            </View>
-          </View>
-        ))} */}
+        <View className='px-5'>
+          <AccountSettingButton
+            title={t('account.whatsup_support')}
+            onPress={() => Linking.openURL('https://wa.me/+971589107126')}
+            icon={<AntDesign name="whats-app" size={20} color={Colors.light.tabIconSelected} />}
+          />
+          <AccountSettingButton
+            title={t('account.phone_support')}
+            onPress={() => Linking.openURL('tel:+971589107126')}
+            icon={<AntDesign name="phone" size={20} color={Colors.light.tabIconSelected} />}
+          />
+        </View>
 
         <AccountActionsButtons />
 

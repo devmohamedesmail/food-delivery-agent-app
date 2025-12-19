@@ -36,17 +36,31 @@ export default function Update() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
   
+  // Initialize time dates from store data
+  const parseTime = (timeString: string) => {
+    if (!timeString) return new Date()
+    const [hours, minutes] = timeString.split(':')
+    const date = new Date()
+    date.setHours(parseInt(hours, 10))
+    date.setMinutes(parseInt(minutes, 10))
+    return date
+  }
+
   // Time picker states
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
-  const [startTimeDate, setStartTimeDate] = useState(new Date())
-  const [endTimeDate, setEndTimeDate] = useState(new Date())
+  const [startTimeDate, setStartTimeDate] = useState(
+    storeData?.start_time ? parseTime(storeData.start_time) : new Date()
+  )
+  const [endTimeDate, setEndTimeDate] = useState(
+    storeData?.end_time ? parseTime(storeData.end_time) : new Date()
+  )
 
   // Validation schema
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t('store.nameRequired') || 'Store name is required'),
+    name: Yup.string().required(t('store.nameRequired')),
     address: Yup.string().required(t('store.addressRequired') || 'Address is required'),
-    phone: Yup.string().required(t('store.phoneRequired') || 'Phone is required'),
+    phone: Yup.string().required(t('store.phoneRequired')),
     start_time: Yup.string().required(t('store.startTimeRequired') || 'Start time is required'),
     end_time: Yup.string().required(t('store.endTimeRequired') || 'End time is required'),
   })
@@ -69,12 +83,29 @@ export default function Update() {
       try {
         const formData = new FormData()
         
-        // Add text fields
+        // Append required fields (ensure they're not empty)
+        if (!values.name || !values.address || !values.phone) {
+          Toast.show({
+            type: 'error',
+            text1: t('store.fillAllRequiredFields') || 'Please fill all required fields',
+            position: 'bottom',
+            visibilityTime: 2000,
+          })
+          setIsSubmitting(false)
+          return
+        }
+
         formData.append('name', values.name)
         formData.append('address', values.address)
         formData.append('phone', values.phone)
-        formData.append('start_time', values.start_time)
-        formData.append('end_time', values.end_time)
+        
+        // Only append times if they exist
+        if (values.start_time) {
+          formData.append('start_time', values.start_time)
+        }
+        if (values.end_time) {
+          formData.append('end_time', values.end_time)
+        }
 
         // Add images if selected
         if (values.logo && values.logo !== storeData?.logo) {
@@ -94,6 +125,15 @@ export default function Update() {
           } as any
           formData.append('banner', bannerFile)
         }
+
+        console.log('Updating store with ID:', storeData?.id)
+        console.log('FormData values:', {
+          name: values.name,
+          address: values.address,
+          phone: values.phone,
+          start_time: values.start_time,
+          end_time: values.end_time,
+        })
 
         const { data } = await axios.put(
           `${config.URL}/stores/update/${storeData?.id}`,
@@ -124,11 +164,14 @@ export default function Update() {
         }
 
       } catch (error: any) {
+        console.error('Store update error:', error)
+        console.error('Error response:', error.response?.data)
+        console.error('Error status:', error.response?.status)
         Toast.show({
           type: 'error',
-          text1: t('store.storeUpdateFailed'),
+          text1: error.response?.data?.message || t('store.storeUpdateFailed'),
           position: 'bottom',
-          visibilityTime: 2000,
+          visibilityTime: 3000,
         })
       } finally {
         setIsSubmitting(false)

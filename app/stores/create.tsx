@@ -1,6 +1,6 @@
 import useFetch from '@/hooks/useFetch'
 import React, { useState, useContext } from 'react'
-import { Text, View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, Platform, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 import { useFormik } from 'formik'
@@ -8,7 +8,6 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { config } from '@/constants/config'
 import { AuthContext } from '@/context/auth_context'
-import CustomHeader from '@/components/ui/Header'
 import Select from '@/components/ui/Select'
 import Loading from '@/components/ui/Loading'
 import Input from '@/components/ui/Input'
@@ -17,8 +16,8 @@ import CustomImagePicker from '@/components/ui/customimagepicker'
 import { Toast } from 'toastify-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Ionicons } from '@expo/vector-icons'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import Layout from '@/components/ui/Layout'
+import Layout from '@/components/store/Layout'
+
 
 interface StoreType {
   id: number
@@ -43,8 +42,6 @@ interface StoreFormValues {
   store_type_id: string
   name: string
   logo: string
-  banner: string
-  address: string
   phone: string
   start_time: string
   end_time: string
@@ -58,7 +55,7 @@ export default function Create() {
   const { data: placesData, loading: loadingPlaces, error: errorPlaces } = useFetch('/places')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
-  
+ 
   // Time picker states
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
@@ -67,12 +64,11 @@ export default function Create() {
 
   // Validation schema
   const validationSchema = Yup.object().shape({
-    place_id: Yup.string().required(t('store.placeRequired') || 'Place is required'),
-    store_type_id: Yup.string().required(t('store.storeTypeRequired') || 'Store type is required'),
-    name: Yup.string().required(t('store.nameRequired') || 'Store name is required'),
-    address: Yup.string().required(t('store.addressRequired') || 'Address is required'),
-    phone: Yup.string().required(t('store.phoneRequired') || 'Phone is required'),
-    start_time: Yup.string().required(t('store.startTimeRequired') || 'Start time is required'),
+    place_id: Yup.string().required(t('store.placeRequired')),
+    store_type_id: Yup.string().required(t('store.storeTypeRequired')),
+    name: Yup.string().required(t('store.nameRequired')),
+    phone: Yup.string().required(t('store.phoneRequired') ),
+    start_time: Yup.string().required(t('store.startTimeRequired')),
    
   })
 
@@ -83,8 +79,6 @@ export default function Create() {
       store_type_id: '',
       name: '',
       logo: '',
-      banner: '',
-      address: '',
       phone: '',
       start_time: '',
       end_time: '',
@@ -96,12 +90,9 @@ export default function Create() {
 
       try {
         const formData = new FormData()
-        
-        // Add text fields
-        formData.append('owner_user_id', auth.user.id.toString())
+        formData.append('user_id', auth?.user?.id)
         formData.append('store_type_id', values.store_type_id)
         formData.append('name', values.name)
-        formData.append('address', values.address)
         formData.append('phone', values.phone)
         formData.append('start_time', values.start_time)
         formData.append('end_time', values.end_time)
@@ -117,14 +108,7 @@ export default function Create() {
           formData.append('logo', logoFile)
         }
 
-        if (values.banner) {
-          const bannerFile = {
-            uri: values.banner,
-            type: 'image/jpeg',
-            name: 'banner.jpg',
-          } as any
-          formData.append('banner', bannerFile)
-        }
+      
 
         const {data} = await axios.post(`${config.URL}/stores/create`, formData, {
           headers: {
@@ -141,8 +125,10 @@ export default function Create() {
             visibilityTime: 1000,
           })
           formik.resetForm()
-          router.push('/')
+          setTimeout(()=>{router.push('/')}, 1000)
+          
         } else {
+          console.log(data)
           Toast.show({
             type: 'error',
             text1: t('store.storeCreationFailed'),
@@ -152,6 +138,7 @@ export default function Create() {
         }
 
       } catch (error: any) {
+        console.log('Store creation error:', error.response || error.message || error)
         Toast.show({
           type: 'error',
           text1:t('store.storeCreationFailed'),
@@ -214,14 +201,8 @@ export default function Create() {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-gray-50"
-    >
-      <Layout>
-        <CustomHeader title={t('store.createStore') || 'Create Store'} />
-        
-        <ScrollView className="flex-1 px-6 pt-4" showsVerticalScrollIndicator={false}>
+   <Layout>
+      <ScrollView className="flex-1 px-6 pt-4" showsVerticalScrollIndicator={false}>
           {/* Subtitle */}
           <Text className={`text-gray-600 text-center mb-6 `} >
             {t('store.createStoreSubtitle') }
@@ -296,14 +277,14 @@ export default function Create() {
                   />
 
                   {/* Address */}
-                  <Input
+                  {/* <Input
                     label={t('store.storeAddress') || 'Address *'}
                     placeholder={t('store.enterAddress') || 'Enter address'}
                     value={formik.values.address}
                     onChangeText={formik.handleChange('address')}
                     keyboardType="default"
                     error={formik.touched.address && formik.errors.address ? formik.errors.address : undefined}
-                  />
+                  /> */}
 
                   {/* Phone */}
                   <Input
@@ -337,14 +318,14 @@ export default function Create() {
                   />
 
                   {/* Banner Image */}
-                  <CustomImagePicker
+                  {/* <CustomImagePicker
                     label={t('store.storeBanner') || 'Store Banner'}
                     placeholder={t('store.selectBanner') || 'Tap to select banner'}
                     value={formik.values.banner}
                     onImageSelect={(uri) => formik.setFieldValue('banner', uri)}
                     aspect={[16, 9]}
                     allowsEditing={true}
-                  />
+                  /> */}
                 </View>
 
                 {/* Section 4: Operating Hours */}
@@ -434,7 +415,6 @@ export default function Create() {
             )}
           </View>
         </ScrollView>
-      </Layout>
-    </KeyboardAvoidingView>
+   </Layout>
   )
 }

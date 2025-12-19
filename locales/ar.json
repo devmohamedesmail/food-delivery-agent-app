@@ -74,7 +74,8 @@
     "cancel": "إلغاء",
     "confirm": "تأكيد",
     "address": "العنوان",
-    "checkCredentials": "يرجى التحقق من بياناتك الخاصة وحاول مرة أخرى."
+    "checkCredentials": "يرجى التحقق من بياناتك الخاصة وحاول مرة أخرى.",
+    "registerDescription": "أنشئ حسابًا لإدارة متجرك  "
   },
   "orders": {
     "orders": "الطلبات",
@@ -88,6 +89,8 @@
     "cancelled": "تم الإلغاء",
     "myOrders": "طلباتي",
     "title": "الطلبات",
+    "ordersCount": "عدد الطلبات",
+    "orderId": "رقم الطلب",
     "noOrders": "لا توجد طلبات بعد",
     "noOrdersDescription": "عندما تتلقى طلبات، ستظهر هنا",
     "loading": "جارٍ التحميل...",
@@ -96,13 +99,16 @@
     "cancelOrder": "إلغاء الطلب",
     "cancelOrderConfirmation": "هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟",
     "orderCancelledSuccessfully": "تم إلغاء الطلب بنجاح",
+    "orderCancellationFailed": "فشل في إلغاء الطلب",
     "failedToCancelOrder": "فشل في إلغاء الطلب",
     "acceptOrder": "قبول الطلب",
     "acceptOrderConfirmation": "هل أنت متأكد من رغبتك في قبول هذا الطلب؟",
     "orderAcceptedSuccessfully": "تم قبول الطلب بنجاح",
     "failedToAcceptOrder": "فشل في قبول الطلب",
     "areYouSureCancel": "هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟",
-    "acceptingOrder": "جاري قبول الطلب..."
+    "acceptingOrder": "جاري قبول الطلب...",
+    "trackOrder": "تتبع الطلب",
+    "orderAgain": "اطلب مرة أخرى"
   },
   "driver": {
     "homeTitle": "الصفحة الرئيسية للسائق",
@@ -244,7 +250,9 @@
     "update_product": "تحديث المنتج",
     "delete_product_confirmation": "هل أنت متأكد من حذف هذا المنتج؟",
     "delete": "حذف",
-    "products_count": " عدد المنتجات"
+    "products_count": " عدد المنتجات",
+    "existing_attributes": "الخصائص الموجودة",
+    "add_new_attribute": "إضافة خاصية جديدة"
   },
   "notifications": {
     "title": "الإشعارات",
@@ -393,15 +401,21 @@
     "setOperatingHours": "حدد ساعات عمل متجرك",
     "selectStartTime": "اختر وقت البدء",
     "selectEndTime": "اختر وقت الانتهاء",
-     "deliveryDetails": "تفاصيل التوصيل",
-     "update_store": "تحديث المتجر",
-     "updating_store": "جاري تحديث المتجر...",
-     "storeUpdatedSuccess": "تم تحديث المتجر بنجاح",
-     "storeUpdateFailed": "فشل تحديث المتجر",
-     "updateStoreButton": "تحديث المتجر",
-     "updateStoreSubtitle": "قم بتحديث معلومات متجرك",
-     "noStoreData": "لا توجد بيانات للمتجر",
-     "endTimeRequired": "وقت الإغلاق مطلوب"
+    "deliveryDetails": "تفاصيل التوصيل",
+    "update_store": "تحديث المتجر",
+    "updating_store": "جاري تحديث المتجر...",
+    "storeUpdatedSuccess": "تم تحديث المتجر بنجاح",
+    "storeUpdateFailed": "فشل تحديث المتجر",
+    "updateStoreButton": "تحديث المتجر",
+    "updateStoreSubtitle": "قم بتحديث معلومات متجرك",
+    "noStoreData": "لا توجد بيانات للمتجر",
+    "endTimeRequired": "وقت الإغلاق مطلوب",
+    "placeRequired": "المكان مطلوب",
+    "storeTypeRequired": "نوع المتجر مطلوب",
+    "nameRequired": "اسم المتجر مطلوب",
+    "addressRequired": "العنوان مطلوب",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "startTimeRequired": "وقت البدء مطلوب"
   },
   "account": {
     "profile": "الملف الشخصي",
@@ -454,6 +468,8 @@
     "driver": " ( سائق )",
     "logouting": "تسجيل الخروج...",
     "logout_successful": " تم تسجيل الخروج بنجاح",
-    "logout_failed": "فشل تسجيل الخروج"
+    "logout_failed": "فشل تسجيل الخروج",
+    "whatsup_support": " دعم الواتساب ",
+    "phone_support": "دعم الهاتف"
   }
 }

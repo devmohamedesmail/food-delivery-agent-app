@@ -2,21 +2,21 @@ import React, { useContext, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { config } from "@/constants/config";
 import { AuthContext } from "@/context/auth_context";
 import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/ui/Header";
 import Input from "@/components/ui/Input";
-import CustomTextArea from "@/components/ui/textarea";
 import CustomButton from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
 import { useLocalSearchParams } from "expo-router";
 import Layout from "@/components/ui/Layout";
+import { useRouter } from "expo-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ProductController from "@/controllers/products/controller";
+import { useStore } from "@/hooks/useStore";
 
 interface Category {
   id: number;
@@ -29,23 +29,41 @@ export default function Update() {
   const product = data.data ? JSON.parse(data.data as string) : null;
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>([]);
-  const [selectedAttributeId, setSelectedAttributeId] = useState<string>("");
-
-  const {
-    data: profileData,
-    loading: profileLoading,
-    refetch: refetchProfile,
-  } = useFetch(auth?.user?.id ? `/users/profile/${auth.user.id}` : "");
-
-  const {data:attributesData} =useFetch('/attributes');
   
+  // Initialize with existing product attributes if available
+  const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>(() => {
+    if (product?.attributes && product.attributes.length > 0) {
+      const firstAttr = product.attributes[0];
+      return firstAttr.values?.map((v: any) => ({
+        attribute_id: firstAttr.id.toString(),
+        value: v.value,
+        price: v.price?.toString() || "0"
+      })) || [];
+    }
+    return [];
+  });
+  
+  const [selectedAttributeId, setSelectedAttributeId] = useState<string>(() => {
+    return product?.attributes?.[0]?.id?.toString() || "";
+  });
+  
+  const router = useRouter();
+  // const {
+  //   data: profileData,
+  //   loading: profileLoading,
+  //   refetch: refetchProfile,
+  // } = useFetch(auth?.user?.id ? `/users/profile/${auth.user.id}` : "");
+  const {store}= useStore()
+
+  const { data: attributesData } = useFetch('/attributes');
+
+
 
   // Check if store exists
-  const storeId = profileData?.data?.store?.id || "";
+  // const storeId = profileData?.data?.store?.id || "";
 
   const { data: categoriesData } = useFetch(
-    storeId ? `/categories/store/${storeId}` : ""
+    store?.id ? `/categories/store/${store.id}` : ""
   );
 
   const categoryOptions =
@@ -53,6 +71,42 @@ export default function Update() {
       label: cat.name,
       value: cat.id.toString(),
     })) || [];
+
+  const queryClient = useQueryClient();
+
+  // 🔹 Update mutation
+  const updateMutation = useMutation({
+    mutationFn: ({
+      productID,
+      formData,
+    }: {
+      productID: number;
+      formData: FormData;
+    }) =>
+      ProductController.updateProduct({
+        productID,
+        formData,
+        token: auth.token,
+      }),
+
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: t("products.product_updated_successfully"),
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["products", store?.id],
+      });
+      router.back();
+    },
+
+    onError: (error) => {
+      Toast.show({
+        type: "error",
+        text1: t("products.failed_to_update_product"),
+      })
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -79,18 +133,13 @@ export default function Update() {
         ),
       category_id: Yup.string().required(t("products.category_required")),
     }),
-    onSubmit: async (values, { resetForm, setSubmitting }) => {
+    onSubmit: async (values) => {
       try {
-        if (!storeId) {
-          Toast.error(
-            t("products.no_store_found", { defaultValue: "No store found" })
-          );
-          return;
-        }
-
+        if (!store?.id)  return;
+      
         // Create FormData for image upload
         const formData = new FormData();
-        formData.append("store_id", storeId.toString());
+        formData.append("store_id", store.id);
         formData.append("name", values.name);
         formData.append("description", values.description);
         formData.append("price", values.price);
@@ -103,7 +152,7 @@ export default function Update() {
         if (selectedAttributeId && attributeValues.length > 0) {
           // Send as array notation for FormData
           formData.append("attributes[]", selectedAttributeId);
-          
+
           // Send each value as separate entries
           attributeValues.forEach((av, index) => {
             formData.append(`values[${index}][attribute_id]`, av.attribute_id);
@@ -123,40 +172,61 @@ export default function Update() {
             type: `image/${fileType}`,
           } as any);
         }
-
-        const response = await axios.put(
-          `${config.URL}/products/update/${product?.id}`,
+        updateMutation.mutate({
+          productID: product.id,
           formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (response.data.success) {
-          
-          Toast.show({
-            type: "success",
-            text1: t("products.product_updated_successfully"),
-          });
-          resetForm();
-        }
+        });
+
+
+
       } catch (error) {
+         console.log("Error saving product:", error);
         Toast.show({
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
-        console.log("Error saving product:", error);
-      } finally {
-        setSubmitting(false);
-      }
+       
+      } 
     },
   });
   return (
-   <Layout>
-     <Header title={t("products.update_product")} />
+    <Layout>
+      <Header title={t("products.update_product")} />
       <ScrollView>
         <View className="px-4 py-6">
+          {/* Display Existing Product Attributes */}
+          {product?.attributes && product.attributes.length > 0 && (
+            <View className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <Text className="text-lg font-bold text-blue-900 mb-3" style={{ fontFamily: "Cairo_700Bold" }}>
+                {t("products.existing_attributes", { defaultValue: "Existing Product Attributes" })}
+              </Text>
+              {product.attributes.map((attr: any) => (
+                <View key={attr.id} className="mb-3 p-3 bg-white rounded-lg">
+                  <Text className="text-sm font-semibold text-gray-800 mb-2" style={{ fontFamily: "Cairo_600SemiBold" }}>
+                    {attr.name}
+                  </Text>
+                  {attr.values && attr.values.length > 0 ? (
+                    <View className="space-y-1">
+                      {attr.values.map((val: any, idx: number) => (
+                        <View key={idx} className="flex-row justify-between items-center py-2 px-3 bg-gray-50 rounded-md">
+                          <Text className="text-sm text-gray-700" style={{ fontFamily: "Cairo_400Regular" }}>
+                            {val.value}
+                          </Text>
+                          <Text className="text-sm font-medium text-green-600" style={{ fontFamily: "Cairo_500Medium" }}>
+                            {val.price ? `+${val.price}` : t("products.no_extra_price", { defaultValue: "No extra" })}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  ) : (
+                    <Text className="text-xs text-gray-500 italic" style={{ fontFamily: "Cairo_400Regular" }}>
+                      {t("products.no_values", { defaultValue: "No values defined" })}
+                    </Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
           {/* Product Name */}
           <View className="mb-4">
             <Input
@@ -172,15 +242,7 @@ export default function Update() {
             />
           </View>
 
-          {/* Product Description */}
-          {/* <View className="mb-4">
-            <CustomTextArea
-              label={t("products.product_description")}
-              placeholder={t("products.enter_product_description")}
-              value={formik.values.description}
-              onChangeText={formik.handleChange("description")}
-            />
-          </View> */}
+          
 
           {/* Price */}
           <View className="mb-4">
@@ -198,24 +260,7 @@ export default function Update() {
             />
           </View>
 
-          {/* Sale Price */}
-          {/* <View className="mb-4">
-            <Input
-              label={t("products.sale_price")}
-              placeholder={t("products.enter_sale_price", {
-                defaultValue: "Enter sale price",
-              })}
-              value={formik.values.sale_price}
-              onChangeText={formik.handleChange("sale_price")}
-              keyboardType="numeric"
-              error={
-                formik.touched.sale_price &&
-                typeof formik.errors.sale_price === "string"
-                  ? formik.errors.sale_price
-                  : ""
-              }
-            />
-          </View> */}
+        
 
           {/* Category Dropdown */}
           <View className="mb-4">
@@ -252,7 +297,7 @@ export default function Update() {
           </View>
 
 
-            <View className="mb-4">
+          <View className="mb-4">
             <Select
               label={t("products.attribute")}
               placeholder={t("products.select_attribute")}
@@ -274,7 +319,7 @@ export default function Update() {
               <Text className="text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "Cairo_400Regular" }}>
                 {t("products.attribute_values", { defaultValue: "Attribute Values" })}
               </Text>
-              
+
               {/* Dynamic Attribute Value Inputs */}
               {attributeValues.map((attrValue, index) => (
                 <View key={index} className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
@@ -372,6 +417,6 @@ export default function Update() {
           />
         </View>
       </ScrollView>
-   </Layout>
+    </Layout>
   );
 }

@@ -9,15 +9,12 @@ import { useTranslation } from "react-i18next";
 export default function Home() {
   const { auth, isLoading } = useContext(AuthContext);
   const { t } = useTranslation();
+ 
 
   useEffect(() => {
     if (!auth) return;
 
-    if (auth.user?.role?.role === "driver") {
-      router.replace("/driver");
-    }
-
-    if (auth.user?.role?.role === "store_owner") {
+    if (auth.user.role.role === "store_owner") {
       router.replace("/stores");
     }
   }, [auth]);
@@ -38,6 +35,9 @@ export default function Home() {
       <View>
         <Text className="text-lg text-center mb-4">
           {t("auth.noauthvarified")}
+        </Text>
+        <Text className="text-lg text-center mb-4">
+        {auth.user?.email}
         </Text>
         <Link
           href="/auth/login"

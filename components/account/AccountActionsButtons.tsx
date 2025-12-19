@@ -47,7 +47,7 @@ export default function AccountActionsButtons() {
         }
     }
     return (
-        <View className='px-5'>
+        <View className='px-5 mt-10'>
             <TouchableOpacity
                 className='bg-white py-7  border-b border-b-gray-200 rounded-xl px-4 mb-4 flex-row justify-center items-center'
                 onPress={() => setLogoutModalVisible(true)}>

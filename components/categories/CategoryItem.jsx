@@ -4,11 +4,13 @@ import { useRouter } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import Button from '../ui/Button';
+
 
 export default function CategoryItem({ category, handleDelete }) {
     const { t } = useTranslation();
     const router = useRouter();
+
+
 
     return (
         <View
@@ -17,14 +19,12 @@ export default function CategoryItem({ category, handleDelete }) {
         >
             <View className="flex items-center justify-between mb-2">
 
-                <View className='bg-blue-400 w-20 h-20 rounded-full flex items-center justify-center mb-2'>
+                <View className='bg-blue-400 w-16 h-16 rounded-full flex items-center justify-center mb-2'>
                     <Text className='text-xl text-white'>
                         {category.name.charAt(0).toUpperCase()}
                     </Text>
                 </View>
-                <Text
-                    className="text-sm font-bold text-gray-800"
-                >
+                <Text className="text-sm font-bold text-black">
                     {category.name}
                 </Text>
                 <Text

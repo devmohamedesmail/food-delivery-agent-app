@@ -22,89 +22,69 @@ import ProductItem from "@/components/products/ProductItem";
 import { useStore } from "@/hooks/useStore";
 import Layout from "@/components/ui/Layout";
 import FloatButton from "@/components/ui/FloatButton";
+import ProductController from "@/controllers/products/controller";
+import { useAuth } from "@/context/auth_context";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-interface Product {
-  id: number;
-  store_id: number;
-  category_id: number;
-  name: string;
-  description: string;
-  price: number;
-  sale_price: number | null;
-  image: string | null;
-  on_sale: boolean;
-  is_featured: boolean;
-  stock: number;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 export default function Products() {
   const { t } = useTranslation();
+  const { auth } = useAuth()
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
   const { store, loading } = useStore();
+  const queryClient = useQueryClient();
+  const { data: products = [], isLoading, refetch } = useQuery({
+    queryKey: ["products", store.id],
+    queryFn: () => ProductController.fetchProductsByStore(store.id, auth.token),
+    enabled: !!store?.id && !!auth?.token,
+  });
 
-  const {
-    data: productsData,
-    loading: productsLoading,
-    refetch: refetchProducts,
-  } = useFetch(store?.id ? `/products/store/${store?.id}` : "");
+
+
+
 
   // Fetch categories for dropdown
   const { data: categoriesData } = useFetch(
     store?.id ? `/categories/store/${store?.id}` : ""
   );
 
-  useEffect(() => {
-    if (productsData && productsData.data) {
-      setProducts(productsData.data);
-      setRefreshing(false);
-    }
-  }, [productsData]);
 
-  const handleDelete = async (productId: number) => {
-      Alert.alert(
-        t("products.delete_product"),
-        t("products.delete_product_confirmation"),
-        [
-          { text: t("products.cancel"), style: "cancel" },
-          {
-            text: t("products.delete"),
-            style: "destructive",
-            onPress: async () => {
-              try {
-                const response = await axios.delete(
-                  `${config.URL}/products/${productId}`
-                );
-                if (response.data.success) {
-                  Toast.show({
-                    type: "success",
-                    text1: t("products.product_deleted_successfully"),
-                  });
-                  refetchProducts();
-                }
 
-              } catch (error) {
-                Toast.show({
-                  type: "error",
-                  text1: t("products.failed_to_delete_product"),
-                });
-              }
-            },
-          },
-        ]
-      );
-  };
+  // 🔹 Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (productId: number) =>
+      ProductController.deleteProduct({
+        productId,
+        token: auth.token,
+      }),
 
-  const onRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await refetchProducts();
-    } finally {
-      setRefreshing(false);
-    }
+    onSuccess: () => {
+      Toast.success(t("products.product_deleted_successfully"));
+      queryClient.invalidateQueries({
+        queryKey: ["products", store.id],
+      });
+    },
+
+    onError: () => {
+      Toast.error(t("products.failed_to_delete_product"));
+    },
+  });
+
+  const handleDelete = (productId: number) => {
+    Alert.alert(
+      t("products.delete_product"),
+      t("products.delete_product_confirmation"),
+      [
+        { text: t("products.cancel"), style: "cancel" },
+        {
+          text: t("products.delete"),
+          style: "destructive",
+          onPress: () => deleteMutation.mutate(productId),
+        },
+      ]
+    );
   };
 
   return (
@@ -112,9 +92,9 @@ export default function Products() {
       <Header title={t("products.products")} />
 
       <View className="flex flex-row justify-between items-center px-5 py-5">
-        <Text className="font-bold"> {t("products.products_count")} - {productsData?.data?.length}</Text>
+        <Text className="font-bold"> {t("products.products_count")} - {products?.length}</Text>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => router.push("/stores/products/add")}
           className="bg-primary rounded-full px-3 py-2">
           <Text className="text-white">{t("products.add_product")}</Text>
@@ -123,7 +103,7 @@ export default function Products() {
 
       {loading ? <Loading /> : null}
 
-      {productsLoading ? (
+      {isLoading ? (
         <View className="mt-10 flex gap-4 px-3">
           {[...Array(5)].map((_, index) => (
             <Skeleton key={index} height={100} />
@@ -131,7 +111,7 @@ export default function Products() {
         </View>
       ) : null}
 
-      {!productsLoading && products.length === 0 ? <NoProductsFound /> : null}
+      {!isLoading && products?.length === 0 ? <NoProductsFound /> : null}
 
       <View className="mb-10 pb-20">
         <FlatList
@@ -139,9 +119,6 @@ export default function Products() {
           data={products}
           numColumns={2}
           keyExtractor={(item) => item.id.toString()}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
           contentContainerStyle={{ padding: 16 }}
           renderItem={({ item: product }) => (
             <ProductItem
@@ -153,7 +130,7 @@ export default function Products() {
         />
       </View>
 
-       <FloatButton onPress={() => router.push("/stores/products/add")} />
+      <FloatButton onPress={() => router.push("/stores/products/add")} />
     </Layout>
   );
 }

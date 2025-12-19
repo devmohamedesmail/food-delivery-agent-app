@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Button from '../ui/Button'
 
 export default function NoStore() {
   const { t } = useTranslation()
@@ -32,38 +34,39 @@ export default function NoStore() {
       </Text>
 
       {/* Create Store Button */}
-      <TouchableOpacity
-        onPress={handleCreateStore}
-        className="bg-primary rounded-xl px-8 py-4 flex-row items-center shadow-lg"
-        activeOpacity={0.8}
-      >
-        <Ionicons name="add-circle-outline" size={24} color="white" />
-        <Text className="text-white text-lg font-semibold ml-2" >
-          {t('store.createStoreButton')}
-        </Text>
-      </TouchableOpacity>
 
-      {/* Additional Info */}
-      <View className="mt-8 bg-white rounded-xl p-4 shadow-sm w-full">
-        <View className="flex-row items-start mb-3">
-          <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm" >
-            {t('store.manageMenuOrders')}
+
+
+      <View className='flex flex-row justify-between  space-x-4 p-2 w-full gap-5'>
+
+
+
+        <TouchableOpacity
+          onPress={handleCreateStore}
+          className="bg-primary rounded-xl px-8 py-4 flex-row items-center shadow-lg flex-1 w-1/2"
+          activeOpacity={0.8}
+        >
+          <Ionicons name="add-circle-outline" size={24} color="white" />
+          <Text className="text-white text-lg font-semibold ml-2" >
+            {t('store.createStoreButton')}
           </Text>
-        </View>
-        <View className="flex-row items-start mb-3">
-          <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm" >
-            {t('store.trackPerformance')}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push('/account')}
+          className="bg-black rounded-xl px-8 py-4 flex-row items-center shadow-lg w-1/2"
+          activeOpacity={0.8}
+        >
+          <FontAwesome name="user-o" size={24} color="white" />
+
+          <Text className="text-white text-lg font-semibold ml-2" >
+            {t('account.account')}
           </Text>
-        </View>
-        <View className="flex-row items-start">
-          <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-          <Text className="text-gray-700 ml-2 flex-1 text-sm">
-            {t('store.reachCustomers')}
-          </Text>
-        </View>
+        </TouchableOpacity>
       </View>
+
+
+
     </View>
   )
 }

@@ -1,34 +1,41 @@
 import React, { useState } from "react";
-import {RefreshControl,
+import {
+  RefreshControl,
   Alert,
   FlatList,
 } from "react-native";
-import axios from "axios";
-import { config } from "@/constants/config";
 import { useTranslation } from "react-i18next";
-import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/ui/Loading";
 import NoCategories from "@/components/categories/NoCategories";
 import Layout from "@/components/categories/Layout";
 import { useStore } from "@/hooks/useStore";
 import CategoryItem from "@/components/categories/CategoryItem";
+import CategoryController from "@/controllers/categories/contoller";
+import { useAuth } from "@/context/auth_context";
 
 export default function Categories() {
   const { t } = useTranslation();
-
+  const { auth } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
   const { store } = useStore();
-  const {
-    data: categoriesData,
-    loading: categoriesLoading,
-    refetch: refetchCategories,
-  } = useFetch(`/categories/store/${store?.id}`);
+  const queryClient = useQueryClient();
+
+  const { 
+    data: categories = [], 
+    isLoading, 
+    refetch 
+  } = useQuery({
+    queryKey: ["categories", store?.id],
+    queryFn: () => CategoryController.fetchCategoriesByStore(store.id, auth.token),
+    enabled: !!store?.id && !!auth?.token,
+  });
 
   const onRefresh = async () => {
     try {
       setRefreshing(true);
-      await refetchCategories();
+      await refetch();
     } catch (error) {
       console.log(error);
     } finally {
@@ -45,33 +52,29 @@ export default function Categories() {
         {
           text: t("categories.delete"),
           style: "destructive",
-          onPress: async () => {
-            try {
-              console.log("Deleting category with id:", id);
-              await axios.delete(`${config.URL}/categories/${id}`);
-              Toast.show({
-                type: "success",
-                text1: t("categories.category_deleted_successfully"),
-              });
-              refetchCategories();
-            } catch (error: any) {
-              console.log("Error deleting category:", error);
-              Toast.show({
-                type: "error",
-                text1: t("categories.failed_to_delete_category"),
-              });
-            }
-          },
+          onPress: () => deleteMutation.mutate(id),
         },
       ]
     );
   };
 
+  const deleteMutation = useMutation({
+    mutationFn: (categoryId: number) =>
+      CategoryController.deleteCategory({ id: categoryId, token: auth?.token }),
+    onSuccess: () => {
+      Toast.success(t("categories.category_deleted_successfully"));
+      queryClient.invalidateQueries({ queryKey: ["categories", store.id] });
+    },
+    onError: () => {
+      Toast.error(t("categories.failed_to_delete_category"));
+    },
+  });
+
   return (
     <Layout>
       <FlatList
         key={"2-columns"}
-        data={categoriesData?.data}
+        data={categories}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         renderItem={({ item: category }) => (
@@ -85,11 +88,10 @@ export default function Categories() {
             colors={["#fd4a12"]}
           />
         }
-        // حالات التحميل
         ListHeaderComponent={
           <>
-            {categoriesLoading && <Loading />}
-            {!categoriesLoading && categoriesData?.data?.length === 0 && (
+            {isLoading && <Loading />}
+            {!isLoading && categories?.length === 0 && (
               <NoCategories />
             )}
           </>

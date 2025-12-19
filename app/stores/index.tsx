@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, StatusBar, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -10,11 +10,16 @@ import ManageHomeSection from "@/components/features/store/index/ManageHomeSecti
 import StoreHeader from "@/components/features/store/index/StoreHeader";
 import Layout from "@/components/ui/Layout";
 import { Link, useRouter } from "expo-router";
+import { useAuth } from "@/context/auth_context";
 
 export default function Home() {
   const { t } = useTranslation();
   const { store, loading } = useStore();
+  const { isLoading: authLoading } = useAuth();
   const router = useRouter();
+
+
+useEffect(()=>{},[])
 
   return (
     <Layout>
@@ -27,7 +32,7 @@ export default function Home() {
 
 
 
-      {loading ? (
+      {loading || authLoading ? (
         <Loading />
       ) : (
         <>

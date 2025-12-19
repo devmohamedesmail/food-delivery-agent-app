@@ -9,18 +9,17 @@ import ProfileProvider from "@/context/ProfileContext";
 import 'react-native-gesture-handler';
 import { useNotificationObserver } from "@/hooks/useNotificationObserver";
 import { NetworkProvider } from "@/context/NetworkProvider";
-
-
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 
 
 export default function RootLayout() {
   useNotificationObserver();
-  
+  const queryClient = new QueryClient();
   return (
-    <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <ProfileProvider>
         <NetworkProvider>
         <Stack screenOptions={{ headerShown: false }}></Stack>
@@ -29,5 +28,7 @@ export default function RootLayout() {
         </NetworkProvider>
       </ProfileProvider>
     </AuthProvider>
+    </QueryClientProvider>
+    
   );
 }
