@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
+import React, { useContext, useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity} from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -8,11 +8,9 @@ import { Link, useRouter } from 'expo-router'
 import CustomInput from '@/components/ui/Input'
 import CustomButton from '@/components/ui/button'
 import { AuthContext } from '@/context/auth-provider'
-import Logo from '@/components/common/logo'
 import { Toast } from 'toastify-react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-
-
+import AuthLayout from '@/components/auth/AuthLayout'
+import Header from '@/components/auth/Header'
 
 
 export default function Login() {
@@ -21,26 +19,35 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const { handle_login } = useContext(AuthContext)
+  const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email')
+
+
+  const validationSchema = Yup.object({
+    email: loginMethod === 'email'
+      ? Yup.string().email(t('auth.email_invalid')).required(t('auth.email_required'))
+      : Yup.string().notRequired(),
+    phone: loginMethod === 'phone'
+      ? Yup.string().matches(/^[0-9]{10,15}$/, t('auth.phone_invalid')).required(t('auth.phone_required'))
+      : Yup.string().notRequired(),
+    password: Yup.string()
+      .required(t('auth.password_required'))
+      .min(6, t('auth.password_min')),
+  })
 
 
   const formik = useFormik({
     initialValues: {
-      identifier: '',
+      email: '',
+      phone: '',
       password: '',
     },
-    validationSchema: Yup.object({
-      identifier: Yup.string()
-        .email(t('auth.identifier_invalid'))
-        .required(t('auth.identifier_required')),
-      password: Yup.string()
-        .required(t('auth.password_required'))
-        .min(6, t('auth.password_min')),
-    }),
+    validationSchema,
 
     onSubmit: async (values) => {
       setIsLoading(true)
       try {
-        const result = await handle_login(values.identifier, values.password)
+        const identifier = loginMethod === 'email' ? values.email : values.phone;
+        const result = await handle_login(identifier, values.password)
         Toast.show({
           text1: t('auth.login_success'),
           text2: t('auth.welcomeBack'),
@@ -70,62 +77,59 @@ export default function Login() {
     },
   })
 
-
+  // Update formik validation when method changes
+  useEffect(() => {
+    formik.validateForm();
+  }, [loginMethod]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
+   <AuthLayout>
+    <Header title={t('auth.signIn')} description={t('auth.loginDescription')} />
+     <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
 
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Header */}
-          <View className="pt-10 pb-8 px-6 bg-black">
-
-          
-            
-           
-
-
-            {/* Logo/Brand Section */}
-            <View className="items-center mb-8 pt-20">
-
-              <View className="bg-white p-4 rounded-full overflow-hidden">
-                <Logo />
-              </View>
-              <Text
-                className="text-3xl  text-white font-extrabold mt-4 mb-2"
+            {/* Tabs for Email/Phone */}
+            <View className="flex-row mb-6 border-b border-gray-200">
+              <TouchableOpacity
+                className={`flex-1 pb-3 ${loginMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
+                onPress={() => setLoginMethod('email')}
               >
-                {t('auth.welcomeBack')}
-              </Text>
-              <Text
-                className={`text-white text-center ${i18n.language === 'ar' ? 'text-right' : 'text-left'}`}
-
+                <Text className={`text-center font-medium ${loginMethod === 'email' ? 'text-primary' : 'text-gray-500'}`}>
+                  {t('auth.email')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className={`flex-1 pb-3 ${loginMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
+                onPress={() => setLoginMethod('phone')}
               >
-                {t('auth.loginToYourAccount')}
-              </Text>
+                <Text className={`text-center font-medium ${loginMethod === 'phone' ? 'text-primary' : 'text-gray-500'}`}>
+                  {t('auth.phone')}
+                </Text>
+              </TouchableOpacity>
             </View>
-          </View>
 
-          {/* Login Form */}
-          <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
             <View className="space-y-4">
-              {/* Email/Phone Input */}
-              <CustomInput
-                label={t('auth.identifier')}
-                placeholder={t('auth.identifier')}
-                value={formik.values.identifier}
-                onChangeText={formik.handleChange('identifier')}
-                type="text"
-                keyboardType="default"
-                error={formik.touched.identifier && formik.errors.identifier ? formik.errors.identifier : undefined}
-              />
+              {/* Conditional Input based on Tab */}
+              {loginMethod === 'email' ? (
+                <CustomInput
+                  label={t('auth.email')}
+                  placeholder={t('auth.enterEmail')}
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange('email')}
+                  type="email"
+                  keyboardType="email-address"
+                  error={formik.touched.email && formik.errors.email ? formik.errors.email : undefined}
+                />
+              ) : (
+                <CustomInput
+                  label={t('auth.phone')}
+                  placeholder={t('auth.enterPhone')}
+                  value={formik.values.phone}
+                  onChangeText={formik.handleChange('phone')}
+                  type="phone"
+                  keyboardType="phone-pad"
+                  error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
+                />
+              )}
 
               {/* Password Input */}
               <CustomInput
@@ -146,17 +150,13 @@ export default function Login() {
                   <View className={`w-5 h-5 border-2 border-gray-300 rounded mr-2 items-center justify-center ${rememberMe ? ' border-primary' : ''}`}>
                     {rememberMe && <Ionicons name="checkmark" size={12} color="white" />}
                   </View>
-                  <Text
-                    className="text-black"
-                  >
+                  <Text className="text-black">
                     {t('auth.rememberMe')}
                   </Text>
                 </TouchableOpacity>
 
                 <Link href="/auth/forget-password" >
-                  <Text
-                    className="text-primary font-medium"
-                  >
+                  <Text className="text-primary font-medium">
                     {t('auth.forgotPassword')}
                   </Text>
                 </Link>
@@ -166,33 +166,24 @@ export default function Login() {
               <View className="mt-8">
                 <CustomButton
                   title={isLoading ? t('auth.signingIn') : t('auth.signIn')}
-                  onPress={formik.handleSubmit}
-                  disabled={isLoading || !formik.isValid || !formik.dirty || !formik.values.identifier || !formik.values.password}
+                  onPress={() => formik.handleSubmit()}
+                  disabled={isLoading || !formik.isValid || !formik.dirty}
                 />
               </View>
 
-
-
               {/* Sign Up Link */}
               <View className="flex-row justify-center items-center mt-8 mb-8">
-                <Text
-                  className="text-gray-600"
-
-                >
+                <Text className="text-gray-600">
                   {t('auth.dontHaveAccount')}
                 </Text>
                 <TouchableOpacity onPress={() => router.push('/auth/register')}>
-                  <Text
-                    className="text-primary font-semibold ml-1"
-                  >
+                  <Text className="text-primary font-semibold ml-1">
                     {t('auth.signUp')}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+   </AuthLayout>
   )
 }

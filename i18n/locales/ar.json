@@ -78,7 +78,10 @@
     "registerDescription": "أنشئ حسابًا لإدارة متجرك  ",
     "reset-password": "نسيت كلمة المرور",
     "send-reset-password": "إرسال رابط إعادة التعيين",
-    "back-to-login": "العودة لتسجيل الدخول"
+    "back-to-login": "العودة لتسجيل الدخول",
+    "enterEmail":"أدخل البريد الإلكتروني",
+    "enterPhone":"أدخل رقم الهاتف",
+    "loginDescription": "يرجى إدخال البريد الإلكتروني أو رقم الهاتف للاستمرار"
   },
   "orders": {
     "orders": "الطلبات",

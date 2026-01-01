@@ -77,7 +77,11 @@
     "registerDescription": "Create an account to manage your store ",
     "reset-password": "Forget Password",
     "send-reset-password": "Send Reset Link",
-    "back-to-login": "Back to Login"
+    "back-to-login": "Back to Login",
+    "enterEmail":"Enter your email",
+    "enterPhone":"Enter your phone",
+    "loginDescription": "Please enter your email or phone number to continue"
+
   },
   "orders": {
     "orders": "Orders",
