@@ -23,7 +23,7 @@ interface RegisterFormValues {
 export default function Register() {
     const { t, i18n } = useTranslation()
     const [isLoading, setIsLoading] = useState(false)
-    const { handle_register } = useContext(AuthContext)
+    const { register } = useContext(AuthContext)
     const router = useRouter()
     const [registerMethod, setRegisterMethod] = useState<'email' | 'phone'>('email')
 
@@ -62,7 +62,7 @@ export default function Register() {
                 // Determine identifier based on active tab
                 const identifier = registerMethod === 'email' ? values.email : values.phone;
 
-                const result = await handle_register(values.name, identifier, values.password, values.role_id)
+                const result = await register(values.name, identifier, values.password, values.role_id)
                 if (result.success) {
 
                     Toast.show({
@@ -78,6 +78,7 @@ export default function Register() {
                         router.push('/driver/create')
                     }
                 } else {
+                    
                     Toast.show({
                         type: 'error',
                         text1: t('auth.registration_failed'),

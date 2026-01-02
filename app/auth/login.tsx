@@ -18,7 +18,7 @@ export default function Login() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const { handle_login } = useContext(AuthContext)
+  const { login } = useContext(AuthContext)
   const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email')
 
 
@@ -47,7 +47,7 @@ export default function Login() {
       setIsLoading(true)
       try {
         const identifier = loginMethod === 'email' ? values.email : values.phone;
-        const result = await handle_login(identifier, values.password)
+        const result = await login(identifier, values.password)
         Toast.show({
           text1: t('auth.login_success'),
           text2: t('auth.welcomeBack'),

@@ -26,10 +26,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loadUser();
     }, []);
 
-    const handle_login = async (identifier: string, password: string) => {
+    const login = async (identifier: string, password: string,method: 'email' | 'phone') => {
         try {
+            console.log(identifier, password);
             const response = await axios.post(`${config.URL}/auth/login`, {
-                identifier: identifier,
+                email: identifier,
                 password: password
             });
             const user = response.data;
@@ -40,6 +41,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 data: user 
             };
         } catch (error: any) {
+            console.log(error);
             return { 
                 success: false, 
                 message: error.response?.data?.message || 'Login failed'
@@ -48,12 +50,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     // handle register user
-    const handle_register = async (name: string, identifier: string, password: string, role_id: string) => {
+    const register = async (name: string, identifier: string, password: string, role_id: string) => {
         try {
             console.log(name, identifier, password, role_id);
             const response = await axios.post(`${config.URL}/auth/register`, {
                 name,
-                identifier,
+                email:identifier,
                 password,
                 role_id
             });
@@ -68,7 +70,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     // logout user
-    const handle_logout = async () => {
+    const logout = async () => {
         try {
             await AsyncStorage.removeItem('user');
             setAuth(null);
@@ -81,15 +83,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         <AuthContext.Provider value={{
             auth,
             isLoading,
-            handle_login,
-            handle_register,
-            handle_logout,
-            // Compatibility with existing code
+            login,
+            register,
+            logout,
             user: auth?.user || auth,
             isAuthenticated: !!auth,
-            login: handle_login,
-            register: handle_register,
-            logout: handle_logout
         }}>
             {children}
         </AuthContext.Provider>

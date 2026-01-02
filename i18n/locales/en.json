@@ -80,7 +80,8 @@
     "back-to-login": "Back to Login",
     "enterEmail":"Enter your email",
     "enterPhone":"Enter your phone",
-    "loginDescription": "Please enter your email or phone number to continue"
+    "loginDescription": "Please enter your email or phone number to continue",
+    "noauthvarified":"Your account is not verified. Please login to continue."
 
   },
   "orders": {

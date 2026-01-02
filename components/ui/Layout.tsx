@@ -8,9 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const {theme}=useTheme();
   return (
     <SafeAreaView className={`flex-1 edges={["bottom"]} ${theme === "dark" ? "bg-black" : "bg-gray-50"} `}>
-    
       <StatusBar barStyle="light-content" backgroundColor="black" />
-       
       {children}
     </SafeAreaView>
   );

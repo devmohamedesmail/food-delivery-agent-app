@@ -5,16 +5,16 @@ import { Link, Redirect, router } from "expo-router";
 import Loading from "@/components/ui/Loading";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import Layout from "@/components/ui/Layout";
 
 export default function Home() {
   const { auth, isLoading } = useContext(AuthContext);
   const { t } = useTranslation();
- 
+
 
   useEffect(() => {
     if (!auth) return;
-
-    if (auth.user.role.role === "store_owner") {
+    if (auth?.user?.role?.role === "store_owner") {
       router.replace("/stores");
     }
   }, [auth]);
@@ -28,24 +28,21 @@ export default function Home() {
   }
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-white justify-center items-center"
-      edges={["bottom"]}
-    >
+    <Layout>
       <View>
         <Text className="text-lg text-center mb-4">
           {t("auth.noauthvarified")}
         </Text>
         <Text className="text-lg text-center mb-4">
-        {auth.user?.email}
+          {auth.user?.email}
         </Text>
         <Link
           href="/auth/login"
-          className="bg-primary text-white px-10 py-3 rounded-full"
+          className="bg-primary text-white text-center px-10 py-3 rounded-full"
         >
-          {t("auth.login")}
+          {t("auth.signIn")}
         </Link>
       </View>
-    </SafeAreaView>
+    </Layout>
   );
 }

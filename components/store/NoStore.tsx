@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -33,36 +33,23 @@ export default function NoStore() {
         {t('store.noStoreMessage')}
       </Text>
 
-      {/* Create Store Button */}
+
 
 
 
       <View className='flex flex-row justify-between  space-x-4 p-2 w-full gap-5'>
 
-
-
-        <TouchableOpacity
+        <Button
+          icon={<Ionicons name="add-circle-outline" size={24} color="white" />}
+          title={t('store.createStoreButton')}
           onPress={handleCreateStore}
-          className="bg-primary rounded-xl px-8 py-4 flex-row items-center shadow-lg flex-1 w-1/2"
-          activeOpacity={0.8}
-        >
-          <Ionicons name="add-circle-outline" size={24} color="white" />
-          <Text className="text-white text-lg font-semibold ml-2" >
-            {t('store.createStoreButton')}
-          </Text>
-        </TouchableOpacity>
+        />
 
-        <TouchableOpacity
+        <Button
+          icon={<FontAwesome name="user-o" size={24} color="white" />}
+          title={t('account.account')}
           onPress={() => router.push('/account')}
-          className="bg-black rounded-xl px-8 py-4 flex-row items-center shadow-lg w-1/2"
-          activeOpacity={0.8}
-        >
-          <FontAwesome name="user-o" size={24} color="white" />
-
-          <Text className="text-white text-lg font-semibold ml-2" >
-            {t('account.account')}
-          </Text>
-        </TouchableOpacity>
+        />
       </View>
 
 

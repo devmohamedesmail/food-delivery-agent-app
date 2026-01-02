@@ -23,7 +23,6 @@ export default function Home() {
   return (
     <Layout>
       <View className="flex-row items-center justify-between pt-20 px-4 py-4 bg-black/90 shadow-sm">
-
         <View className="flex items-center flex-row gap-6">
           <NotificationIcon />
           <ToggleTheme />
