@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useTheme } from "@/context/theme-provider";
+import Colors from "@/constants/Colors";
 
 interface ManagementCard {
   title: string;
@@ -16,6 +18,8 @@ interface ManagementCard {
 export default function ManageHomeSection() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { theme } = useTheme();
+  const activeColors = Colors[theme];
 
   const managementCards: ManagementCard[] = [
     {
@@ -24,7 +28,7 @@ export default function ManageHomeSection() {
       icon: "grid-outline",
       route: "/stores/categories",
       color: "#3B82F6",
-      bgColor: "#EFF6FF",
+      bgColor: theme === 'dark' ? 'rgba(59, 130, 246, 0.2)' : "#EFF6FF",
     },
     {
       title: t("store.products"),
@@ -32,7 +36,7 @@ export default function ManageHomeSection() {
       icon: "cube-outline",
       route: "/stores/products",
       color: "#10B981",
-      bgColor: "#ECFDF5",
+      bgColor: theme === 'dark' ? 'rgba(16, 185, 129, 0.2)' : "#ECFDF5",
     },
     {
       title: t("store.orders"),
@@ -40,7 +44,7 @@ export default function ManageHomeSection() {
       icon: "receipt-outline",
       route: "/stores/orders",
       color: "#F59E0B",
-      bgColor: "#FFFBEB",
+      bgColor: theme === 'dark' ? 'rgba(245, 158, 11, 0.2)' : "#FFFBEB",
     },
     {
       title: t("account.account"),
@@ -48,12 +52,15 @@ export default function ManageHomeSection() {
       icon: "person-outline",
       route: "/account",
       color: "#EF4444",
-      bgColor: "#FEF2F2",
+      bgColor: theme === 'dark' ? 'rgba(239, 68, 68, 0.2)' : "#FEF2F2",
     },
   ];
   return (
     <View className="mb-4">
-      <Text className="text-xl bg-white py-5 rounded-sm font-bold text-black text-center border-b-2 border-b-primary mb-3 px-2">
+      <Text
+        className="text-xl py-5 rounded-sm font-bold text-center border-b-2 border-b-primary mb-3 px-2"
+        style={{ color: activeColors.text, backgroundColor: activeColors.background }}
+      >
         {t("store.store_management")}
       </Text>
 
@@ -62,8 +69,13 @@ export default function ManageHomeSection() {
           <TouchableOpacity
             key={index}
             onPress={() => router.push(card.route as any)}
-            className="bg-white mb-2 rounded-xl p-5 shadow-sm active:opacity-70"
+            className="mb-2 rounded-xl p-5 shadow-sm active:opacity-70"
             activeOpacity={0.7}
+            style={{
+              backgroundColor: activeColors.background,
+              borderWidth: theme === 'dark' ? 1 : 0,
+              borderColor: theme === 'dark' ? '#333' : 'transparent'
+            }}
           >
             <View className="flex-row-reverse items-center">
               <View
@@ -74,10 +86,16 @@ export default function ManageHomeSection() {
               </View>
 
               <View className="flex-1 justify-center items-end mx-2">
-                <Text className="text-lg font-bold text-gray-800">
+                <Text
+                  className="text-lg font-bold"
+                  style={{ color: activeColors.text }}
+                >
                   {card.title}
                 </Text>
-                <Text className="text-gray-500 text-sm mt-1">
+                <Text
+                  className="text-sm mt-1"
+                  style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                >
                   {card.subtitle}
                 </Text>
               </View>

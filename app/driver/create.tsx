@@ -4,13 +4,13 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
-import Input from '../../components/ui/Input'
+import Input from '../../components/ui/input'
 import Button from '../../components/ui/button'
 import Select from '../../components/ui/select'
 import { Toast } from 'toastify-react-native'
 import CustomImagePicker from '../../components/ui/customimagepicker'
-import CustomHeader from '../../components/ui/Header'
-import CustomLoading from '../../components/ui/Loading'
+import CustomHeader from '../../components/ui/header'
+import CustomLoading from '../../components/ui/loading'
 import axios from 'axios'
 import { config } from '@/constants/config'
 import useFetch from '@/hooks/useFetch'
@@ -229,7 +229,7 @@ export default function Create() {
 
                             {/* Submit Button */}
                             <View className="mt-8">
-                               
+
                                 <Button
                                     title={`${isSubmitting ? t('driver.registering...') : t('driver.registerVehicle')}`}
                                     onPress={formik.handleSubmit}

@@ -7,7 +7,7 @@ import { AuthContext } from '@/context/auth-provider'
 import { useRouter } from 'expo-router'
 import { RefreshControl } from 'react-native'
 import useFetch from '@/hooks/useFetch'
-import Loading from '@/components/ui/Loading'
+import Loading from '@/components/ui/loading'
 import NotificationIcon from '@/components/common/notification-icon'
 import VehicleInfo from '@/components/driver/VehicleInfo'
 import ToggleAvailbility from '@/components/driver/ToggleAvailbility'
@@ -76,12 +76,12 @@ export default function Home() {
                 <ToggleAvailbility profileData={profileData} refetchProfile={refetchProfile} />
 
                 <View className='px-10'>
-                  
 
-                  <Button  title={t('driver.viewOrders')}  onPress={() => router.push('/driver/orders')} />
-                  <Button  title={t('account.account')}  bgColor="bg-black"  onPress={() => router.push('/account')} />
 
-        
+                  <Button title={t('driver.viewOrders')} onPress={() => router.push('/driver/orders')} />
+                  <Button title={t('account.account')} bgColor="bg-black" onPress={() => router.push('/account')} />
+
+
 
                 </View>
 

@@ -6,13 +6,13 @@ import { useTranslation } from "react-i18next";
 import { AuthContext } from "@/context/auth-provider";
 import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
-import Header from "@/components/ui/Header";
-import Input from "@/components/ui/Input";
+import Header from "@/components/ui/header";
+import Input from "@/components/ui/input";
 import CustomButton from "@/components/ui/button";
 import Select from "@/components/ui/select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
 import { useLocalSearchParams } from "expo-router";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 import { useRouter } from "expo-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ProductController from "@/controllers/products/controller";
@@ -29,7 +29,7 @@ export default function Update() {
   const product = data.data ? JSON.parse(data.data as string) : null;
   const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
-  
+
   // Initialize with existing product attributes if available
   const [attributeValues, setAttributeValues] = useState<Array<{ attribute_id: string; value: string; price: string }>>(() => {
     if (product?.attributes && product.attributes.length > 0) {
@@ -42,18 +42,18 @@ export default function Update() {
     }
     return [];
   });
-  
+
   const [selectedAttributeId, setSelectedAttributeId] = useState<string>(() => {
     return product?.attributes?.[0]?.id?.toString() || "";
   });
-  
+
   const router = useRouter();
   // const {
   //   data: profileData,
   //   loading: profileLoading,
   //   refetch: refetchProfile,
   // } = useFetch(auth?.user?.id ? `/users/profile/${auth.user.id}` : "");
-  const {store}= useStore()
+  const { store } = useStore()
 
   const { data: attributesData } = useFetch('/attributes');
 
@@ -135,8 +135,8 @@ export default function Update() {
     }),
     onSubmit: async (values) => {
       try {
-        if (!store?.id)  return;
-      
+        if (!store?.id) return;
+
         // Create FormData for image upload
         const formData = new FormData();
         formData.append("store_id", store.id);
@@ -180,13 +180,13 @@ export default function Update() {
 
 
       } catch (error) {
-         console.log("Error saving product:", error);
+        console.log("Error saving product:", error);
         Toast.show({
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
-       
-      } 
+
+      }
     },
   });
   return (
@@ -242,7 +242,7 @@ export default function Update() {
             />
           </View>
 
-          
+
 
           {/* Price */}
           <View className="mb-4">
@@ -260,7 +260,7 @@ export default function Update() {
             />
           </View>
 
-        
+
 
           {/* Category Dropdown */}
           <View className="mb-4">

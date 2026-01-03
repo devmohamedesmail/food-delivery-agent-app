@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Toast } from "toastify-react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "@/components/ui/Loading";
+import Loading from "@/components/ui/loading";
 import NoCategories from "@/components/categories/NoCategories";
 import Layout from "@/components/categories/Layout";
 import { useStore } from "@/hooks/useStore";
@@ -22,10 +22,10 @@ export default function Categories() {
   const { store } = useStore();
   const queryClient = useQueryClient();
 
-  const { 
-    data: categories = [], 
-    isLoading, 
-    refetch 
+  const {
+    data: categories = [],
+    isLoading,
+    refetch
   } = useQuery({
     queryKey: ["categories", store?.id],
     queryFn: () => CategoryController.fetchCategoriesByStore(store.id, auth.token),

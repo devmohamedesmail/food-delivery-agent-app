@@ -5,17 +5,24 @@ import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Button from '../ui/button'
+import { useTheme } from '@/context/theme-provider';
+import Colors from '@/constants/Colors';
 
 export default function NoStore() {
   const { t } = useTranslation()
   const router = useRouter()
+  const { theme } = useTheme();
+  const activeColors = Colors[theme];
 
   const handleCreateStore = () => {
     router.push('/stores/create')
   }
 
   return (
-    <View className="flex-1 bg-background justify-center items-center px-6">
+    <View
+      className="flex-1 justify-center items-center px-6"
+      style={{ backgroundColor: activeColors.background }}
+    >
       {/* Icon Container */}
       <View className="mb-8">
         <View className="w-32 h-32 bg-primary/10 rounded-full justify-center items-center">
@@ -24,12 +31,18 @@ export default function NoStore() {
       </View>
 
       {/* Title */}
-      <Text className="text-2xl font-bold text-text text-center mb-4">
+      <Text
+        className="text-2xl font-bold text-center mb-4"
+        style={{ color: activeColors.text }}
+      >
         {t('store.noStoreTitle')}
       </Text>
 
       {/* Message */}
-      <Text className="text-base text-gray-600 text-center mb-8 px-4 leading-6">
+      <Text
+        className="text-base text-center mb-8 px-4 leading-6"
+        style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+      >
         {t('store.noStoreMessage')}
       </Text>
 
@@ -46,9 +59,11 @@ export default function NoStore() {
         />
 
         <Button
-          icon={<FontAwesome name="user-o" size={24} color="white" />}
+          icon={<FontAwesome name="user-o" size={24} color={theme === 'dark' ? 'white' : 'white'} />}
           title={t('account.account')}
           onPress={() => router.push('/account')}
+          className={theme === 'dark' ? 'bg-gray-700' : ''}
+          style={theme === 'dark' ? { backgroundColor: '#333' } : {}}
         />
       </View>
 

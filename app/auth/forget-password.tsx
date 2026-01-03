@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@/context/theme-provider';
 import { useTranslation } from 'react-i18next';
-import Input from '@/components/ui/Input';
+import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import ToggleTheme from '@/components/common/toggle-theme';
 import LanguageSwitcher from '@/components/common/language-switcher';
@@ -24,9 +24,9 @@ export default function ForgetPassword() {
     };
 
     return (
-        <View className={`flex-1  px-6 justify-center ${theme=== 'light' ? 'bg-white' : 'bg-gray-900'} `}>
+        <View className={`flex-1  px-6 justify-center ${theme === 'light' ? 'bg-white' : 'bg-gray-900'} `}>
             <Text className="text-3xl font-bold text-center mb-6 text-gray-800">
-                {t("auth.reset-password")} 
+                {t("auth.reset-password")}
             </Text>
 
             <ToggleTheme />

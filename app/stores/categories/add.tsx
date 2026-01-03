@@ -6,11 +6,11 @@ import { useTranslation } from "react-i18next";
 import { AuthContext } from "@/context/auth-provider";
 import { Toast } from "toastify-react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Input from "@/components/ui/Input";
+import Input from "@/components/ui/input";
 import TextArea from "@/components/ui/textarea";
 import Button from "@/components/ui/button";
-import Header from "@/components/ui/Header";
-import Layout from "@/components/ui/Layout";
+import Header from "@/components/ui/header";
+import Layout from "@/components/ui/layout";
 import { useStore } from "@/hooks/useStore";
 import CategoryController from "@/controllers/categories/contoller";
 
@@ -36,7 +36,7 @@ export default function Add() {
     onError: (error: any) => {
       Toast.error(
         error?.response?.data?.message ||
-          t("categories.failed_to_save_category")
+        t("categories.failed_to_save_category")
       );
     },
   });

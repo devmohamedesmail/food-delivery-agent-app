@@ -28,7 +28,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const login = async (identifier: string, password: string,method: 'email' | 'phone') => {
         try {
-            console.log(identifier, password);
             const response = await axios.post(`${config.URL}/auth/login`, {
                 email: identifier,
                 password: password

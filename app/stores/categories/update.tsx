@@ -8,13 +8,13 @@ import { useContext } from "react";
 import { AuthContext } from "@/context/auth-provider";
 import { Toast } from "toastify-react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Input from "@/components/ui/Input";
+import Input from "@/components/ui/input";
 import TextArea from "@/components/ui/textarea";
 import Button from "@/components/ui/button";
-import Header from "@/components/ui/Header";
+import Header from "@/components/ui/header";
 import { useStore } from "@/hooks/useStore";
 import CategoryController from "@/controllers/categories/contoller";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 
 export default function update() {
   const { data } = useLocalSearchParams();
@@ -41,7 +41,7 @@ export default function update() {
     onError: (error: any) => {
       Toast.error(
         error?.response?.data?.message ||
-          t("categories.failed_to_save_category")
+        t("categories.failed_to_save_category")
       );
     },
   });
@@ -62,7 +62,7 @@ export default function update() {
 
   return (
     <Layout>
-       <Header title={t("categories.update_category")} />
+      <Header title={t("categories.update_category")} />
       <View className="p-4">
         <Input
           label={t("categories.name")}
@@ -81,8 +81,8 @@ export default function update() {
           placeholder={t("categories.enter_category_description") || ""}
           value={formik.values.description}
           onChangeText={formik.handleChange("description")}
-        
-          
+
+
         />
         <Button
           title={updateMutation.isPending ? t("common.saving") : t("common.save")}

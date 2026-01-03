@@ -3,24 +3,24 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import Header from "../../components/ui/Header";
+import Header from "../../components/ui/header";
 import { useAuth } from "@/context/auth-provider";
-import Loading from "@/components/ui/Loading";
+import Loading from "@/components/ui/loading";
 import EmptyNotification from "@/components/common/empty-notification";
 import axios from "axios";
 import { config } from "@/constants/config";
 import { Toast } from "toastify-react-native";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 import NotificationItem from "@/components/notifications/NotificationItem";
 
 interface NotificationItem {
   id: string;
   type:
-    | "order_received"
-    | "order_accepted"
-    | "order_ready"
-    | "order_delivered"
-    | "order_cancelled";
+  | "order_received"
+  | "order_accepted"
+  | "order_ready"
+  | "order_delivered"
+  | "order_cancelled";
   title: string;
   message: string;
   time: string;
@@ -49,7 +49,7 @@ export default function Notification() {
 
           {notifications &&
             notifications.map((item) => (
-             <NotificationItem key={item.id} item={item} />
+              <NotificationItem key={item.id} item={item} />
             ))}
         </ScrollView>
       </View>

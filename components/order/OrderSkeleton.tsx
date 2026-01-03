@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import Skeleton from "../ui/Skeleton";
+import Skeleton from "../ui/skeleton";
 
 export default function OrderSkeleton() {
   return (
@@ -12,7 +12,7 @@ export default function OrderSkeleton() {
       <Skeleton width={"100%"} height={200} className="mb-3" />
       <Skeleton width={"100%"} height={200} className="mb-3" />
       <Skeleton width={"100%"} height={200} className="mb-3" />
-    
+
     </View>
   );
 }

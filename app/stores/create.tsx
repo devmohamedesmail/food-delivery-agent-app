@@ -9,8 +9,8 @@ import axios from 'axios'
 import { config } from '@/constants/config'
 import { AuthContext } from '@/context/auth-provider'
 import Select from '@/components/ui/select'
-import Loading from '@/components/ui/Loading'
-import Input from '@/components/ui/Input'
+import Loading from '@/components/ui/loading'
+import Input from '@/components/ui/input'
 import CustomButton from '@/components/ui/button'
 import CustomImagePicker from '@/components/ui/customimagepicker'
 import { Toast } from 'toastify-react-native'
@@ -45,7 +45,7 @@ interface StoreFormValues {
   phone: string
   start_time: string
   end_time: string
-  
+
 }
 
 export default function Create() {
@@ -56,7 +56,7 @@ export default function Create() {
   const { data: storeTypeData, loading: loadingstoreTypeData } = useFetch('/store-types')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
- 
+
   // Time picker states
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
@@ -68,9 +68,9 @@ export default function Create() {
     place_id: Yup.string().required(t('store.placeRequired')),
     store_type_id: Yup.string().required(t('store.storeTypeRequired')),
     name: Yup.string().required(t('store.nameRequired')),
-    phone: Yup.string().required(t('store.phoneRequired') ),
+    phone: Yup.string().required(t('store.phoneRequired')),
     start_time: Yup.string().required(t('store.startTimeRequired')),
-   
+
   })
 
   // Formik setup
@@ -83,7 +83,7 @@ export default function Create() {
       phone: '',
       start_time: '',
       end_time: '',
-  
+
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -97,7 +97,7 @@ export default function Create() {
         formData.append('phone', values.phone)
         formData.append('start_time', values.start_time)
         formData.append('end_time', values.end_time)
-       
+
 
         // Add images if selected
         if (values.logo) {
@@ -109,9 +109,9 @@ export default function Create() {
           formData.append('logo', logoFile)
         }
 
-      
 
-        const {data} = await axios.post(`${config.URL}/stores/create`, formData, {
+
+        const { data } = await axios.post(`${config.URL}/stores/create`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${auth.token}`
@@ -126,8 +126,8 @@ export default function Create() {
             visibilityTime: 1000,
           })
           formik.resetForm()
-          setTimeout(()=>{router.push('/')}, 1000)
-          
+          setTimeout(() => { router.push('/') }, 1000)
+
         } else {
           console.log(data)
           Toast.show({
@@ -141,7 +141,7 @@ export default function Create() {
       } catch (error: any) {
         Toast.show({
           type: 'error',
-          text1:t('store.storeCreationFailed'),
+          text1: t('store.storeCreationFailed'),
           position: 'bottom',
           visibilityTime: 2000,
         })
@@ -164,10 +164,10 @@ export default function Create() {
   })) || []
 
   // Format store types for dropdown
- const storeTypeOptions = storeTypeData?.data?.map((type: any) => ({
-  label: i18n.language === 'ar' ? type.name_ar : type.name_en,
-  value: type.id.toString(),
-}))
+  const storeTypeOptions = storeTypeData?.data?.map((type: any) => ({
+    label: i18n.language === 'ar' ? type.name_ar : type.name_en,
+    value: type.id.toString(),
+  }))
 
   const handlePlaceSelect = (value: string) => {
     formik.setFieldValue('place_id', value)
@@ -201,83 +201,83 @@ export default function Create() {
   }
 
   return (
-   <Layout>
+    <Layout>
       <ScrollView className="flex-1 px-6 pt-4" showsVerticalScrollIndicator={false}>
-          {/* Subtitle */}
-          <Text className={`text-gray-600 text-center mb-6 `} >
-            {t('store.createStoreSubtitle') }
-          </Text>
+        {/* Subtitle */}
+        <Text className={`text-gray-600 text-center mb-6 `} >
+          {t('store.createStoreSubtitle')}
+        </Text>
 
-          {/* Form Card */}
-          <View className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            {/* Section 1: Location & Type */}
-            <View className="mb-6">
-              <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
-                <Ionicons name="location-outline" size={24} color="#fd4a12" />
-                <Text className="text-lg font-semibold text-gray-800 ml-2" >
-                  {t('store.locationAndType')}
+        {/* Form Card */}
+        <View className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          {/* Section 1: Location & Type */}
+          <View className="mb-6">
+            <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
+              <Ionicons name="location-outline" size={24} color="#fd4a12" />
+              <Text className="text-lg font-semibold text-gray-800 ml-2" >
+                {t('store.locationAndType')}
+              </Text>
+            </View>
+            <View className="h-1 w-20 bg-primary rounded mb-4" />
+
+            {/* Place Selection */}
+            <Select
+              label={t('store.selectPlace') || 'Select Place'}
+              placeholder={t('store.choosePlacePlaceholder') || 'Choose a place'}
+              value={formik.values.place_id}
+              onSelect={handlePlaceSelect}
+              options={placeOptions}
+              error={formik.touched.place_id && formik.errors.place_id ? formik.errors.place_id : undefined}
+            />
+
+            {/* Store Type Selection - Only show when place is selected */}
+            {formik.values.place_id && (
+              <Select
+                label={t('store.selectStoreType') || 'Select Store Type'}
+                placeholder={t('store.chooseStoreTypePlaceholder') || 'Choose a store type'}
+                value={formik.values.store_type_id}
+                onSelect={(value: string) => formik.setFieldValue('store_type_id', value)}
+                options={storeTypeOptions}
+                disabled={availableStoreTypes.length === 0}
+                error={formik.touched.store_type_id && formik.errors.store_type_id ? formik.errors.store_type_id : undefined}
+              />
+            )}
+
+            {/* Show message if no store types available */}
+            {formik.values.place_id && availableStoreTypes.length === 0 && (
+              <View className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4">
+                <Text className="text-yellow-800 text-center" style={{ fontFamily: 'Cairo_400Regular' }}>
+                  {t('store.noStoreTypesAvailable') || 'No store types available for this place'}
                 </Text>
               </View>
-              <View className="h-1 w-20 bg-primary rounded mb-4" />
+            )}
+          </View>
 
-              {/* Place Selection */}
-              <Select
-                label={t('store.selectPlace') || 'Select Place'}
-                placeholder={t('store.choosePlacePlaceholder') || 'Choose a place'}
-                value={formik.values.place_id}
-                onSelect={handlePlaceSelect}
-                options={placeOptions}
-                error={formik.touched.place_id && formik.errors.place_id ? formik.errors.place_id : undefined}
-              />
-
-              {/* Store Type Selection - Only show when place is selected */}
-              {formik.values.place_id && (
-                <Select
-                  label={t('store.selectStoreType') || 'Select Store Type'}
-                  placeholder={t('store.chooseStoreTypePlaceholder') || 'Choose a store type'}
-                  value={formik.values.store_type_id}
-                  onSelect={(value: string) => formik.setFieldValue('store_type_id', value)}
-                  options={storeTypeOptions}
-                  disabled={availableStoreTypes.length === 0}
-                  error={formik.touched.store_type_id && formik.errors.store_type_id ? formik.errors.store_type_id : undefined}
-                />
-              )}
-
-              {/* Show message if no store types available */}
-              {formik.values.place_id && availableStoreTypes.length === 0 && (
-                <View className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4">
-                  <Text className="text-yellow-800 text-center" style={{ fontFamily: 'Cairo_400Regular' }}>
-                    {t('store.noStoreTypesAvailable') || 'No store types available for this place'}
+          {/* Show form fields only when store type is selected */}
+          {formik.values.store_type_id && (
+            <>
+              {/* Section 2: Store Information */}
+              <View className="mb-6">
+                <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
+                  <Ionicons name="storefront-outline" size={24} color="#fd4a12" />
+                  <Text className="text-lg font-semibold text-gray-800 ml-2" >
+                    {t('store.storeInformation') || 'Store Information'}
                   </Text>
                 </View>
-              )}
-            </View>
+                <View className="h-1 w-20 bg-primary rounded mb-4" />
 
-            {/* Show form fields only when store type is selected */}
-            {formik.values.store_type_id && (
-              <>
-                {/* Section 2: Store Information */}
-                <View className="mb-6">
-                  <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
-                    <Ionicons name="storefront-outline" size={24} color="#fd4a12" />
-                    <Text className="text-lg font-semibold text-gray-800 ml-2" >
-                      {t('store.storeInformation') || 'Store Information'}
-                    </Text>
-                  </View>
-                  <View className="h-1 w-20 bg-primary rounded mb-4" />
+                {/* Store Name */}
+                <Input
+                  label={t('store.storeName') || 'Store Name *'}
+                  placeholder={t('store.enterStoreName') || 'Enter store name'}
+                  value={formik.values.name}
+                  onChangeText={formik.handleChange('name')}
+                  keyboardType="default"
+                  error={formik.touched.name && formik.errors.name ? formik.errors.name : undefined}
+                />
 
-                  {/* Store Name */}
-                  <Input
-                    label={t('store.storeName') || 'Store Name *'}
-                    placeholder={t('store.enterStoreName') || 'Enter store name'}
-                    value={formik.values.name}
-                    onChangeText={formik.handleChange('name')}
-                    keyboardType="default"
-                    error={formik.touched.name && formik.errors.name ? formik.errors.name : undefined}
-                  />
-
-                  {/* Address */}
-                  {/* <Input
+                {/* Address */}
+                {/* <Input
                     label={t('store.storeAddress') || 'Address *'}
                     placeholder={t('store.enterAddress') || 'Enter address'}
                     value={formik.values.address}
@@ -286,39 +286,39 @@ export default function Create() {
                     error={formik.touched.address && formik.errors.address ? formik.errors.address : undefined}
                   /> */}
 
-                  {/* Phone */}
-                  <Input
-                    label={t('store.storePhone') || 'Phone *'}
-                    placeholder={t('store.enterPhone') || 'Enter phone number'}
-                    value={formik.values.phone}
-                    onChangeText={formik.handleChange('phone')}
-                    keyboardType="phone-pad"
-                    error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
-                  />
+                {/* Phone */}
+                <Input
+                  label={t('store.storePhone') || 'Phone *'}
+                  placeholder={t('store.enterPhone') || 'Enter phone number'}
+                  value={formik.values.phone}
+                  onChangeText={formik.handleChange('phone')}
+                  keyboardType="phone-pad"
+                  error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
+                />
+              </View>
+
+              {/* Section 3: Store Images */}
+              <View className="mb-6">
+                <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
+                  <Ionicons name="images-outline" size={24} color="#fd4a12" />
+                  <Text className="text-lg font-semibold text-gray-800 ml-2">
+                    {t('store.storeImages')}
+                  </Text>
                 </View>
+                <View className="h-1 w-20 bg-primary rounded mb-4" />
 
-                {/* Section 3: Store Images */}
-                <View className="mb-6">
-                  <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
-                    <Ionicons name="images-outline" size={24} color="#fd4a12" />
-                    <Text className="text-lg font-semibold text-gray-800 ml-2">
-                      {t('store.storeImages')}
-                    </Text>
-                  </View>
-                  <View className="h-1 w-20 bg-primary rounded mb-4" />
+                {/* Logo Image */}
+                <CustomImagePicker
+                  label={t('store.storeLogo') || 'Store Logo'}
+                  placeholder={t('store.selectLogo') || 'Tap to select logo'}
+                  value={formik.values.logo}
+                  onImageSelect={(uri) => formik.setFieldValue('logo', uri)}
+                  aspect={[1, 1]}
+                  allowsEditing={true}
+                />
 
-                  {/* Logo Image */}
-                  <CustomImagePicker
-                    label={t('store.storeLogo') || 'Store Logo'}
-                    placeholder={t('store.selectLogo') || 'Tap to select logo'}
-                    value={formik.values.logo}
-                    onImageSelect={(uri) => formik.setFieldValue('logo', uri)}
-                    aspect={[1, 1]}
-                    allowsEditing={true}
-                  />
-
-                  {/* Banner Image */}
-                  {/* <CustomImagePicker
+                {/* Banner Image */}
+                {/* <CustomImagePicker
                     label={t('store.storeBanner') || 'Store Banner'}
                     placeholder={t('store.selectBanner') || 'Tap to select banner'}
                     value={formik.values.banner}
@@ -326,95 +326,95 @@ export default function Create() {
                     aspect={[16, 9]}
                     allowsEditing={true}
                   /> */}
+              </View>
+
+              {/* Section 4: Operating Hours */}
+              <View className="mb-6">
+                <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
+                  <Ionicons name="time-outline" size={24} color="#fd4a12" />
+                  <Text className="text-lg font-semibold text-gray-800 ml-2" >
+                    {t('store.operatingHours')}
+                  </Text>
                 </View>
+                <View className="h-1 w-20 bg-primary rounded mb-4" />
 
-                {/* Section 4: Operating Hours */}
-                <View className="mb-6">
-                  <View className={`flex-row items-center mb-4 ${isArabic ? 'flex-row-reverse' : 'text-left'}`}>
-                    <Ionicons name="time-outline" size={24} color="#fd4a12" />
-                    <Text className="text-lg font-semibold text-gray-800 ml-2" >
-                      {t('store.operatingHours')}
+                {/* Start Time */}
+                <View className="mb-4">
+                  <Text className="text-gray-700 font-medium mb-2" style={{ fontFamily: 'Cairo_500Medium' }}>
+                    {t('store.startTime')}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setShowStartTimePicker(true)}
+                    className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex-row items-center justify-between"
+                  >
+                    <Text className={formik.values.start_time ? 'text-gray-900' : 'text-gray-400'}>
+                      {formik.values.start_time || t('store.selectStartTime')}
                     </Text>
-                  </View>
-                  <View className="h-1 w-20 bg-primary rounded mb-4" />
-
-                  {/* Start Time */}
-                  <View className="mb-4">
-                    <Text className="text-gray-700 font-medium mb-2" style={{ fontFamily: 'Cairo_500Medium' }}>
-                      {t('store.startTime')}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => setShowStartTimePicker(true)}
-                      className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex-row items-center justify-between"
-                    >
-                      <Text className={formik.values.start_time ? 'text-gray-900' : 'text-gray-400'}>
-                        {formik.values.start_time || t('store.selectStartTime')}
-                      </Text>
-                      <Ionicons name="time" size={20} color="#fd4a12" />
-                    </TouchableOpacity>
-                    {formik.touched.start_time && formik.errors.start_time && (
-                      <Text className="text-red-500 text-sm mt-1">{formik.errors.start_time}</Text>
-                    )}
-                  </View>
-
-                  {/* End Time */}
-                  <View className="mb-4">
-                    <Text className="text-gray-700 font-medium mb-2">
-                      {t('store.endTime')}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => setShowEndTimePicker(true)}
-                      className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex-row items-center justify-between"
-                    >
-                      <Text className={formik.values.end_time ? 'text-gray-900' : 'text-gray-400'}>
-                        {formik.values.end_time || t('store.selectEndTime') }
-                      </Text>
-                      <Ionicons name="time" size={20} color="#fd4a12" />
-                    </TouchableOpacity>
-                    {formik.touched.end_time && formik.errors.end_time && (
-                      <Text className="text-red-500 text-sm mt-1">{formik.errors.end_time}</Text>
-                    )}
-                  </View>
-
-                  {/* Time Pickers */}
-                  {showStartTimePicker && (
-                    <DateTimePicker
-                      value={startTimeDate}
-                      mode="time"
-                      is24Hour={true}
-                      display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                      onChange={handleStartTimeChange}
-                    />
-                  )}
-
-                  {showEndTimePicker && (
-                    <DateTimePicker
-                      value={endTimeDate}
-                      mode="time"
-                      is24Hour={true}
-                      display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                      onChange={handleEndTimeChange}
-                    />
+                    <Ionicons name="time" size={20} color="#fd4a12" />
+                  </TouchableOpacity>
+                  {formik.touched.start_time && formik.errors.start_time && (
+                    <Text className="text-red-500 text-sm mt-1">{formik.errors.start_time}</Text>
                   )}
                 </View>
 
-                
-
-                {/* Submit Button */}
-                <View className="mt-4">
-                  {isSubmitting ? (
-                    <Loading />
-                  ) : (
-                    <CustomButton
-                      title={t('store.createStoreButton') || 'Create Store'}
-                      onPress={formik.handleSubmit}
-                    />
+                {/* End Time */}
+                <View className="mb-4">
+                  <Text className="text-gray-700 font-medium mb-2">
+                    {t('store.endTime')}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setShowEndTimePicker(true)}
+                    className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex-row items-center justify-between"
+                  >
+                    <Text className={formik.values.end_time ? 'text-gray-900' : 'text-gray-400'}>
+                      {formik.values.end_time || t('store.selectEndTime')}
+                    </Text>
+                    <Ionicons name="time" size={20} color="#fd4a12" />
+                  </TouchableOpacity>
+                  {formik.touched.end_time && formik.errors.end_time && (
+                    <Text className="text-red-500 text-sm mt-1">{formik.errors.end_time}</Text>
                   )}
                 </View>
-              </>
-            )}
-          </View>
-        </ScrollView>
-   </Layout>
+
+                {/* Time Pickers */}
+                {showStartTimePicker && (
+                  <DateTimePicker
+                    value={startTimeDate}
+                    mode="time"
+                    is24Hour={true}
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleStartTimeChange}
+                  />
+                )}
+
+                {showEndTimePicker && (
+                  <DateTimePicker
+                    value={endTimeDate}
+                    mode="time"
+                    is24Hour={true}
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleEndTimeChange}
+                  />
+                )}
+              </View>
+
+
+
+              {/* Submit Button */}
+              <View className="mt-4">
+                {isSubmitting ? (
+                  <Loading />
+                ) : (
+                  <CustomButton
+                    title={t('store.createStoreButton') || 'Create Store'}
+                    onPress={formik.handleSubmit}
+                  />
+                )}
+              </View>
+            </>
+          )}
+        </View>
+      </ScrollView>
+    </Layout>
   )
 }

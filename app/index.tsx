@@ -2,10 +2,10 @@ import { AuthContext } from "@/context/auth-provider";
 import React, { useContext, useEffect } from "react";
 import { Text, View } from "react-native";
 import { Link, Redirect, router } from "expo-router";
-import Loading from "@/components/ui/Loading";
+import Loading from "@/components/ui/loading";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 
 export default function Home() {
   const { auth, isLoading } = useContext(AuthContext);

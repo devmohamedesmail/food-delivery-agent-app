@@ -78,11 +78,10 @@
     "reset-password": "Forget Password",
     "send-reset-password": "Send Reset Link",
     "back-to-login": "Back to Login",
-    "enterEmail":"Enter your email",
-    "enterPhone":"Enter your phone",
+    "enterEmail": "Enter your email",
+    "enterPhone": "Enter your phone",
     "loginDescription": "Please enter your email or phone number to continue",
-    "noauthvarified":"Your account is not verified. Please login to continue."
-
+    "noauthvarified": "Your account is not verified. Please login to continue."
   },
   "orders": {
     "orders": "Orders",
@@ -425,6 +424,7 @@
     "startTimeRequired": "Start time is required"
   },
   "account": {
+    "theme": "Theme",
     "profile": "Profile",
     "description": "Account settings and preferences",
     "edit_profile": "Edit Profile",

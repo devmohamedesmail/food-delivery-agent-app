@@ -1,5 +1,5 @@
-import Header from '@/components/ui/Header'
-import Layout from '@/components/ui/Layout'
+import Header from '@/components/ui/header'
+import Layout from '@/components/ui/layout'
 import React, { useState, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native'
@@ -9,13 +9,13 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { config } from '@/constants/config'
 import { AuthContext } from '@/context/auth-provider'
-import Input from '@/components/ui/Input'
+import Input from '@/components/ui/input'
 import CustomButton from '@/components/ui/button'
 import CustomImagePicker from '@/components/ui/customimagepicker'
 import { Toast } from 'toastify-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Ionicons } from '@expo/vector-icons'
-import Loading from '@/components/ui/Loading'
+import Loading from '@/components/ui/loading'
 
 interface StoreFormValues {
   name: string
@@ -35,7 +35,7 @@ export default function Update() {
   const storeData = data ? JSON.parse(data as string) : null
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
-  
+
   // Initialize time dates from store data
   const parseTime = (timeString: string) => {
     if (!timeString) return new Date()
@@ -82,7 +82,7 @@ export default function Update() {
 
       try {
         const formData = new FormData()
-        
+
         // Append required fields (ensure they're not empty)
         if (!values.name || !values.address || !values.phone) {
           Toast.show({
@@ -98,7 +98,7 @@ export default function Update() {
         formData.append('name', values.name)
         formData.append('address', values.address)
         formData.append('phone', values.phone)
-        
+
         // Only append times if they exist
         if (values.start_time) {
           formData.append('start_time', values.start_time)
@@ -218,7 +218,7 @@ export default function Update() {
     >
       <Layout>
         <Header title={t("store.update_store")} />
-        
+
         <ScrollView className="flex-1 px-6 pt-4" showsVerticalScrollIndicator={false}>
           {/* Subtitle */}
           <Text className="text-gray-600 text-center mb-6">

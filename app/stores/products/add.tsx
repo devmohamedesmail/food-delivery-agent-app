@@ -6,12 +6,12 @@ import { useTranslation } from "react-i18next";
 import { AuthContext } from "@/context/auth-provider";
 import useFetch from "@/hooks/useFetch";
 import { Toast } from "toastify-react-native";
-import Header from "@/components/ui/Header";
-import Input from "@/components/ui/Input";
+import Header from "@/components/ui/header";
+import Input from "@/components/ui/input";
 import CustomButton from "@/components/ui/button";
 import Select from "@/components/ui/select";
 import CustomImagePicker from "@/components/ui/customimagepicker";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 import { useStore } from "@/hooks/useStore";
 import ProductController from "@/controllers/products/controller";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +47,7 @@ export default function Add() {
 
   const queryClient = useQueryClient(); // ✅ هنا
 
-   // 🔹 Create mutation
+  // 🔹 Create mutation
   const createMutation = useMutation({
     mutationFn: (formData: FormData) =>
       ProductController.createProduct({
@@ -139,7 +139,7 @@ export default function Add() {
           type: "error",
           text1: t("products.failed_to_save_product"),
         });
-      } 
+      }
     },
   });
 
@@ -173,7 +173,7 @@ export default function Add() {
             />
           </View>
 
-        
+
 
           {/* Price */}
           <View className="mb-4">
@@ -191,7 +191,7 @@ export default function Add() {
             />
           </View>
 
-        
+
           {/* Category Dropdown */}
           <View className="mb-4">
             <Select

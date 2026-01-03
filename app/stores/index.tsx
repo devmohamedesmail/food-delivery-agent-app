@@ -3,31 +3,41 @@ import { View, Text, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 import NoStore from "@/components/store/NoStore";
 import NotificationIcon from "@/components/common/notification-icon";
-import Loading from "@/components/ui/Loading";
+import Loading from "@/components/ui/loading";
 import { useStore } from "@/hooks/useStore";
 import ManageHomeSection from "@/components/features/store/index/ManageHomeSection";
 import StoreHeader from "@/components/features/store/index/StoreHeader";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/ui/layout";
 import { useAuth } from "@/context/auth-provider";
 import ToggleTheme from "@/components/common/toggle-theme";
+import { useTheme } from "@/context/theme-provider";
+import Colors from "@/constants/Colors";
 
 
 export default function Home() {
   const { t } = useTranslation();
   const { store, loading } = useStore();
   const { isLoading: authLoading } = useAuth();
+  const { theme } = useTheme();
+  const activeColors = Colors[theme];
 
 
   useEffect(() => { }, [])
 
   return (
     <Layout>
-      <View className="flex-row items-center justify-between pt-20 px-4 py-4 bg-black/90 shadow-sm">
+      <View
+        className="flex-row items-center justify-between pt-20 px-4 py-4 shadow-sm"
+        style={{ backgroundColor: theme === 'dark' ? '#1a1a1a' : activeColors.background, borderBottomWidth: 1, borderBottomColor: theme === 'dark' ? '#333' : '#f3f4f6' }}
+      >
         <View className="flex items-center flex-row gap-6">
           <NotificationIcon />
           <ToggleTheme />
         </View>
-        <Text className="text-2xl font-bold text-white">
+        <Text
+          className="text-2xl font-bold"
+          style={{ color: activeColors.text }}
+        >
           {t("common.home")}
         </Text>
       </View>

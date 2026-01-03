@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import Input from '@/components/ui/Input'
+import Input from '@/components/ui/input'
 import { AuthContext } from '@/context/auth-provider'
 import Button from '@/components/ui/button'
 import { Toast } from 'toastify-react-native'
@@ -78,7 +78,7 @@ export default function Register() {
                         router.push('/driver/create')
                     }
                 } else {
-                    
+
                     Toast.show({
                         type: 'error',
                         text1: t('auth.registration_failed'),

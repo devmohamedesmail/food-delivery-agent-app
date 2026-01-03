@@ -8,40 +8,41 @@ import { config } from '@/constants/config';
 import { useStore } from '@/hooks/useStore';
 import { useAuth } from '@/context/auth-provider';
 import Button from '../ui/button';
-import CustomModal from '../ui/CustomModal';
+import CustomModal from '../ui/custom-modal';
 import Colors from '@/constants/Colors';
 import OrderController, { Order } from '@/controllers/orders/controller';
+import { useTheme } from '@/context/theme-provider';
 
 const statusConfig = {
-    pending: { 
-        color: 'bg-amber-100', 
-        textColor: 'text-amber-700', 
-        borderColor: 'border-amber-200' 
+    pending: {
+        color: 'bg-amber-100',
+        textColor: 'text-amber-700',
+        borderColor: 'border-amber-200'
     },
-    accepted: { 
-        color: 'bg-blue-100', 
-        textColor: 'text-blue-700', 
-        borderColor: 'border-blue-200' 
+    accepted: {
+        color: 'bg-blue-100',
+        textColor: 'text-blue-700',
+        borderColor: 'border-blue-200'
     },
-    preparing: { 
-        color: 'bg-purple-100', 
-        textColor: 'text-purple-700', 
-        borderColor: 'border-purple-200' 
+    preparing: {
+        color: 'bg-purple-100',
+        textColor: 'text-purple-700',
+        borderColor: 'border-purple-200'
     },
-    on_the_way: { 
-        color: 'bg-indigo-100', 
-        textColor: 'text-indigo-700', 
-        borderColor: 'border-indigo-200' 
+    on_the_way: {
+        color: 'bg-indigo-100',
+        textColor: 'text-indigo-700',
+        borderColor: 'border-indigo-200'
     },
-    delivered: { 
-        color: 'bg-green-100', 
-        textColor: 'text-green-700', 
-        borderColor: 'border-green-200' 
+    delivered: {
+        color: 'bg-green-100',
+        textColor: 'text-green-700',
+        borderColor: 'border-green-200'
     },
-    cancelled: { 
-        color: 'bg-red-600', 
-        textColor: 'text-white', 
-        borderColor: 'border-red-600' 
+    cancelled: {
+        color: 'bg-red-600',
+        textColor: 'text-white',
+        borderColor: 'border-red-600'
     },
 };
 
@@ -55,11 +56,13 @@ export default function OrderItem({ item }: OrderItemProps) {
     const { store } = useStore();
     const queryClient = useQueryClient();
     const [cancelModalVisible, setCancelModalVisible] = useState(false);
+    const { theme } = useTheme();
+    const activeColors = Colors[theme];
 
     const statusStyle = statusConfig[item.status as keyof typeof statusConfig] || statusConfig.pending;
 
     const acceptMutation = useMutation({
-        mutationFn: (orderId: number) => 
+        mutationFn: (orderId: number) =>
             OrderController.acceptOrder({ orderId, token: auth.token }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders', store?.id] });
@@ -71,7 +74,7 @@ export default function OrderItem({ item }: OrderItemProps) {
     });
 
     const cancelMutation = useMutation({
-        mutationFn: (orderId: number) => 
+        mutationFn: (orderId: number) =>
             OrderController.cancelOrder({ orderId, token: auth.token }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['orders', store?.id] });
@@ -151,10 +154,10 @@ export default function OrderItem({ item }: OrderItemProps) {
 
                     {item?.user?.name && (
                         <View className="flex-row items-center mb-3">
-                            <FontAwesome 
-                                name="user" 
-                                size={18} 
-                                color={Colors.light.tabIconSelected} 
+                            <FontAwesome
+                                name="user"
+                                size={18}
+                                color={Colors.light.tabIconSelected}
                             />
                             <Text className="text-gray-600 text-sm ml-2 flex-1" numberOfLines={1}>
                                 {item.user.name}
@@ -163,10 +166,10 @@ export default function OrderItem({ item }: OrderItemProps) {
                     )}
 
                     <View className="flex-row items-center mb-3">
-                        <FontAwesome6 
-                            name="location-dot" 
-                            size={18} 
-                            color={Colors.light.tabIconSelected} 
+                        <FontAwesome6
+                            name="location-dot"
+                            size={18}
+                            color={Colors.light.tabIconSelected}
                         />
                         <Text className="text-gray-600 text-sm ml-2 flex-1" numberOfLines={1}>
                             {item.delivery_address}
@@ -175,10 +178,10 @@ export default function OrderItem({ item }: OrderItemProps) {
 
                     {item.phone && (
                         <View className="flex-row items-center mb-4">
-                            <AntDesign 
-                                name="phone" 
-                                size={18} 
-                                color={Colors.light.tabIconSelected} 
+                            <AntDesign
+                                name="phone"
+                                size={18}
+                                color={Colors.light.tabIconSelected}
                             />
                             <Text className="text-gray-600 text-sm ml-2 flex-1" numberOfLines={1}>
                                 {item.phone}
@@ -190,8 +193,8 @@ export default function OrderItem({ item }: OrderItemProps) {
                     {item.status === 'pending' && (
                         <View className="flex-row gap-3">
                             <Button
-                                title={acceptMutation.isPending 
-                                    ? t('orders.acceptingOrder') 
+                                title={acceptMutation.isPending
+                                    ? t('orders.acceptingOrder')
                                     : t('orders.acceptOrder')
                                 }
                                 className="flex-1"
@@ -232,24 +235,30 @@ export default function OrderItem({ item }: OrderItemProps) {
                 visible={cancelModalVisible}
                 onClose={() => setCancelModalVisible(false)}
             >
-                <Text className="text-center font-bold text-lg">
+                <Text
+                    className="text-center font-bold text-lg"
+                    style={{ color: activeColors.text }}
+                >
                     {t('orders.cancelOrder')}
                 </Text>
-                <Text className="text-center mt-4 text-gray-600">
+                <Text
+                    className="text-center mt-4"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+                >
                     {t('orders.areYouSureCancel')}
                 </Text>
                 <View className="flex-row justify-center mt-6 gap-3">
                     <Button
                         title={t('common.cancel')}
                         className="flex-1"
-                        style={{ backgroundColor: '#6b7280' }}
+                        style={{ backgroundColor: theme === 'dark' ? '#333' : '#6b7280' }}
                         onPress={() => setCancelModalVisible(false)}
                         disabled={cancelMutation.isPending}
                     />
 
                     <Button
-                        title={cancelMutation.isPending 
-                            ? t('common.confirming') 
+                        title={cancelMutation.isPending
+                            ? t('common.confirming')
                             : t('common.confirm')
                         }
                         className="flex-1"

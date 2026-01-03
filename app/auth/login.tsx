@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity} from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Ionicons } from '@expo/vector-icons'
 import { Link, useRouter } from 'expo-router'
-import CustomInput from '@/components/ui/Input'
+import CustomInput from '@/components/ui/input'
 import CustomButton from '@/components/ui/button'
 import { AuthContext } from '@/context/auth-provider'
 import { Toast } from 'toastify-react-native'
@@ -83,107 +83,107 @@ export default function Login() {
   }, [loginMethod]);
 
   return (
-   <AuthLayout>
-    <Header title={t('auth.signIn')} description={t('auth.loginDescription')} />
-     <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
+    <AuthLayout>
+      <Header title={t('auth.signIn')} description={t('auth.loginDescription')} />
+      <View className="flex-1 px-6 rounded-t-3xl -mt-6 bg-white pt-10">
 
-            {/* Tabs for Email/Phone */}
-            <View className="flex-row mb-6 border-b border-gray-200">
-              <TouchableOpacity
-                className={`flex-1 pb-3 ${loginMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
-                onPress={() => setLoginMethod('email')}
-              >
-                <Text className={`text-center font-medium ${loginMethod === 'email' ? 'text-primary' : 'text-gray-500'}`}>
-                  {t('auth.email')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className={`flex-1 pb-3 ${loginMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
-                onPress={() => setLoginMethod('phone')}
-              >
-                <Text className={`text-center font-medium ${loginMethod === 'phone' ? 'text-primary' : 'text-gray-500'}`}>
-                  {t('auth.phone')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+        {/* Tabs for Email/Phone */}
+        <View className="flex-row mb-6 border-b border-gray-200">
+          <TouchableOpacity
+            className={`flex-1 pb-3 ${loginMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
+            onPress={() => setLoginMethod('email')}
+          >
+            <Text className={`text-center font-medium ${loginMethod === 'email' ? 'text-primary' : 'text-gray-500'}`}>
+              {t('auth.email')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`flex-1 pb-3 ${loginMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
+            onPress={() => setLoginMethod('phone')}
+          >
+            <Text className={`text-center font-medium ${loginMethod === 'phone' ? 'text-primary' : 'text-gray-500'}`}>
+              {t('auth.phone')}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-            <View className="space-y-4">
-              {/* Conditional Input based on Tab */}
-              {loginMethod === 'email' ? (
-                <CustomInput
-                  label={t('auth.email')}
-                  placeholder={t('auth.enterEmail')}
-                  value={formik.values.email}
-                  onChangeText={formik.handleChange('email')}
-                  type="email"
-                  keyboardType="email-address"
-                  error={formik.touched.email && formik.errors.email ? formik.errors.email : undefined}
-                />
-              ) : (
-                <CustomInput
-                  label={t('auth.phone')}
-                  placeholder={t('auth.enterPhone')}
-                  value={formik.values.phone}
-                  onChangeText={formik.handleChange('phone')}
-                  type="phone"
-                  keyboardType="phone-pad"
-                  error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
-                />
-              )}
+        <View className="space-y-4">
+          {/* Conditional Input based on Tab */}
+          {loginMethod === 'email' ? (
+            <CustomInput
+              label={t('auth.email')}
+              placeholder={t('auth.enterEmail')}
+              value={formik.values.email}
+              onChangeText={formik.handleChange('email')}
+              type="email"
+              keyboardType="email-address"
+              error={formik.touched.email && formik.errors.email ? formik.errors.email : undefined}
+            />
+          ) : (
+            <CustomInput
+              label={t('auth.phone')}
+              placeholder={t('auth.enterPhone')}
+              value={formik.values.phone}
+              onChangeText={formik.handleChange('phone')}
+              type="phone"
+              keyboardType="phone-pad"
+              error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
+            />
+          )}
 
-              {/* Password Input */}
-              <CustomInput
-                label={t('auth.password')}
-                placeholder={t('auth.enterPassword')}
-                value={formik.values.password}
-                onChangeText={formik.handleChange('password')}
-                type="password"
-                error={formik.touched.password && formik.errors.password ? formik.errors.password : undefined}
-              />
+          {/* Password Input */}
+          <CustomInput
+            label={t('auth.password')}
+            placeholder={t('auth.enterPassword')}
+            value={formik.values.password}
+            onChangeText={formik.handleChange('password')}
+            type="password"
+            error={formik.touched.password && formik.errors.password ? formik.errors.password : undefined}
+          />
 
-              {/* Remember Me & Forgot Password */}
-              <View className={`flex-row justify-between items-center mt-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
-                <TouchableOpacity
-                  onPress={() => setRememberMe(!rememberMe)}
-                  className="flex-row items-center"
-                >
-                  <View className={`w-5 h-5 border-2 border-gray-300 rounded mr-2 items-center justify-center ${rememberMe ? ' border-primary' : ''}`}>
-                    {rememberMe && <Ionicons name="checkmark" size={12} color="white" />}
-                  </View>
-                  <Text className="text-black">
-                    {t('auth.rememberMe')}
-                  </Text>
-                </TouchableOpacity>
-
-                <Link href="/auth/forget-password" >
-                  <Text className="text-primary font-medium">
-                    {t('auth.forgotPassword')}
-                  </Text>
-                </Link>
+          {/* Remember Me & Forgot Password */}
+          <View className={`flex-row justify-between items-center mt-4 ${i18n.language === 'ar' ? 'flex-row-reverse' : ''}`}>
+            <TouchableOpacity
+              onPress={() => setRememberMe(!rememberMe)}
+              className="flex-row items-center"
+            >
+              <View className={`w-5 h-5 border-2 border-gray-300 rounded mr-2 items-center justify-center ${rememberMe ? ' border-primary' : ''}`}>
+                {rememberMe && <Ionicons name="checkmark" size={12} color="white" />}
               </View>
+              <Text className="text-black">
+                {t('auth.rememberMe')}
+              </Text>
+            </TouchableOpacity>
 
-              {/* Login Button */}
-              <View className="mt-8">
-                <CustomButton
-                  title={isLoading ? t('auth.signingIn') : t('auth.signIn')}
-                  onPress={() => formik.handleSubmit()}
-                  disabled={isLoading || !formik.isValid || !formik.dirty}
-                />
-              </View>
-
-              {/* Sign Up Link */}
-              <View className="flex-row justify-center items-center mt-8 mb-8">
-                <Text className="text-gray-600">
-                  {t('auth.dontHaveAccount')}
-                </Text>
-                <TouchableOpacity onPress={() => router.push('/auth/register')}>
-                  <Text className="text-primary font-semibold ml-1">
-                    {t('auth.signUp')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <Link href="/auth/forget-password" >
+              <Text className="text-primary font-medium">
+                {t('auth.forgotPassword')}
+              </Text>
+            </Link>
           </View>
-   </AuthLayout>
+
+          {/* Login Button */}
+          <View className="mt-8">
+            <CustomButton
+              title={isLoading ? t('auth.signingIn') : t('auth.signIn')}
+              onPress={() => formik.handleSubmit()}
+              disabled={isLoading || !formik.isValid || !formik.dirty}
+            />
+          </View>
+
+          {/* Sign Up Link */}
+          <View className="flex-row justify-center items-center mt-8 mb-8">
+            <Text className="text-gray-600">
+              {t('auth.dontHaveAccount')}
+            </Text>
+            <TouchableOpacity onPress={() => router.push('/auth/register')}>
+              <Text className="text-primary font-semibold ml-1">
+                {t('auth.signUp')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </AuthLayout>
   )
 }
