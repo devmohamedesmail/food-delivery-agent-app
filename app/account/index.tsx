@@ -22,6 +22,7 @@ export default function Account() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+
   return (
     <Layout>
       <Header title={t('account.account')} />
@@ -52,7 +53,7 @@ export default function Account() {
               className="mt-1"
               style={{ fontFamily: 'Cairo_400Regular', color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
             >
-              {auth?.user?.identifier || 'user@example.com'}
+              {auth?.user?.email || auth?.user?.phone}
             </Text>
             <View className="mt-2 bg-primary/10 px-3 py-1 rounded-full">
               <Text

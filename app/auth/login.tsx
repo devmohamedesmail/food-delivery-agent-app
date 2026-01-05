@@ -11,6 +11,9 @@ import { AuthContext } from '@/context/auth-provider'
 import { Toast } from 'toastify-react-native'
 import AuthLayout from '@/components/auth/AuthLayout'
 import Header from '@/components/auth/Header'
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Entypo from '@expo/vector-icons/Entypo';
+import Colors from '@/constants/Colors'
 
 
 export default function Login() {
@@ -90,20 +93,27 @@ export default function Login() {
         {/* Tabs for Email/Phone */}
         <View className="flex-row mb-6 border-b border-gray-200">
           <TouchableOpacity
-            className={`flex-1 pb-3 ${loginMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
+            activeOpacity={1}
+            className={`flex-1 flex-row items-center justify-center pb-3 ${loginMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
             onPress={() => setLoginMethod('email')}
           >
-            <Text className={`text-center font-medium ${loginMethod === 'email' ? 'text-primary' : 'text-gray-500'}`}>
-              {t('auth.email')}
+            <Fontisto name="email" size={20} color={`${loginMethod === 'email' ? Colors.light.tabIconSelected : 'text-gray-500'}`} />
+            <Text className={`text-center mx-2 font-medium ${loginMethod === 'email' ? 'text-primary' : 'text-gray-500'}`}>
+              {t('auth.email')}  
             </Text>
+
           </TouchableOpacity>
+
           <TouchableOpacity
-            className={`flex-1 pb-3 ${loginMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
+            activeOpacity={1}
+            className={`flex-1 flex-row items-center justify-center pb-3 ${loginMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
             onPress={() => setLoginMethod('phone')}
           >
-            <Text className={`text-center font-medium ${loginMethod === 'phone' ? 'text-primary' : 'text-gray-500'}`}>
+            <Entypo name="mobile" size={20} color={`${loginMethod === 'phone' ? Colors.light.tabIconSelected : 'text-gray-500'}`} />
+            <Text className={`text-center mx-2 font-medium ${loginMethod === 'phone' ? 'text-primary' : 'text-gray-500'}`}>
               {t('auth.phone')}
             </Text>
+           
           </TouchableOpacity>
         </View>
 

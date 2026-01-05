@@ -112,6 +112,7 @@ export default function Register() {
                 {/* Tabs for Email/Phone */}
                 <View className="flex-row mb-6 border-b border-gray-200">
                     <TouchableOpacity
+                        activeOpacity={1}
                         className={`flex-1 pb-3 ${registerMethod === 'email' ? 'border-b-2 border-primary' : ''}`}
                         onPress={() => setRegisterMethod('email')}
                     >
@@ -120,6 +121,7 @@ export default function Register() {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        activeOpacity={1}
                         className={`flex-1 pb-3 ${registerMethod === 'phone' ? 'border-b-2 border-primary' : ''}`}
                         onPress={() => setRegisterMethod('phone')}
                     >

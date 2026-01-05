@@ -11,6 +11,7 @@ export default function AccountSettingButton({ onPress, title, icon }: { title: 
 
     return (
         <TouchableOpacity
+            activeOpacity={1}
             className='py-7 border-b rounded-xl px-4 mb-1 flex-row justify-center items-center'
             style={{
                 backgroundColor: activeColors.background,

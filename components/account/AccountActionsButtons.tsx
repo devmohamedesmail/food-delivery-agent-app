@@ -95,7 +95,7 @@ export default function AccountActionsButtons() {
                         onPress={() => setLogoutModalVisible(false)}
                         className='px-4 py-3 w-44'
                         textClassName={theme === 'dark' ? 'text-white' : 'text-gray-800'}
-                        style={{ backgroundColor: theme === 'dark' ? '#333' : '#e5e7eb' }}
+                        style={{ backgroundColor: theme === 'dark' ? '#333' : Colors.light.tabIconSelected }}
 
                     />
                 </View>

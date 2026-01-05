@@ -50,17 +50,19 @@ export default function NoStore() {
 
 
 
-      <View className='flex flex-row justify-between  space-x-4 p-2 w-full gap-5'>
+      <View className='flex flex-row justify-between  space-x-4 p-2 w-full '>
 
         <Button
           icon={<Ionicons name="add-circle-outline" size={24} color="white" />}
           title={t('store.createStoreButton')}
           onPress={handleCreateStore}
+          
         />
 
         <Button
           icon={<FontAwesome name="user-o" size={24} color={theme === 'dark' ? 'white' : 'white'} />}
           title={t('account.account')}
+          bgColor='bg-black'
           onPress={() => router.push('/account')}
           className={theme === 'dark' ? 'bg-gray-700' : ''}
           style={theme === 'dark' ? { backgroundColor: '#333' } : {}}
