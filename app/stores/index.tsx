@@ -24,6 +24,7 @@ export default function Home() {
 
   useEffect(() => { }, [])
 
+  console.log("store", store)
   return (
     <Layout>
       <View

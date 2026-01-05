@@ -11,7 +11,7 @@ import { AuthContext } from '@/context/auth-provider'
 import Select from '@/components/ui/select'
 import Loading from '@/components/ui/loading'
 import Input from '@/components/ui/input'
-import CustomButton from '@/components/ui/button'
+import Button from '@/components/ui/button'
 import CustomImagePicker from '@/components/ui/customimagepicker'
 import { Toast } from 'toastify-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -53,7 +53,6 @@ export default function Create() {
   const router = useRouter()
   const { auth } = useContext(AuthContext)
   const { data: placesData, loading: loadingPlaces, error: errorPlaces } = useFetch('/places')
-  const { data: storeTypeData, loading: loadingstoreTypeData } = useFetch('/store-types')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
 
@@ -91,7 +90,7 @@ export default function Create() {
 
       try {
         const formData = new FormData()
-        formData.append('user_id', auth?.user?.id)
+        formData.append('place_id', values.place_id)
         formData.append('store_type_id', values.store_type_id)
         formData.append('name', values.name)
         formData.append('phone', values.phone)
@@ -122,7 +121,7 @@ export default function Create() {
           Toast.show({
             type: 'success',
             text1: t('store.storeCreatedSuccess'),
-            position: 'bottom',
+            position: 'top',
             visibilityTime: 1000,
           })
           formik.resetForm()
@@ -133,12 +132,13 @@ export default function Create() {
           Toast.show({
             type: 'error',
             text1: t('store.storeCreationFailed'),
-            position: 'bottom',
-            visibilityTime: 2000,
+            position: 'top',
+            visibilityTime: 1000,
           })
         }
 
       } catch (error: any) {
+        console.log("Error Creating Store",error)
         Toast.show({
           type: 'error',
           text1: t('store.storeCreationFailed'),
@@ -151,28 +151,28 @@ export default function Create() {
     },
   })
 
-  // Get the selected place object - Fix: Access data property correctly
+  // Get the selected place object
   const selectedPlace = placesData?.data?.find((place: Place) => place.id.toString() === formik.values.place_id)
 
   // Get store types for the selected place
   const availableStoreTypes = selectedPlace?.storeTypes || []
 
-  // Format places for dropdown - Fix: Access data property correctly
+  // Format places for dropdown
   const placeOptions = placesData?.data?.map((place: Place) => ({
     label: place.name,
     value: place.id.toString()
   })) || []
 
-  // Format store types for dropdown
-  const storeTypeOptions = storeTypeData?.data?.map((type: any) => ({
-    label: i18n.language === 'ar' ? type.name_ar : type.name_en,
-    value: type.id.toString(),
+  // Format store types for dropdown - Use store types from selected place
+  const storeTypeOptions = availableStoreTypes.map((item: any) => ({
+    label: i18n.language === 'ar' ? item.storeType.name_ar : item.storeType.name_en,
+    value: item.storeType.id.toString(),
   }))
 
   const handlePlaceSelect = (value: string) => {
     formik.setFieldValue('place_id', value)
     // Reset store type when place changes
-    // formik.setFieldValue('store_type_id', '')
+    formik.setFieldValue('store_type_id', '')
   }
 
   // Time picker handlers
@@ -402,14 +402,11 @@ export default function Create() {
 
               {/* Submit Button */}
               <View className="mt-4">
-                {isSubmitting ? (
-                  <Loading />
-                ) : (
-                  <CustomButton
+                 <Button
+                    disabled={isSubmitting}
                     title={t('store.createStoreButton') || 'Create Store'}
                     onPress={formik.handleSubmit}
                   />
-                )}
               </View>
             </>
           )}
