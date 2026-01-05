@@ -22,9 +22,7 @@ export default function Home() {
   const activeColors = Colors[theme];
 
 
-  useEffect(() => { }, [])
 
-  console.log("store", store)
   return (
     <Layout>
       <View
