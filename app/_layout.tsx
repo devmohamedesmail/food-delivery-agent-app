@@ -10,27 +10,28 @@ import 'react-native-gesture-handler';
 import { NetworkProvider } from "@/context/network-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/context/theme-provider";
-
-
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
 export default function RootLayout() {
   const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <AuthProvider>
-          <ProfileProvider>
-            <NetworkProvider>
-              <Stack screenOptions={{ headerShown: false }}></Stack>
-              <ToastManager />
-              <StatusBar style="auto" />
-            </NetworkProvider>
-          </ProfileProvider>
-        </AuthProvider>
-      </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
+            <ProfileProvider>
+              <NetworkProvider>
+                <Stack screenOptions={{ headerShown: false }}></Stack>
+                <ToastManager />
+                <StatusBar style="auto" />
+              </NetworkProvider>
+            </ProfileProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
 
-    </QueryClientProvider>
 
   );
 }

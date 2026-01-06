@@ -46,7 +46,7 @@ export default function CustomImagePicker({
       // Pick image
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
-        allowsEditing,
+        // allowsEditing,
         aspect,
         quality,
       })

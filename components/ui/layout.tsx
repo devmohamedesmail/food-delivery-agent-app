@@ -5,11 +5,17 @@ import { useTheme } from "@/context/theme-provider";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const {theme}=useTheme();
+  const { theme } = useTheme();
   return (
+
     <SafeAreaView edges={["bottom"]} className={`flex-1  ${theme === "dark" ? "bg-black" : "bg-gray-50"} `}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="black"
+
+      />
       {children}
     </SafeAreaView>
+
   );
 }

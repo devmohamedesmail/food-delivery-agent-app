@@ -12,12 +12,11 @@ import Select from '@/components/ui/select'
 import Loading from '@/components/ui/loading'
 import Input from '@/components/ui/input'
 import Button from '@/components/ui/button'
-import CustomImagePicker from '@/components/ui/customimagepicker'
+import CustomImagePicker from '@/components/ui/image-picker'
 import { Toast } from 'toastify-react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Ionicons } from '@expo/vector-icons'
 import Layout from '@/components/store/Layout'
-import { ProfileContext } from '@/context/profile-provider'
 import { useProfile } from '@/hooks/useProfile'
 
 
@@ -58,7 +57,7 @@ export default function Create() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const isArabic = i18n.language === 'ar'
   const { refetch } = useProfile();
-  
+
 
   // Time picker states
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
@@ -143,7 +142,7 @@ export default function Create() {
         }
 
       } catch (error: any) {
-        console.log("Error Creating Store",error)
+        console.log("Error Creating Store", error)
         Toast.show({
           type: 'error',
           text1: t('store.storeCreationFailed'),
@@ -407,11 +406,11 @@ export default function Create() {
 
               {/* Submit Button */}
               <View className="mt-4">
-                 <Button
-                    disabled={isSubmitting}
-                    title={t('store.createStoreButton') || 'Create Store'}
-                    onPress={formik.handleSubmit}
-                  />
+                <Button
+                  disabled={isSubmitting}
+                  title={t('store.createStoreButton') || 'Create Store'}
+                  onPress={formik.handleSubmit}
+                />
               </View>
             </>
           )}

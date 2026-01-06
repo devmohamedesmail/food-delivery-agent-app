@@ -10,7 +10,7 @@ import Header from "@/components/ui/header";
 import Input from "@/components/ui/input";
 import CustomButton from "@/components/ui/button";
 import Select from "@/components/ui/select";
-import CustomImagePicker from "@/components/ui/customimagepicker";
+import CustomImagePicker from "@/components/ui/image-picker";
 import Layout from "@/components/ui/layout";
 import { useStore } from "@/hooks/useStore";
 import ProductController from "@/controllers/products/controller";
