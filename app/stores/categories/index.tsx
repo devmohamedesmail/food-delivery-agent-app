@@ -3,17 +3,22 @@ import {
   RefreshControl,
   Alert,
   FlatList,
+  View,
+  Text,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Toast } from "toastify-react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/components/ui/loading";
-import NoCategories from "@/components/categories/NoCategories";
-import Layout from "@/components/categories/Layout";
+import NoCategories from "@/components/categories/no-categories";
+import Layout from "@/components/ui/layout";
 import { useStore } from "@/hooks/useStore";
-import CategoryItem from "@/components/categories/CategoryItem";
+import CategoryItem from "@/components/categories/category-item";
 import CategoryController from "@/controllers/categories/contoller";
 import { useAuth } from "@/context/auth-provider";
+import Header from "@/components/ui/header";
+import Button from "@/components/ui/button";
+import { useRouter } from "expo-router";
 
 export default function Categories() {
   const { t } = useTranslation();
@@ -21,6 +26,7 @@ export default function Categories() {
   const [refreshing, setRefreshing] = useState(false);
   const { store } = useStore();
   const queryClient = useQueryClient();
+  const router = useRouter()
 
   const {
     data: categories = [],
@@ -72,6 +78,27 @@ export default function Categories() {
 
   return (
     <Layout>
+
+
+ <Header title={t("categories.categories")} />
+
+      <View className="flex flex-row justify-between items-center my-2 px-4">
+        <Text className="text-2xl font-bold text-primary mt-1">
+          {categories?.data?.length}
+        </Text>
+        <Button
+          title={t("categories.add_category")}
+          onPress={() => router.push("/stores/categories/add")}
+        />
+      </View>
+
+
+
+
+
+
+
+
       <FlatList
         key={"2-columns"}
         data={categories}

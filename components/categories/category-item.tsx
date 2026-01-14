@@ -6,18 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 
-export default function CategoryItem({ category, handleDelete }) {
+export default function CategoryItem({ category, handleDelete }:any) {
     const { t } = useTranslation();
     const router = useRouter();
-
-
-
     return (
         <View
             key={category.id}
             className="bg-white rounded-xl p-4 shadow-sm w-[45%] m-2"
         >
-            <View className="flex items-center justify-between mb-2">
+
+            {/* Header */}
+            <View className="flex items-center justify-between ">
 
                 <View className='bg-blue-400 w-16 h-16 rounded-full flex items-center justify-center mb-2'>
                     <Text className='text-xl text-white'>
@@ -27,17 +26,9 @@ export default function CategoryItem({ category, handleDelete }) {
                 <Text className="text-sm font-bold text-black">
                     {category.name}
                 </Text>
-                <Text
-                    className="text-gray-500 text-sm mt-1"
-                    style={{ fontFamily: "Cairo_400Regular" }}
-                >
-                    {category.description}
-                </Text>
             </View>
 
             <View className="flex flex-row  items-center justify-between space-x-2 mt-3 pt-3 border-t border-gray-100">
-            
-
                 <TouchableOpacity
                     onPress={() =>
                         router.push({
@@ -48,8 +39,6 @@ export default function CategoryItem({ category, handleDelete }) {
                     className='bg-primary w-12 h-12 rounded-full flex flex-row justify-center items-center'>
                     <AntDesign name="eye" size={18} color="white" />
                 </TouchableOpacity>
-
-
                 <TouchableOpacity
                     onPress={() =>
                         router.push({
